@@ -1,18 +1,18 @@
 # Home-Assistant-AddOn
 
-## 通过 Add-on 安装
+## ADD-ON:
 
--   参考[Wiki](https://gitee.com/eWeLink/Home-Assistant-AddOn/wikis/%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B?sort_id=3862199)
+-   Refer to[Wiki](https://appcms-src.coolkit.cn/uncategorized/9213.html)
 
-## 通过 Docker 安装
+## DOCKER:
 
--   **使用 host 网络用于发现和控制 DIY 和局域网设备**
--   **暂不支持端口映射，请确保宿主机的 3000 端口处于空闲状态**
+-   **Use host network to discover and control DIY and LAN devices.**
+-   **Currently, port forwarding is not supported, please make sure that port 3000 is idle.**
 
-1. `git clone https://gitee.com/eWeLink/Home-Assistant-AddOn.git`
+1. `git clone https://github.com/CoolKit-Technologies/ha-addon.git`
 2. `cd Home-Assistant-AddOn/eWeLink_Smart_Home/`
 3. `docker build . -t ewelink_smart_home`
-4. 运行以下代码，将`yourHomeAssistantUrl`替换成当前网络下的 HomeAssistant 地址，将`yourHomeAssistantAuth`替换成您在 HA 里创建的长期令牌(长期令牌的获取请参考[Wiki](https://gitee.com/eWeLink/Home-Assistant-AddOn/wikis/%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B?sort_id=3862199))
+4. Run the code below. Replace `yourHomeAssistantUrl` with your current Home Assisant URL. Replace `yourHomeAssistantAuth` with a long lived access token.(How to create Long Lived Access Tokens [Wiki](https://appcms-src.coolkit.cn/uncategorized/9213.html))
 
 ```
 docker run -d \
@@ -23,7 +23,7 @@ docker run -d \
     ewelink_smart_home
 ```
 
--   示例
+-   Example:
 
 ```
   docker run -d \
@@ -34,4 +34,4 @@ docker run -d \
   ewelink_smart_home
 ```
 
-5. 访问`3000`端口
+5. Access port `3000`.

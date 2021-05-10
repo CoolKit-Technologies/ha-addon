@@ -1,0 +1,33 @@
+{
+    "name": "eWeLink Smart Home",
+    "version": "2.0.4-beta",
+    "slug": "ewelink_smart_home_slug",
+    "description": "connect eWeLink with home-assistant",
+    "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+    "startup": "application",
+    "boot": "auto",
+    "url": "https://www.facebook.com/ewelink.support",
+    "host_network": false,
+    "ports": {
+        "3000/tcp": 3000
+    },
+    "ports_description": {
+        "3000/tcp": "Web interface"
+    },
+    "panel_icon": "mdi:earth",
+    "panel_title": "eWeLink Smart Home",
+    "hassio_api": true,
+    "webui": "http://[HOST]:[PORT:3000]",
+    "homeassistant_api": true,
+    "ingress": true,
+    "ingress_port": 3000,
+    "ingress_entry": "",
+    "options": {
+        "auth": "",
+        "home_assistant_url": "http://homeassistant.local:8123"
+    },
+    "schema": {
+        "auth": "str",
+        "home_assistant_url": "str"
+    }
+}

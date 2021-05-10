@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18">
+  <path id="developer-board" d="M22,9V7H20V5a2,2,0,0,0-2-2H4A2,2,0,0,0,2,5V19a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2V17h2V15H20V13h2V11H20V9h2M18,19H4V5H18V19M6,13h5v4H6V13m6-6h4v3H12V7M6,7h5v5H6V7m6,4h4v6H12Z" transform="translate(-2 -3)" fill="#03a9f4"/>
+</svg>

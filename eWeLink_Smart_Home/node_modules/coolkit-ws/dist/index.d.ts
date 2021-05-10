@@ -1,0 +1,3 @@
+import CoolKitWs from "./class/CoolKitWs";
+declare const coolKitWs: CoolKitWs;
+export default coolKitWs;
