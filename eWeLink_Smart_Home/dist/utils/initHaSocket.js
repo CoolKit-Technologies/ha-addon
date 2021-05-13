@@ -244,7 +244,7 @@ exports.default = (function (reconnect) {
                             return __generator(this, function (_e) {
                                 switch (_e.label) {
                                     case 0:
-                                        console.log('HA触发call_service事件', res);
+                                        console.log('HA emit call_service event', res);
                                         entity_id = res.service_data.entity_id, service = res.service;
                                         state = service === 'turn_off' ? 'off' : 'on';
                                         if (!Array.isArray(entity_id)) return [3 /*break*/, 8];

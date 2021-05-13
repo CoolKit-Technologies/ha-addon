@@ -92,10 +92,18 @@ var Controller = /** @class */ (function () {
                 old.encryptedData = params_1 === null || params_1 === void 0 ? void 0 : params_1.encryptedData;
                 return old;
             }
-            // 如果设备之前是Cloud设备,需要保持设备的位置不便
+            // 如果设备之前是Cloud设备,需要保持设备的位置不变
             var tmpIndex = void 0;
+            var oldDeviceParams = {};
             if (old instanceof CloudDeviceController_1.default) {
-                tmpIndex = old.index;
+                oldDeviceParams = {
+                    index: old.index,
+                    devicekey: old.devicekey,
+                    selfApikey: old.apikey,
+                    deviceName: old.deviceName,
+                    extra: old.extra,
+                    params: old.params,
+                };
             }
             if (lanType === 'plug') {
                 var lanDevice = new LanSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
@@ -124,6 +132,7 @@ var Controller = /** @class */ (function () {
                     extra: tmp.extra,
                     params: tmp.params,
                     online: tmp.online,
+                    devicekey: tmp.devicekey,
                     disabled: disabled,
                     index: _index,
                 });
@@ -140,6 +149,7 @@ var Controller = /** @class */ (function () {
                     params: tmp.params,
                     tags: tmp.tags,
                     online: tmp.online,
+                    devicekey: tmp.devicekey,
                     disabled: disabled,
                     index: _index,
                 });
@@ -156,6 +166,7 @@ var Controller = /** @class */ (function () {
                     extra: tmp.extra,
                     params: tmp.params,
                     online: tmp.online,
+                    devicekey: tmp.devicekey,
                     disabled: disabled,
                     index: _index,
                 });
@@ -188,6 +199,7 @@ var Controller = /** @class */ (function () {
                     extra: tmp.extra,
                     params: tmp.params,
                     online: tmp.online,
+                    devicekey: tmp.devicekey,
                     disabled: disabled,
                     index: _index,
                 });
@@ -251,6 +263,7 @@ var Controller = /** @class */ (function () {
                     apikey: tmp.apikey,
                     extra: tmp.extra,
                     params: tmp.params,
+                    devicekey: tmp.devicekey,
                     disabled: disabled,
                     online: tmp.online,
                     index: _index,

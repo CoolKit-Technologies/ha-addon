@@ -261,8 +261,8 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 result = _b.sent();
                 if (result && result.status === 200) {
                     // todo
-                    // AuthClass.setAuth(req.ip, clientId, result.data);
-                    // eventBus.emit('init-ha-socket');
+                    AuthClass_1.default.setAuth(req.ip, clientId, result.data);
+                    eventBus_1.default.emit('init-ha-socket');
                     console.log('Jia ~ file: redirectToAuth.ts ~ line 44 ~ result.data', result.data);
                     res.json({
                         error: 0,

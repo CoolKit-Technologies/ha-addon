@@ -1,5 +1,8 @@
 # Changelogs
 
+## v2.0.5-beta
+
+-   Optimize WebUI.
 ## v2.0.4-beta
 
 -   Optimize LAN control.

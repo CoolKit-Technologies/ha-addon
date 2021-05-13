@@ -10,6 +10,7 @@ var CloudDeviceController = /** @class */ (function () {
         this.extra = data.extra;
         this.index = data.index;
         this.online = data.online;
+        this.devicekey = data.devicekey;
     }
     return CloudDeviceController;
 }());

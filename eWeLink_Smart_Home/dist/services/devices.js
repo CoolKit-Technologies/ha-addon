@@ -315,6 +315,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     if (device instanceof CloudDeviceController_1.default || device instanceof LanDeviceController_1.default) {
                         device.params = mergeDeviceParams_1.default(device.params, params);
                         device.online = true;
+                        eventBus_1.default.emit('sse');
                     }
                     if (device instanceof CloudSwitchController_1.default || device instanceof CloudTandHModificationController_1.default) {
                         // 同步到HA
@@ -330,7 +331,6 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         // 同步到HA
                         device.updateState(device.params.switches);
                     }
-                    eventBus_1.default.emit('sse');
                 }
                 else {
                     res.json({
