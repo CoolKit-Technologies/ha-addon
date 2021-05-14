@@ -52,79 +52,115 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var restApi_1 = require("../apis/restApi");
-var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var dataUtil_1 = require("../utils/dataUtil");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanDualR3Controller = /** @class */ (function (_super) {
-    __extends(LanDualR3Controller, _super);
-    function LanDualR3Controller(props) {
+var lanDeviceApi_1 = require("../apis/lanDeviceApi");
+var LanTandHModificationController = /** @class */ (function (_super) {
+    __extends(LanTandHModificationController, _super);
+    function LanTandHModificationController(props) {
         var _this = _super.call(this, props) || this;
-        _this.maxChannel = 2;
+        _this.uiid = 15;
         var deviceId = props.deviceId;
         _this.entityId = "switch." + deviceId;
+        _this.unit = dataUtil_1.getDataSync('unit.json', [_this.deviceId]) || 'c';
         return _this;
     }
-    return LanDualR3Controller;
+    return LanTandHModificationController;
 }(LanDeviceController_1.default));
-LanDualR3Controller.prototype.setSwitch = function (switches) {
+/**
+ *
+ *
+ * @param {on | off} status
+ * @description 默认设备处于自动模式下 --> deviceType:normal
+ */
+LanTandHModificationController.prototype.setSwitch = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitches({
+                    if (!this.devicekey || !this.selfApikey) {
+                        return [2 /*return*/, -1];
+                    }
+                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                            selfApikey: this.selfApikey,
+                            deviceid: this.deviceId,
                             ip: this.ip || this.target,
                             port: this.port,
-                            deviceid: this.deviceId,
                             devicekey: this.devicekey,
-                            selfApikey: this.selfApikey,
                             data: JSON.stringify({
-                                switches: switches,
+                                switch: status,
+                                mainSwitch: status,
+                                deviceType: 'normal',
                             }),
                         })];
                 case 1:
                     res = _a.sent();
-                    if (res && res.data && res.data.error === 0) {
-                        this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                    if ((res === null || res === void 0 ? void 0 : res.data) && res.data.error === 0) {
+                        this.updateState(status);
+                        this.params.switch = status;
                         return [2 /*return*/, 0];
                     }
-                    _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                    return [2 /*return*/, -1];
             }
         });
     });
 };
-LanDualR3Controller.prototype.updateState = function (switches) {
+LanTandHModificationController.prototype.updateState = function (status) {
     return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
+        var state;
         return __generator(this, function (_a) {
             if (this.disabled) {
                 return [2 /*return*/];
             }
-            switches &&
-                switches.forEach(function (_a) {
-                    var outlet = _a.outlet, status = _a.switch;
-                    var name = _this.channelName ? _this.channelName[outlet] : outlet + 1;
-                    var state = status;
-                    if (!_this.online) {
-                        state = 'unavailable';
-                    }
-                    restApi_1.updateStates(_this.entityId + "_" + (outlet + 1), {
-                        entity_id: _this.entityId + "_" + (outlet + 1),
-                        state: state,
-                        attributes: {
-                            restored: true,
-                            supported_features: 0,
-                            friendly_name: _this.deviceName + "-" + name,
-                            state: state,
-                        },
-                    });
-                });
+            state = status;
+            if (!this.online) {
+                state = 'unavailable';
+            }
+            restApi_1.updateStates("switch." + this.deviceId, {
+                entity_id: "switch." + this.deviceId,
+                state: state,
+                attributes: {
+                    restored: true,
+                    supported_features: 0,
+                    friendly_name: this.deviceName,
+                    state: state,
+                },
+            });
             return [2 /*return*/];
         });
     });
 };
-exports.default = LanDualR3Controller;
+LanTandHModificationController.prototype.updateTandH = function (currentTemperature, currentHumidity) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            restApi_1.updateStates("sensor." + this.deviceId + "_t", {
+                entity_id: "sensor." + this.deviceId + "_t",
+                state: currentTemperature,
+                attributes: {
+                    restored: true,
+                    supported_features: 0,
+                    friendly_name: this.deviceName + "-Temperature",
+                    device_class: 'temperature',
+                    state: currentTemperature,
+                    unit_of_measurement: '°C',
+                },
+            });
+            restApi_1.updateStates("sensor." + this.deviceId + "_h", {
+                entity_id: "sensor." + this.deviceId + "_h",
+                state: currentHumidity,
+                attributes: {
+                    restored: true,
+                    supported_features: 0,
+                    friendly_name: this.deviceName + "-Humidity",
+                    device_class: 'humidity',
+                    state: currentHumidity,
+                    unit_of_measurement: '%',
+                },
+            });
+            return [2 /*return*/];
+        });
+    });
+};
+exports.default = LanTandHModificationController;

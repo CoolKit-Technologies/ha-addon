@@ -52,6 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __importDefault(require("lodash"));
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var restApi_1 = require("../apis/restApi");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
@@ -86,12 +87,13 @@ LanMultiChannelSwitchController.prototype.setSwitch = function (switches) {
                         })];
                 case 1:
                     res = _a.sent();
-                    if (res && res.data && res.data.error === 0) {
+                    if (lodash_1.default.get(res, ['data', 'error']) === 0) {
                         this.updateState(switches);
                         this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        return [2 /*return*/, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/];
+                case 2: return [2 /*return*/, -1];
             }
         });
     });

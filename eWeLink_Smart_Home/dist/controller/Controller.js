@@ -30,6 +30,7 @@ var uiid_1 = require("../config/uiid");
 var UnsupportDeviceController_1 = __importDefault(require("./UnsupportDeviceController"));
 var CloudDualR3Controller_1 = __importDefault(require("./CloudDualR3Controller"));
 var LanDualR3Controller_1 = __importDefault(require("./LanDualR3Controller"));
+var LanTandHModificationController_1 = __importDefault(require("./LanTandHModificationController"));
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -117,6 +118,11 @@ var Controller = /** @class */ (function () {
             }
             if (lanType === 'multifun_switch') {
                 var lanDevice = new LanDualR3Controller_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                Controller.deviceMap.set(id, lanDevice);
+                return lanDevice;
+            }
+            if (lanType === 'th_plug') {
+                var lanDevice = new LanTandHModificationController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }

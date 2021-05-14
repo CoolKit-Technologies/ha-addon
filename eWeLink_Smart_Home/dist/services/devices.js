@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setRate = exports.changeUnit = exports.removeDiyDevice = exports.updateDiyDevice = exports.upgradeDevice = exports.getOTAinfo = exports.proxy2ws = exports.updateChannelName = exports.updateDeviceName = exports.disableDevice = exports.getDeviceById = exports.getDevices = void 0;
+exports.updateLanDevice = exports.setRate = exports.changeUnit = exports.removeDiyDevice = exports.updateDiyDevice = exports.upgradeDevice = exports.getOTAinfo = exports.proxy2ws = exports.updateChannelName = exports.updateDeviceName = exports.disableDevice = exports.getDeviceById = exports.getDevices = void 0;
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var initMdns_1 = __importDefault(require("../utils/initMdns"));
@@ -73,39 +73,50 @@ var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"))
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
 var syncDevice2Ha_1 = __importDefault(require("../utils/syncDevice2Ha"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
+var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchController"));
+var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var updateDiyDeviceName_1 = __importDefault(require("../utils/updateDiyDeviceName"));
 var mdns = initMdns_1.default();
 var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var type, refresh, data;
+    var type, refresh, data, err_1;
     return __generator(this, function (_a) {
-        try {
-            type = req.query.type;
-            refresh = req.body.refresh;
-            if (type === undefined) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                type = req.query.type;
+                refresh = req.body.refresh;
+                if (type === undefined) {
+                    res.json({
+                        error: 401,
+                        data: null,
+                    });
+                }
+                if (!refresh) return [3 /*break*/, 2];
+                return [4 /*yield*/, syncDevice2Ha_1.default({
+                        syncLovelace: false,
+                        sleepTime: 2000,
+                    })];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
+                data = formatDevice_1.getFormattedDeviceList();
                 res.json({
-                    error: 401,
+                    error: 0,
+                    data: data,
+                });
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                console.log('Jia ~ file: devices.ts ~ line 22 ~ getDevices ~ err', err_1);
+                res.json({
+                    error: 500,
                     data: null,
                 });
-            }
-            if (refresh) {
-                syncDevice2Ha_1.default({
-                    syncLovelace: false,
-                    sleepTime: 2000,
-                });
-            }
-            data = formatDevice_1.getFormattedDeviceList();
-            res.json({
-                error: 0,
-                data: data,
-            });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
-        catch (err) {
-            console.log('Jia ~ file: devices.ts ~ line 22 ~ getDevices ~ err', err);
-            res.json({
-                error: 500,
-                data: null,
-            });
-        }
-        return [2 /*return*/];
     });
 }); };
 exports.getDevices = getDevices;
@@ -138,11 +149,11 @@ var getDeviceById = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.getDeviceById = getDeviceById;
 var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, disabled, id, device, error, err_1;
+    var _a, disabled, id, device, error, err_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 4, , 5]);
                 _a = req.body, disabled = _a.disabled, id = _a.id;
                 device = Controller_1.default.getDevice(id);
                 if (!device) {
@@ -158,12 +169,15 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 if (device && disabled) {
                     removeEntityByDevice_1.default(device);
                 }
-                if (!disabled) {
-                    syncDevice2Ha_1.default({
+                if (!!disabled) return [3 /*break*/, 3];
+                return [4 /*yield*/, syncDevice2Ha_1.default({
                         syncLovelace: true,
                         sleepTime: 2000,
-                    });
-                }
+                    })];
+            case 2:
+                _b.sent();
+                _b.label = 3;
+            case 3:
                 if (error === 0) {
                     res.json({
                         error: 0,
@@ -176,22 +190,22 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                         data: null,
                     });
                 }
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_1);
+                return [3 /*break*/, 5];
+            case 4:
+                err_2 = _b.sent();
+                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_2);
                 res.json({
                     error: 500,
                     data: null,
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
 exports.disableDevice = disableDevice;
 var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, newName, id, device, error, err_2;
+    var _a, newName, id, device, error, err_3;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -226,8 +240,8 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
                 _b.label = 3;
             case 3: return [3 /*break*/, 5];
             case 4:
-                err_2 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_2);
+                err_3 = _b.sent();
+                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_3);
                 res.json({
                     error: 500,
                     data: null,
@@ -239,7 +253,7 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
 }); };
 exports.updateDeviceName = updateDeviceName;
 var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, tags, id, ck_channel_name, device, error, err_3;
+    var _a, tags, id, ck_channel_name, device, error, err_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -277,8 +291,8 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
                 });
                 return [3 /*break*/, 4];
             case 3:
-                err_3 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_3);
+                err_4 = _b.sent();
+                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_4);
                 res.json({
                     error: 500,
                     data: null,
@@ -290,7 +304,7 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
 }); };
 exports.updateChannelName = updateChannelName;
 var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, apikey, id, params, result, error, device, err_4;
+    var _a, apikey, id, params, result, error, device, err_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -340,7 +354,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 }
                 return [3 /*break*/, 3];
             case 2:
-                err_4 = _b.sent();
+                err_5 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -352,7 +366,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.proxy2ws = proxy2ws;
 var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var list, _a, error, data, err_5;
+    var list, _a, error, data, err_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -376,7 +390,7 @@ var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 }
                 return [3 /*break*/, 3];
             case 2:
-                err_5 = _b.sent();
+                err_6 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -388,7 +402,7 @@ var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.getOTAinfo = getOTAinfo;
 var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, apikey, id, params, result, error, err_6;
+    var _a, apikey, id, params, result, error, err_7;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -417,7 +431,7 @@ var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 }
                 return [3 /*break*/, 3];
             case 2:
-                err_6 = _b.sent();
+                err_7 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -429,16 +443,16 @@ var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.upgradeDevice = upgradeDevice;
 var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, type, id, params, device, result, reqParams, err_7;
+    var _a, type, id, params, device, result, reqParams, err_8;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _a = req.body, type = _a.type, id = _a.id, params = _a.params;
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 11, , 12]);
+                _b.trys.push([1, 13, , 14]);
                 device = Controller_1.default.getDevice(id);
-                if (!(device instanceof DiyDeviceController_1.default)) return [3 /*break*/, 10];
+                if (!(device instanceof DiyDeviceController_1.default)) return [3 /*break*/, 12];
                 result = void 0;
                 reqParams = __assign({ deviceid: id, ip: device.ip, port: device.port }, params);
                 console.log('Jia ~ file: devices.ts ~ line 366 ~ updateDiyDevice ~ reqParams', reqParams);
@@ -466,6 +480,12 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 result = _b.sent();
                 _b.label = 9;
             case 9:
+                if (!(type === 'deviceName')) return [3 /*break*/, 11];
+                return [4 /*yield*/, updateDiyDeviceName_1.default(id, params)];
+            case 10:
+                result = _b.sent();
+                _b.label = 11;
+            case 11:
                 console.log('Jia ~ file: devices.ts ~ line 381 ~ updateDiyDevice ~ result', result);
                 if (result && result.error === 0) {
                     res.json({
@@ -479,22 +499,91 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                         data: null,
                     });
                 }
-                _b.label = 10;
-            case 10: return [3 /*break*/, 12];
-            case 11:
-                err_7 = _b.sent();
+                _b.label = 12;
+            case 12: return [3 /*break*/, 14];
+            case 13:
+                err_8 = _b.sent();
+                res.json({
+                    error: 500,
+                    data: null,
+                });
+                // Controller.deviceMap.delete(id);
+                eventBus_1.default.emit('sse');
+                return [3 /*break*/, 14];
+            case 14: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateDiyDevice = updateDiyDevice;
+/**
+ *
+ * @description 仅开关局域网设备
+ */
+var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, params, device, result, err_9;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, id = _a.id, params = _a.params;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 10, , 11]);
+                device = Controller_1.default.getDevice(id);
+                if (!(device instanceof LanDeviceController_1.default)) return [3 /*break*/, 8];
+                result = void 0;
+                if (!(device instanceof LanSwitchController_1.default)) return [3 /*break*/, 3];
+                return [4 /*yield*/, device.setSwitch(params.switch)];
+            case 2:
+                result = _b.sent();
+                _b.label = 3;
+            case 3:
+                if (!(device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default)) return [3 /*break*/, 5];
+                return [4 /*yield*/, device.setSwitch(params.switches)];
+            case 4:
+                result = _b.sent();
+                _b.label = 5;
+            case 5:
+                if (!(device instanceof LanTandHModificationController_1.default)) return [3 /*break*/, 7];
+                return [4 /*yield*/, device.setSwitch(params.switch)];
+            case 6:
+                result = _b.sent();
+                _b.label = 7;
+            case 7:
+                if (result === 0) {
+                    res.json({
+                        error: 0,
+                        data: null,
+                    });
+                }
+                else {
+                    res.json({
+                        error: 500,
+                        data: null,
+                    });
+                }
+                return [3 /*break*/, 9];
+            case 8:
+                res.json({
+                    error: 402,
+                    msg: 'not such device',
+                    data: null,
+                });
+                _b.label = 9;
+            case 9: return [3 /*break*/, 11];
+            case 10:
+                err_9 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
                 });
                 Controller_1.default.deviceMap.delete(id);
                 eventBus_1.default.emit('sse');
-                return [3 /*break*/, 12];
-            case 12: return [2 /*return*/];
+                return [3 /*break*/, 11];
+            case 11: return [2 /*return*/];
         }
     });
 }); };
-exports.updateDiyDevice = updateDiyDevice;
+exports.updateLanDevice = updateLanDevice;
 var removeDiyDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, diyDevices, code;
     return __generator(this, function (_a) {
@@ -527,14 +616,14 @@ var removeDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
 exports.removeDiyDevice = removeDiyDevice;
 // 更改恒温恒湿设备的温度单位
 var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, unit, device, code, err_8;
+    var _a, id, unit, device, code, err_10;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
                 _a = req.body, id = _a.id, unit = _a.unit;
                 device = Controller_1.default.getDevice(id);
-                if (!(device instanceof CloudTandHModificationController_1.default)) return [3 /*break*/, 2];
+                if (!(device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default)) return [3 /*break*/, 2];
                 return [4 /*yield*/, modifyDeviceStatus_1.changeDeviceUnit(id, unit)];
             case 1:
                 code = _b.sent();
@@ -562,7 +651,7 @@ var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 _b.label = 3;
             case 3: return [3 /*break*/, 5];
             case 4:
-                err_8 = _b.sent();
+                err_10 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -575,7 +664,7 @@ var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 exports.changeUnit = changeUnit;
 // 设置功率检查插座 & DualR3费率
 var setRate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, rate, device, code, err_9;
+    var _a, id, rate, device, code, err_11;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -610,7 +699,7 @@ var setRate = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 _b.label = 3;
             case 3: return [3 /*break*/, 5];
             case 4:
-                err_9 = _b.sent();
+                err_11 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,

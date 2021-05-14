@@ -62,6 +62,7 @@ var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceCont
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
 var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchController"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, function () {
     var res, title, views, lovelace_1, isDeviceExist, singalSwitchCard, _loop_1, _a, _b, device;
     var e_1, _c;
@@ -115,7 +116,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         device instanceof CloudDualR3Controller_1.default ||
                         device instanceof LanDualR3Controller_1.default) {
                         if (device instanceof LanDualR3Controller_1.default) {
-                            console.log("Jia ~ file: generateLovelace.ts ~ line 71 ~ generateLovelace ~ device", device);
+                            console.log('Jia ~ file: generateLovelace.ts ~ line 71 ~ generateLovelace ~ device', device);
                         }
                         if (device.maxChannel === 1 && device.deviceName) {
                             singalSwitchCard.entities.push(device.entityId + "_1");
@@ -142,7 +143,10 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                             lovelace_1.cards.push(tmpCard);
                         }
                     }
-                    if (device instanceof CloudTandHModificationController_1.default) {
+                    if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
                         var tmpCard = {
                             type: 'entities',
                             entities: ["switch." + device.deviceId, "sensor." + device.deviceId + "_t", "sensor." + device.deviceId + "_h"],

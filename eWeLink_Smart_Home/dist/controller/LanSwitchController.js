@@ -87,9 +87,10 @@ LanSwitchController.prototype.setSwitch = function (status) {
                     if ((res === null || res === void 0 ? void 0 : res.data) && res.data.error === 0) {
                         this.updateState(status);
                         this.params.switch = status;
+                        return [2 /*return*/, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/];
+                case 2: return [2 /*return*/, -1];
             }
         });
     });
