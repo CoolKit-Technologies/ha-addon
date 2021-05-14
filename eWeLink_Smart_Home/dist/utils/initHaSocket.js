@@ -82,6 +82,7 @@ var CloudDoubleColorLightController_1 = __importDefault(require("../controller/C
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var eventBus_1 = __importDefault(require("./eventBus"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 /**
  * @param {string} entity_id 实体id
  * @param {string} state // on | off
@@ -125,6 +126,10 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                 _h.sent();
                 _h.label = 8;
             case 8:
+                // lan 恒温恒湿
+                if (device instanceof LanTandHModificationController_1.default) {
+                    device.setSwitch(state);
+                }
                 if (!(device instanceof CloudSwitchController_1.default)) return [3 /*break*/, 10];
                 return [4 /*yield*/, device.updateSwitch(state)];
             case 9:
@@ -244,7 +249,7 @@ exports.default = (function (reconnect) {
                             return __generator(this, function (_e) {
                                 switch (_e.label) {
                                     case 0:
-                                        console.log('HA触发call_service事件', res);
+                                        console.log('HA emit call_service event', res);
                                         entity_id = res.service_data.entity_id, service = res.service;
                                         state = service === 'turn_off' ? 'off' : 'on';
                                         if (!Array.isArray(entity_id)) return [3 /*break*/, 8];

@@ -74,6 +74,8 @@ var app_1 = require("./config/app");
 var config_1 = require("./config/config");
 var sleep_1 = __importDefault(require("./utils/sleep"));
 var generateLovelace_1 = __importDefault(require("./utils/generateLovelace"));
+var AuthClass_1 = __importDefault(require("./class/AuthClass"));
+var eventBus_1 = __importDefault(require("./utils/eventBus"));
 coolkit_open_api_1.default.init({
     appId: app_1.appId,
     appSecret: app_1.appSecret,
@@ -84,26 +86,26 @@ coolkit_open_api_1.default.init({
             case 0:
                 initMdns_1.default(); // 扫描局域网设备
                 // todo
-                // await AuthClass.init();
-                // if (AuthClass.curAuth) {
-                //     eventBus.emit('init-ha-socket');
-                // }
-                return [4 /*yield*/, initHaSocket_1.default()];
+                // 完善认证逻辑
+                return [4 /*yield*/, AuthClass_1.default.init()];
             case 1:
                 // todo
-                // await AuthClass.init();
-                // if (AuthClass.curAuth) {
-                //     eventBus.emit('init-ha-socket');
-                // }
+                // 完善认证逻辑
+                _a.sent();
+                if (AuthClass_1.default.curAuth) {
+                    eventBus_1.default.emit('init-ha-socket');
+                }
+                return [4 /*yield*/, initHaSocket_1.default()];
+            case 2:
                 _a.sent(); // 跟HA建立socket连接
                 return [4 /*yield*/, initCkWs_1.default()];
-            case 2:
+            case 3:
                 _a.sent(); // 跟易微联Socket建立连接
                 return [4 /*yield*/, initCkApi_1.default()];
-            case 3:
+            case 4:
                 _a.sent(); // 初始化v2接口并保持登录
                 return [4 /*yield*/, sleep_1.default(3000)];
-            case 4:
+            case 5:
                 _a.sent();
                 generateLovelace_1.default();
                 return [2 /*return*/];

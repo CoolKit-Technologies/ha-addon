@@ -31,7 +31,7 @@ exports.default = (function () {
                 var diyDevice = formatDiyDevice_1.default(device);
                 device.updateState((_a = diyDevice.data) === null || _a === void 0 ? void 0 : _a.switch);
                 // 表示该diy设备在线
-                dataUtil_1.appendData('diy.json', [diyDevice.id], true);
+                dataUtil_1.appendData('diy.json', [diyDevice.id, 'online'], true);
             }
             if (device instanceof LanSwitchController_1.default) {
                 var decryptData = device.parseEncryptedData();

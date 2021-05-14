@@ -92,11 +92,11 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
-                                _d.trys.push([0, 3, , 4]);
+                                _d.trys.push([0, 4, , 5]);
                                 type = ws.type, data = ws.data;
                                 console.log('接受到CKWS消息:type-->', data);
                                 console.log('接受到CKWS消息:\n', data);
-                                if (!(type === 'message' && data !== 'pong')) return [3 /*break*/, 2];
+                                if (!(type === 'message' && data !== 'pong')) return [3 /*break*/, 3];
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {
                                     return [2 /*return*/];
@@ -155,9 +155,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                             device.updateState(tmp.params.switches);
                                         }
                                     }
-                                    // 同步状态到前端
                                     eventBus_1.default.emit('update-controller', data);
-                                    eventBus_1.default.emit('sse');
                                 }
                                 if (!(tmp.action === 'sysmsg' && (device === null || device === void 0 ? void 0 : device.entityId))) return [3 /*break*/, 2];
                                 online = tmp.params.online;
@@ -172,16 +170,18 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         attributes: __assign(__assign({}, res.data.attributes), { state: 'unavailable' }),
                                     });
                                 }
-                                // 同步状态到前端
                                 eventBus_1.default.emit('device-offline', device.deviceId);
-                                eventBus_1.default.emit('sse');
                                 _d.label = 2;
-                            case 2: return [3 /*break*/, 4];
-                            case 3:
+                            case 2:
+                                // 同步状态到前端
+                                eventBus_1.default.emit('sse');
+                                _d.label = 3;
+                            case 3: return [3 /*break*/, 5];
+                            case 4:
                                 error_1 = _d.sent();
                                 console.log(error_1);
-                                return [3 /*break*/, 4];
-                            case 4: return [2 /*return*/];
+                                return [3 /*break*/, 5];
+                            case 5: return [2 /*return*/];
                         }
                     });
                 }); });

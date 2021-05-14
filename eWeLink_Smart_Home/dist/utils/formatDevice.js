@@ -17,6 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFormattedDeviceList = exports.formatDevice = void 0;
 var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
+var lodash_1 = __importDefault(require("lodash"));
 var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceController"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
@@ -25,6 +26,7 @@ var dataUtil_1 = require("./dataUtil");
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var ghostManufacturer = function (manufacturer) {
     if (manufacturer === void 0) { manufacturer = 'eWeLink'; }
     if (~manufacturer.indexOf('松诺') || ~manufacturer.toLocaleUpperCase().indexOf('SONOFF')) {
@@ -39,6 +41,7 @@ var formatDevice = function (data) {
             key: data.deviceId,
             uiid: data.uiid,
             deviceId: data.deviceId,
+            deviceName: data.deviceName,
             disabled: data.disabled,
             ip: data.ip,
             port: data.port,
@@ -76,7 +79,7 @@ var formatDevice = function (data) {
         if (data instanceof CloudMultiChannelSwitchController_1.default) {
             tags = data.channelName;
         }
-        if (data instanceof CloudTandHModificationController_1.default) {
+        if (data instanceof CloudTandHModificationController_1.default || data instanceof LanTandHModificationController_1.default) {
             unit = data.unit;
         }
         if (data instanceof CloudPowerDetectionSwitchController_1.default || data instanceof CloudDualR3Controller_1.default) {
@@ -134,12 +137,24 @@ var getFormattedDeviceList = function () {
     }
     var oldDiyDevices = dataUtil_1.getDataSync('diy.json', []);
     for (var key in oldDiyDevices) {
-        if (!Controller_1.default.getDevice(key)) {
-            result.push({
-                online: false,
-                type: 1,
-                deviceId: key,
-            });
+        try {
+            if (!Controller_1.default.getDevice(key)) {
+                result.push({
+                    online: false,
+                    type: 1,
+                    deviceId: key,
+                    deviceName: lodash_1.default.get(oldDiyDevices, [key, 'deviceName']),
+                });
+            }
+        }
+        catch (error) {
+            if (!Controller_1.default.getDevice(key)) {
+                result.push({
+                    online: false,
+                    type: 1,
+                    deviceId: key,
+                });
+            }
         }
     }
     result.sort(function (a, b) {

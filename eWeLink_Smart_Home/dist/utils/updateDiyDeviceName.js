@@ -39,65 +39,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
-var restApi_1 = require("../apis/restApi");
-var dataUtil_1 = require("../utils/dataUtil");
-var DiyController = /** @class */ (function () {
-    function DiyController(_a) {
-        var deviceId = _a.deviceId, ip = _a.ip, _b = _a.port, port = _b === void 0 ? 8081 : _b, disabled = _a.disabled, txt = _a.txt;
-        this.type = 1;
-        this.uiid = 1;
-        this.deviceId = deviceId;
-        this.ip = ip;
-        this.port = port;
-        this.entityId = "switch." + deviceId;
-        // this.entityId = `switch.${deviceId}`;
-        this.disabled = disabled;
-        this.txt = txt;
-        this.deviceName = dataUtil_1.getDataSync('diy.json', [deviceId, 'deviceName']) || "DIY-" + deviceId;
-    }
-    return DiyController;
-}());
-DiyController.prototype.setSwitch = function (status) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            axios_1.default
-                .post("http://" + this.ip + ":" + this.port + "/zeroconf/switch", {
-                sequence: Date.now(),
-                deviceId: this.deviceId,
-                data: {
-                    switch: status,
-                },
-            })
-                .catch(function (e) {
-                console.log('控制DIY设备出错，设备id：', _this.deviceId);
-            });
-            return [2 /*return*/];
-        });
+var Controller_1 = __importDefault(require("../controller/Controller"));
+var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
+var dataUtil_1 = require("./dataUtil");
+var eventBus_1 = __importDefault(require("./eventBus"));
+exports.default = (function (id, params) { return __awaiter(void 0, void 0, void 0, function () {
+    var error, device;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, dataUtil_1.appendData('diy.json', [id, 'deviceName'], params.deviceName)];
+            case 1:
+                error = _a.sent();
+                if (error === 0) {
+                    device = Controller_1.default.getDevice(id);
+                    if (device instanceof DiyDeviceController_1.default) {
+                        device.deviceName = params.deviceName;
+                        // 修改DIY名字没有触发MDNS，主动触发sse
+                        eventBus_1.default.emit('sse');
+                    }
+                }
+                return [2 /*return*/, {
+                        error: error,
+                    }];
+        }
     });
-};
-DiyController.prototype.updateState = function (status) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            if (this.disabled) {
-                return [2 /*return*/];
-            }
-            restApi_1.updateStates(this.entityId, {
-                entity_id: this.entityId,
-                state: status,
-                attributes: {
-                    restored: true,
-                    supported_features: 0,
-                    friendly_name: this.entityId,
-                    state: status,
-                },
-            }).catch(function (e) {
-                console.log('更新Diy设备到HA出错，设备id：', _this.deviceId);
-            });
-            return [2 /*return*/];
-        });
-    });
-};
-exports.default = DiyController;
+}); });

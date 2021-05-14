@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
 var formatDevice_1 = require("../utils/formatDevice");
 var sse = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var handler;
     return __generator(this, function (_a) {
         res.header({
             'Content-Type': 'text/event-stream',
@@ -50,9 +51,15 @@ var sse = function (req, res) { return __awaiter(void 0, void 0, void 0, functio
             'Access-Control-Allow-Origin': '*',
         });
         res.write('retry: 10000\n');
-        eventBus_1.default.on('sse', function () {
+        handler = function () {
             var result = formatDevice_1.getFormattedDeviceList();
             res.write('data: ' + JSON.stringify(result) + '\n\n');
+        };
+        eventBus_1.default.addListener('sse', handler);
+        res.on('close', function () {
+            eventBus_1.default.removeListener('sse', handler);
+            res.end();
+            console.log('clooooooooooooooooooooooooooooooooooooose');
         });
         return [2 /*return*/];
     });

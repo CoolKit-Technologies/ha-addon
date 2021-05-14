@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -64,12 +75,14 @@ var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
         _this.params = params.params;
         _this.disabled = params.disabled;
         _this.state = params.params.switch;
-        _this.current = params.params.current;
-        _this.voltage = params.params.voltage;
         _this.uiid = params.extra.uiid;
         _this.power = params.params.power;
         _this.online = params.online;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
+        if (_this.uiid === 32) {
+            _this.current = params.params.current;
+            _this.voltage = params.params.voltage;
+        }
         return _this;
         // // 如果电流电压功率有更新就通知我
         // setInterval(() => {
@@ -111,7 +124,7 @@ CloudPowerDetectionSwitchController.prototype.updateSwitch = function (status) {
 CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
     var power = _a.power, current = _a.current, voltage = _a.voltage, status = _a.status;
     return __awaiter(this, void 0, void 0, function () {
-        var state, res;
+        var state, attributes, res;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -122,18 +135,20 @@ CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
                     if (!this.online) {
                         state = 'unavailable';
                     }
+                    attributes = {
+                        restored: true,
+                        supported_features: 0,
+                        friendly_name: this.deviceName,
+                        power: (power || this.power || 0) + " W",
+                        state: state || this.state,
+                    };
+                    if (this.uiid === 32) {
+                        attributes = __assign(__assign({}, attributes), { current: (current || this.current || 0) + " A", voltage: (voltage || this.voltage || 0) + " V" });
+                    }
                     return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
                             entity_id: this.entityId,
                             state: state || this.state,
-                            attributes: {
-                                restored: true,
-                                supported_features: 0,
-                                friendly_name: this.deviceName,
-                                power: (power || this.power || 0) + " W",
-                                current: (current || this.current || 0) + " A",
-                                voltage: (voltage || this.voltage || 0) + " V",
-                                state: state || this.state,
-                            },
+                            attributes: attributes,
                         })];
                 case 1:
                     res = _b.sent();

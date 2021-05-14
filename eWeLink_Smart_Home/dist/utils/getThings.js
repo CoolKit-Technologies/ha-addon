@@ -57,6 +57,7 @@ var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchCont
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var dataUtil_1 = require("./dataUtil");
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var lang, _a, error, data, thingList, i, item, deviceIndex, _b, extra, deviceid, name_1, params, devicekey, apikey, tags, old, decryptData, decryptData, decryptData, device, status_1, power, voltage, current, data_1;
@@ -122,7 +123,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             if (device instanceof CloudSwitchController_1.default) {
                                 !device.disabled && device.updateState(params.switch);
                             }
-                            if (device instanceof CloudTandHModificationController_1.default) {
+                            if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
                                 !device.disabled && device.updateState(params.switch);
                                 !device.disabled && device.updateTandH(params.currentTemperature, params.currentHumidity);
                             }

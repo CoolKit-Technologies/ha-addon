@@ -178,6 +178,7 @@ var HaSocket = /** @class */ (function () {
                         _this.client.send(JSON.stringify(__assign({ id: cur }, data)));
                         // 设置超时
                         setTimeout(function () {
+                            _this.client.removeEventListener('message', handler);
                             resolve(-1);
                         }, 5000);
                         _this.client.on('message', (handler = function (res) {

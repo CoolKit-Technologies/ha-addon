@@ -56,7 +56,7 @@ var Mdns = /** @class */ (function () {
      */
     Mdns.prototype.onResponse = function (callback) {
         this.mdns.on('response', function (packet) {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c, _d, _e, _f;
             var answers = packet.answers;
             if (Array.isArray(answers)) {
                 var tmp = {};
@@ -104,7 +104,7 @@ var Mdns = /** @class */ (function () {
                     return;
                 }
                 if (((_a = tmp.txt) === null || _a === void 0 ? void 0 : _a.type) === 'diy_plug') {
-                    console.log('发现diy设备');
+                    console.log('Found Diy Switch ');
                     var diyDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -113,6 +113,7 @@ var Mdns = /** @class */ (function () {
                     callback && callback(diyDevice);
                 }
                 if (((_b = tmp.txt) === null || _b === void 0 ? void 0 : _b.type) === 'plug') {
+                    console.log('Found Lan Switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -122,6 +123,7 @@ var Mdns = /** @class */ (function () {
                     callback && callback(lanDevice);
                 }
                 if (((_c = tmp.txt) === null || _c === void 0 ? void 0 : _c.type) === 'strip') {
+                    console.log('Found Lan Multi-Switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -131,17 +133,28 @@ var Mdns = /** @class */ (function () {
                     callback && callback(lanDevice);
                 }
                 if (((_d = tmp.txt) === null || _d === void 0 ? void 0 : _d.type) === 'multifun_switch') {
+                    console.log('Found Lan DualR3');
                     var dualR3 = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
                         lanType: 'multifun_switch',
                     });
-                    console.log('发现局域网的DualR3');
                     callback && callback(dualR3);
                 }
                 if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === 'enhanced_plug') {
+                    console.log('Found Lan 单通道插座增强版（用电统计）');
                     // todo
+                }
+                if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === 'th_plug') {
+                    console.log('Found Lan 单通道温湿度控制器');
+                    var device = Controller_1.default.setDevice({
+                        id: key,
+                        data: tmp,
+                        type: 2,
+                        lanType: 'th_plug',
+                    });
+                    callback && callback(device);
                 }
             }
         });

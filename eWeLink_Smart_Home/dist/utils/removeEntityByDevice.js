@@ -10,11 +10,12 @@ var CloudTandHModificationController_1 = __importDefault(require("../controller/
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 exports.default = (function (device) {
     if (device instanceof DiyDeviceController_1.default) {
         return;
     }
-    if (device instanceof CloudTandHModificationController_1.default) {
+    if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
         restApi_1.removeStates(device.entityId);
         restApi_1.removeStates("sensor." + device.deviceId + "_h");
         restApi_1.removeStates("sensor." + device.deviceId + "_t");
