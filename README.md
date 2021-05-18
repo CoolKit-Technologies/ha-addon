@@ -7,7 +7,7 @@
 
 ## ADD-ON:
 
--   Refer to[Wiki](https://appcms-src.coolkit.cn/uncategorized/9213.html)
+-   Refer to [Wiki](https://bit.ly/eWeLinkaddon)
 
 ## DOCKER:
 
@@ -17,7 +17,7 @@
 1. `git clone https://github.com/CoolKit-Technologies/ha-addon.git`
 2. `cd Home-Assistant-AddOn/eWeLink_Smart_Home/`
 3. `docker build . -t ewelink_smart_home`
-4. Run the code below. Replace `yourHomeAssistantUrl` with your current Home Assisant URL. Replace `yourHomeAssistantAuth` with a long lived access token.(How to create Long Lived Access Tokens [Wiki](https://appcms-src.coolkit.cn/uncategorized/9213.html))
+4. Run the code below. Replace `yourHomeAssistantUrl` with your current Home Assisant URL. Replace `yourHomeAssistantAuth` with a long lived access token.(How to create Long Lived Access Tokens [Wiki](https://bit.ly/eWeLinkaddon))
 
 ```
 docker run -d \
