@@ -1,9 +1,9 @@
 # Changelogs
 
-## v2.0.7-beta
+## v2.1.0-beta
 
--   Optimize.
--   Fix BUG.
+-   **Optimized authorization process with Home Assistant built-in auth providers.**
+-   Fixed the issue of failing to change the temperature unit for TH16.
 
 ## v2.0.6-beta
 
