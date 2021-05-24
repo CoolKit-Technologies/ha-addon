@@ -94,8 +94,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             case 0:
                                 _d.trys.push([0, 4, , 5]);
                                 type = ws.type, data = ws.data;
-                                console.log('接受到CKWS消息:type-->', data);
-                                console.log('接受到CKWS消息:\n', data);
+                                console.log('receive CKWS msg:type-->', data);
+                                console.log('receive CKWS msg:\n', data);
                                 if (!(type === 'message' && data !== 'pong')) return [3 /*break*/, 3];
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {

@@ -63,10 +63,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var restApi_1 = require("../apis/restApi");
+var lodash_1 = __importDefault(require("lodash"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
+var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
     __extends(CloudPowerDetectionSwitchController, _super);
     function CloudPowerDetectionSwitchController(params) {
@@ -74,15 +75,9 @@ var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
         _this.entityId = "switch." + params.deviceId;
         _this.params = params.params;
         _this.disabled = params.disabled;
-        _this.state = params.params.switch;
         _this.uiid = params.extra.uiid;
-        _this.power = params.params.power;
         _this.online = params.online;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
-        if (_this.uiid === 32) {
-            _this.current = params.params.current;
-            _this.voltage = params.params.voltage;
-        }
         return _this;
         // // 如果电流电压功率有更新就通知我
         // setInterval(() => {
@@ -139,23 +134,19 @@ CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
                         restored: true,
                         supported_features: 0,
                         friendly_name: this.deviceName,
-                        power: (power || this.power || 0) + " W",
-                        state: state || this.state,
+                        power: (power || lodash_1.default.get(this, ['params', 'power'], 0)) + " W",
+                        state: state || lodash_1.default.get(this, ['params', 'switch']),
                     };
                     if (this.uiid === 32) {
-                        attributes = __assign(__assign({}, attributes), { current: (current || this.current || 0) + " A", voltage: (voltage || this.voltage || 0) + " V" });
+                        attributes = __assign(__assign({}, attributes), { current: (current || lodash_1.default.get(this, ['params', 'current'], 0)) + " A", voltage: (voltage || lodash_1.default.get(this, ['params', 'voltage'], 0)) + " V" });
                     }
                     return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
                             entity_id: this.entityId,
-                            state: state || this.state,
+                            state: state || lodash_1.default.get(this, ['params', 'switch']),
                             attributes: attributes,
                         })];
                 case 1:
                     res = _b.sent();
-                    state && (this.state = state);
-                    power && (this.power = power);
-                    current && (this.current = current);
-                    voltage && (this.voltage = voltage);
                     return [2 /*return*/];
             }
         });

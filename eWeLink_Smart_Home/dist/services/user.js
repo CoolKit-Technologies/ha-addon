@@ -77,7 +77,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = exports.isLogin = exports.logout = exports.login = void 0;
+exports.isAuth = exports.auth = exports.isLogin = exports.logout = exports.login = void 0;
 var coolkit_open_api_1 = __importDefault(require("coolkit-open-api"));
 var dataUtil_1 = require("../utils/dataUtil");
 var getThings_1 = __importDefault(require("../utils/getThings"));
@@ -260,7 +260,6 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
             case 1:
                 result = _b.sent();
                 if (result && result.status === 200) {
-                    // todo
                     AuthClass_1.default.setAuth(req.ip, clientId, result.data);
                     eventBus_1.default.emit('init-ha-socket');
                     console.log('Jia ~ file: redirectToAuth.ts ~ line 44 ~ result.data', result.data);
@@ -278,7 +277,6 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [3 /*break*/, 3];
             case 2:
                 err_4 = _b.sent();
-                console.log(err_4);
                 res.json({
                     error: 500,
                     data: err_4,
@@ -289,3 +287,26 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
     });
 }); };
 exports.auth = auth;
+var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var status_1;
+    return __generator(this, function (_a) {
+        try {
+            status_1 = AuthClass_1.default.isValid(req.ip);
+            res.json({
+                error: 0,
+                data: {
+                    isAuth: status_1,
+                },
+            });
+        }
+        catch (err) {
+            console.log(err);
+            res.json({
+                error: 500,
+                data: err,
+            });
+        }
+        return [2 /*return*/];
+    });
+}); };
+exports.isAuth = isAuth;

@@ -77,6 +77,7 @@ var AuthClass = /** @class */ (function () {
                         origin_1 = _a[_i];
                         auth = JSON.parse(auths[origin_1]);
                         if (!(auth && Date.now() < +auth.expires_time)) return [3 /*break*/, 3];
+                        AuthClass.AuthMap.set(origin_1, auth);
                         return [4 /*yield*/, this.refresh(origin_1)];
                     case 2:
                         tmp = _c.sent();
@@ -97,8 +98,8 @@ var AuthClass = /** @class */ (function () {
             });
         });
     };
-    AuthClass.prototype.isValid = function (origin) {
-        var auth = AuthClass.AuthMap.get(origin);
+    AuthClass.prototype.isValid = function (host) {
+        var auth = AuthClass.AuthMap.get(host);
         if (auth && auth.expires_time > Date.now()) {
             this.curAuth = auth.access_token;
             return true;
@@ -113,6 +114,7 @@ var AuthClass = /** @class */ (function () {
         dataUtil_1.appendData('auth.json', [origin], JSON.stringify(data));
         setTimeout(function () {
             _this.refresh(origin);
+            console.log("it's time to refresh token");
         }, (auth.expires_in - 300) * 1000);
     };
     AuthClass.prototype.refresh = function (origin) {
@@ -124,9 +126,11 @@ var AuthClass = /** @class */ (function () {
                         auth = AuthClass.AuthMap.get(origin);
                         if (!auth) return [3 /*break*/, 2];
                         cliend_id = auth.cliend_id, refresh_token = auth.refresh_token;
+                        console.log('refreshing...');
                         return [4 /*yield*/, restApi_1.refreshAuth(cliend_id, refresh_token)];
                     case 1:
                         res = _a.sent();
+                        console.log('refresh token success!');
                         if (res && res.status === 200) {
                             this.setAuth(origin, cliend_id, __assign(__assign({}, auth), res.data));
                         }

@@ -1,6 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HaToken = void 0;
+/**
+ * @file auth.ts
+ * @description 使用新的验证方式,无须手动输入token
+ * @deprecated
+ */
 var dataUtil_1 = require("../utils/dataUtil");
 var config_1 = require("./config");
 var auth;

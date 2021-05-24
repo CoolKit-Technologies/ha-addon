@@ -58,9 +58,10 @@ var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3
 var dataUtil_1 = require("./dataUtil");
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var lang, _a, error, data, thingList, i, item, deviceIndex, _b, extra, deviceid, name_1, params, devicekey, apikey, tags, old, decryptData, decryptData, decryptData, device, status_1, power, voltage, current, data_1;
+    var lang, _a, error, data, thingList, i, item, deviceIndex, _b, extra, deviceid, name_1, params, devicekey, apikey, tags, old, decryptData, decryptData, decryptData, decryptData, device, status_1, power, voltage, current, data_1;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -110,6 +111,12 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     decryptData = old.parseEncryptedData();
                                     if (decryptData) {
                                         old.updateState(decryptData.switches);
+                                    }
+                                }
+                                if (old instanceof LanPowerDetectionSwitchController_1.default) {
+                                    decryptData = old.parseEncryptedData();
+                                    if (decryptData) {
+                                        old.updateState(decryptData.switch);
                                     }
                                 }
                                 continue;

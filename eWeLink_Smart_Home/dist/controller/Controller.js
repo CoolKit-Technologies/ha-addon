@@ -31,6 +31,7 @@ var UnsupportDeviceController_1 = __importDefault(require("./UnsupportDeviceCont
 var CloudDualR3Controller_1 = __importDefault(require("./CloudDualR3Controller"));
 var LanDualR3Controller_1 = __importDefault(require("./LanDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("./LanTandHModificationController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("./LanPowerDetectionSwitchController"));
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -84,13 +85,16 @@ var Controller = /** @class */ (function () {
             var params_1 = formatLanDevice_1.default(data);
             // 如果ip不存在说明该设备可能不支持局域网
             if (!params_1 || (!params_1.ip && !params_1.target)) {
-                console.log('该设备不支持局域网', params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId);
+                console.log('the device is not lan support', params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId);
                 return;
             }
             var old = Controller.getDevice(id);
             if (old instanceof LanDeviceController_1.default) {
                 old.iv = params_1 === null || params_1 === void 0 ? void 0 : params_1.iv;
                 old.encryptedData = params_1 === null || params_1 === void 0 ? void 0 : params_1.encryptedData;
+                if (old.iv && old.devicekey && old.encryptedData) {
+                    old.params = old.parseEncryptedData();
+                }
                 return old;
             }
             // 如果设备之前是Cloud设备,需要保持设备的位置不变
@@ -123,6 +127,11 @@ var Controller = /** @class */ (function () {
             }
             if (lanType === 'th_plug') {
                 var lanDevice = new LanTandHModificationController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                Controller.deviceMap.set(id, lanDevice);
+                return lanDevice;
+            }
+            if (lanType === 'enhanced_plug') {
+                var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }

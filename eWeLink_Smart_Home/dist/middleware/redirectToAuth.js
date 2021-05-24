@@ -62,16 +62,15 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
             next();
         }
         else {
-            if (url === '/' || url.indexOf('/?code') === 0) {
-                next();
-            }
-            else {
-                console.log('Jia ~ file: redirectToAuth.ts ~ line 40 ~ url', url);
-                res.json({
-                    error: 302,
-                    data: url_1.HaRestURL,
-                });
-            }
+            // if (url === '/' || url.indexOf('/?code') === 0) {
+            //     next();
+            // } else {
+            //     console.log('Jia ~ file: redirectToAuth.ts ~ line 40 ~ url', url);
+            res.json({
+                error: 302,
+                data: url_1.HaRestURL,
+            });
+            // }
         }
         return [2 /*return*/];
     });

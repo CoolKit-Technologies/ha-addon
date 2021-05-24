@@ -51,32 +51,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLanDevice = exports.setRate = exports.changeUnit = exports.removeDiyDevice = exports.updateDiyDevice = exports.upgradeDevice = exports.getOTAinfo = exports.proxy2ws = exports.updateChannelName = exports.updateDeviceName = exports.disableDevice = exports.getDeviceById = exports.getDevices = void 0;
-var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var Controller_1 = __importDefault(require("../controller/Controller"));
-var initMdns_1 = __importDefault(require("../utils/initMdns"));
-var modifyDeviceStatus_1 = require("../utils/modifyDeviceStatus");
-var formatDevice_1 = require("../utils/formatDevice");
-var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
-var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
-var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
-var ckApi_1 = require("../apis/ckApi");
-var diyDeviceApi_1 = require("../apis/diyDeviceApi");
-var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
-var dataUtil_1 = require("../utils/dataUtil");
 var lodash_1 = __importDefault(require("lodash"));
+var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
-var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceController"));
-var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
-var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
-var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
-var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
+var initMdns_1 = __importDefault(require("../utils/initMdns"));
+var Controller_1 = __importDefault(require("../controller/Controller"));
 var syncDevice2Ha_1 = __importDefault(require("../utils/syncDevice2Ha"));
+var dataUtil_1 = require("../utils/dataUtil");
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
+var updateDiyDeviceName_1 = __importDefault(require("../utils/updateDiyDeviceName"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
 var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceController"));
+var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
+var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
+var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
+var formatDevice_1 = require("../utils/formatDevice");
+var ckApi_1 = require("../apis/ckApi");
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
-var updateDiyDeviceName_1 = __importDefault(require("../utils/updateDiyDeviceName"));
+var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
+var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
+var modifyDeviceStatus_1 = require("../utils/modifyDeviceStatus");
+var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
+var diyDeviceApi_1 = require("../apis/diyDeviceApi");
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var mdns = initMdns_1.default();
 var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var type, refresh, data, err_1;
@@ -303,6 +304,9 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.updateChannelName = updateChannelName;
+/**
+ * @description 仅针对云端设备
+ */
 var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, apikey, id, params, result, error, device, err_5;
     return __generator(this, function (_b) {
@@ -326,7 +330,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         data: result,
                     });
                     device = Controller_1.default.getDevice(id);
-                    if (device instanceof CloudDeviceController_1.default || device instanceof LanDeviceController_1.default) {
+                    if (device instanceof CloudDeviceController_1.default) {
                         device.params = mergeDeviceParams_1.default(device.params, params);
                         device.online = true;
                         eventBus_1.default.emit('sse');
@@ -527,9 +531,9 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 _a = req.body, id = _a.id, params = _a.params;
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 10, , 11]);
+                _b.trys.push([1, 12, , 13]);
                 device = Controller_1.default.getDevice(id);
-                if (!(device instanceof LanDeviceController_1.default)) return [3 /*break*/, 8];
+                if (!(device instanceof LanDeviceController_1.default)) return [3 /*break*/, 10];
                 result = void 0;
                 if (!(device instanceof LanSwitchController_1.default)) return [3 /*break*/, 3];
                 return [4 /*yield*/, device.setSwitch(params.switch)];
@@ -549,6 +553,12 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 result = _b.sent();
                 _b.label = 7;
             case 7:
+                if (!(device instanceof LanPowerDetectionSwitchController_1.default)) return [3 /*break*/, 9];
+                return [4 /*yield*/, device.setSwitch(params.switch)];
+            case 8:
+                result = _b.sent();
+                _b.label = 9;
+            case 9:
                 if (result === 0) {
                     res.json({
                         error: 0,
@@ -561,16 +571,16 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                         data: null,
                     });
                 }
-                return [3 /*break*/, 9];
-            case 8:
+                return [3 /*break*/, 11];
+            case 10:
                 res.json({
                     error: 402,
                     msg: 'not such device',
                     data: null,
                 });
-                _b.label = 9;
-            case 9: return [3 /*break*/, 11];
-            case 10:
+                _b.label = 11;
+            case 11: return [3 /*break*/, 13];
+            case 12:
                 err_9 = _b.sent();
                 res.json({
                     error: 500,
@@ -578,8 +588,8 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 });
                 Controller_1.default.deviceMap.delete(id);
                 eventBus_1.default.emit('sse');
-                return [3 /*break*/, 11];
-            case 11: return [2 /*return*/];
+                return [3 /*break*/, 13];
+            case 13: return [2 /*return*/];
         }
     });
 }); };
@@ -671,7 +681,10 @@ var setRate = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 _b.trys.push([0, 4, , 5]);
                 _a = req.body, id = _a.id, rate = _a.rate;
                 device = Controller_1.default.getDevice(id);
-                if (!(device instanceof CloudPowerDetectionSwitchController_1.default || device instanceof CloudDualR3Controller_1.default)) return [3 /*break*/, 2];
+                if (!(device instanceof CloudPowerDetectionSwitchController_1.default ||
+                    device instanceof CloudDualR3Controller_1.default ||
+                    device instanceof LanPowerDetectionSwitchController_1.default ||
+                    device instanceof LanDualR3Controller_1.default)) return [3 /*break*/, 2];
                 return [4 /*yield*/, modifyDeviceStatus_1.setDeviceRate(id, rate)];
             case 1:
                 code = _b.sent();

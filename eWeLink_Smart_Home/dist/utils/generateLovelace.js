@@ -61,6 +61,7 @@ var Controller_1 = __importDefault(require("../controller/Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -105,7 +106,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         singalSwitchCard.entities.push(device.entityId);
                         return "continue";
                     }
-                    if (device instanceof LanSwitchController_1.default) {
+                    if (device instanceof LanSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
                         if (device.selfApikey && device.devicekey) {
                             singalSwitchCard.entities.push(device.entityId);
                         }

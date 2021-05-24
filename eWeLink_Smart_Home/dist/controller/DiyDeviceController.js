@@ -90,7 +90,7 @@ DiyController.prototype.updateState = function (status) {
                 attributes: {
                     restored: true,
                     supported_features: 0,
-                    friendly_name: this.entityId,
+                    friendly_name: this.deviceName || this.entityId,
                     state: status,
                 },
             }).catch(function (e) {

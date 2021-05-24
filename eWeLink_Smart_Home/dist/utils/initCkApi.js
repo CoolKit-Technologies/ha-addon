@@ -59,12 +59,14 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
         switch (_a.label) {
             case 0:
                 loginParams = dataUtil_1.getDataSync('user.json', ['login']);
+                console.log('Jia ~ file: initCkApi.ts ~ line 9 ~ loginParams', loginParams);
                 if (!loginParams) return [3 /*break*/, 4];
                 return [4 /*yield*/, coolkit_open_api_1.default.user.login(loginParams)];
             case 1:
                 result = _a.sent();
+                console.log('Jia ~ file: initCkApi.ts ~ line 10 ~ result', result);
                 if (!(result.error === 0)) return [3 /*break*/, 4];
-                console.log('重新登录成功！');
+                console.log('relogin success');
                 return [4 /*yield*/, dataUtil_1.saveData('user.json', JSON.stringify(__assign(__assign({}, result.data), { login: loginParams })))];
             case 2:
                 _a.sent();

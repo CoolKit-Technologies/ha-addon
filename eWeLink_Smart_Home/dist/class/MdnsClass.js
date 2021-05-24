@@ -144,7 +144,13 @@ var Mdns = /** @class */ (function () {
                 }
                 if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === 'enhanced_plug') {
                     console.log('Found Lan 单通道插座增强版（用电统计）');
-                    // todo
+                    var device = Controller_1.default.setDevice({
+                        id: key,
+                        data: tmp,
+                        type: 2,
+                        lanType: 'enhanced_plug',
+                    });
+                    callback && callback(device);
                 }
                 if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === 'th_plug') {
                     console.log('Found Lan 单通道温湿度控制器');

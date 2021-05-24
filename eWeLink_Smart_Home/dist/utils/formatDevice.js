@@ -27,6 +27,8 @@ var CloudTandHModificationController_1 = __importDefault(require("../controller/
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var ghostManufacturer = function (manufacturer) {
     if (manufacturer === void 0) { manufacturer = 'eWeLink'; }
     if (~manufacturer.indexOf('松诺') || ~manufacturer.toLocaleUpperCase().indexOf('SONOFF')) {
@@ -52,9 +54,12 @@ var formatDevice = function (data) {
         };
     }
     if (data instanceof LanDeviceController_1.default) {
-        var tags = void 0;
+        var tags = void 0, unit = void 0;
         if (data instanceof LanMultiChannelSwitchController_1.default) {
             tags = data.channelName;
+        }
+        if (data instanceof LanTandHModificationController_1.default) {
+            unit = data.unit;
         }
         return {
             key: data.deviceId,
@@ -72,6 +77,7 @@ var formatDevice = function (data) {
             online: data.online,
             index: data.index,
             tags: tags,
+            unit: unit,
         };
     }
     if (data instanceof CloudDeviceController_1.default) {
@@ -79,10 +85,13 @@ var formatDevice = function (data) {
         if (data instanceof CloudMultiChannelSwitchController_1.default) {
             tags = data.channelName;
         }
-        if (data instanceof CloudTandHModificationController_1.default || data instanceof LanTandHModificationController_1.default) {
+        if (data instanceof CloudTandHModificationController_1.default) {
             unit = data.unit;
         }
-        if (data instanceof CloudPowerDetectionSwitchController_1.default || data instanceof CloudDualR3Controller_1.default) {
+        if (data instanceof CloudPowerDetectionSwitchController_1.default ||
+            data instanceof CloudDualR3Controller_1.default ||
+            data instanceof LanDualR3Controller_1.default ||
+            data instanceof LanPowerDetectionSwitchController_1.default) {
             rate = data.rate;
         }
         return {

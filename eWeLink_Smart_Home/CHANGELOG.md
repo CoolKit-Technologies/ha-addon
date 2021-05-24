@@ -1,5 +1,10 @@
 # Changelogs
 
+## v2.0.7-beta
+
+-   Optimize.
+-   Fix BUG.
+
 ## v2.0.6-beta
 
 -   Temperature & Humidity Switch support LAN.

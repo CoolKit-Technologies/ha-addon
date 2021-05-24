@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setSwitches = exports.setSwitch = void 0;
+exports.getLanDeviceParams = exports.setSwitches = exports.setSwitch = void 0;
 var axios_1 = __importDefault(require("axios"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lanControlAuthenticationUtils_1 = __importDefault(require("../utils/lanControlAuthenticationUtils"));
@@ -51,7 +51,7 @@ var setSwitch = function (params) { return __awaiter(void 0, void 0, void 0, fun
                 ip = params.ip, port = params.port, deviceid = params.deviceid, devicekey = params.devicekey, data = params.data, selfApikey = params.selfApikey;
                 iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
                 reqData = {
-                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(("abcdef" + Date.now() + "abcdef").slice(0, 16)),
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
                     deviceid: deviceid,
                     selfApikey: selfApikey,
                     encrypt: true,
@@ -92,7 +92,7 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
                 console.log('Jia ~ file: lanDeviceApi.ts ~ line 28 ~ setSwitches ~ params', params);
                 iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
                 reqData = {
-                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(("abcdef" + Date.now() + "abcdef").slice(0, 16)),
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
                     deviceid: deviceid,
                     selfApikey: selfApikey,
                     encrypt: true,
@@ -124,3 +124,39 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.setSwitches = setSwitches;
+/**
+ *
+ * @deprecated 局域网设备好像不支持该接口
+ */
+var getLanDeviceParams = function (params) { return __awaiter(void 0, void 0, void 0, function () {
+    var ip, port, deviceid, devicekey, selfApikey, iv, reqData, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ip = params.ip, port = params.port, deviceid = params.deviceid, devicekey = params.devicekey, selfApikey = params.selfApikey;
+                iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
+                reqData = {
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
+                    deviceid: deviceid,
+                    selfApikey: selfApikey,
+                    encrypt: true,
+                    sequence: "" + Date.now(),
+                    data: lanControlAuthenticationUtils_1.default.encryptionData({
+                        iv: iv,
+                        data: JSON.stringify({}),
+                        key: devicekey,
+                    }),
+                };
+                res = axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/info", reqData);
+                res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        console.log('get lan device params failed:', deviceid);
+                        return [2 /*return*/];
+                    });
+                }); });
+                return [4 /*yield*/, res];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getLanDeviceParams = getLanDeviceParams;

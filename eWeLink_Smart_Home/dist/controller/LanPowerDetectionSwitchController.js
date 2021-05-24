@@ -52,45 +52,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var lanDeviceApi_1 = require("../apis/lanDeviceApi");
+var lodash_1 = __importDefault(require("lodash"));
 var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
-var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanDualR3Controller = /** @class */ (function (_super) {
-    __extends(LanDualR3Controller, _super);
-    function LanDualR3Controller(props) {
-        var _this = _super.call(this, props) || this;
-        _this.maxChannel = 2;
-        var deviceId = props.deviceId;
-        _this.entityId = "switch." + deviceId;
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var LanPowerDetectionSwitchController = /** @class */ (function (_super) {
+    __extends(LanPowerDetectionSwitchController, _super);
+    function LanPowerDetectionSwitchController(params) {
+        var _this = _super.call(this, params) || this;
+        _this.uiid = 32;
+        _this.entityId = "switch." + params.deviceId;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
     }
-    return LanDualR3Controller;
+    return LanPowerDetectionSwitchController;
 }(LanDeviceController_1.default));
-LanDualR3Controller.prototype.setSwitch = function (switches) {
+LanPowerDetectionSwitchController.prototype.setSwitch = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitches({
+                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
                             devicekey: this.devicekey,
                             selfApikey: this.selfApikey,
                             data: JSON.stringify({
-                                switches: switches,
+                                switch: status,
                             }),
                         })];
                 case 1:
                     res = _a.sent();
                     if (res && res.data && res.data.error === 0) {
-                        this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.updateState({
+                            status: status,
+                        });
+                        this.params = mergeDeviceParams_1.default(this.params, {
+                            switch: status,
+                        });
                         return [2 /*return*/, 0];
                     }
                     _a.label = 2;
@@ -99,34 +103,41 @@ LanDualR3Controller.prototype.setSwitch = function (switches) {
         });
     });
 };
-LanDualR3Controller.prototype.updateState = function (switches) {
+/**
+ * @description 更新状态到HA
+ */
+LanPowerDetectionSwitchController.prototype.updateState = function (_a) {
+    var power = _a.power, current = _a.current, voltage = _a.voltage, status = _a.status;
     return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            if (this.disabled) {
-                return [2 /*return*/];
-            }
-            switches &&
-                switches.forEach(function (_a) {
-                    var outlet = _a.outlet, status = _a.switch;
-                    var name = _this.channelName ? _this.channelName[outlet] : outlet + 1;
-                    var state = status;
-                    if (!_this.online) {
+        var state, attributes, res;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    if (this.disabled) {
+                        return [2 /*return*/];
+                    }
+                    state = status;
+                    if (!this.online) {
                         state = 'unavailable';
                     }
-                    restApi_1.updateStates(_this.entityId + "_" + (outlet + 1), {
-                        entity_id: _this.entityId + "_" + (outlet + 1),
-                        state: state,
-                        attributes: {
-                            restored: true,
-                            supported_features: 0,
-                            friendly_name: _this.deviceName + "-" + name,
-                            state: state,
-                        },
-                    });
-                });
-            return [2 /*return*/];
+                    attributes = {
+                        restored: true,
+                        supported_features: 0,
+                        friendly_name: this.deviceName,
+                        power: (power || lodash_1.default.get(this, ['params', 'power'], 0)) + " W",
+                        current: (current || lodash_1.default.get(this, ['params', 'current'], 0)) + " A",
+                        voltage: (voltage || lodash_1.default.get(this, ['params', 'voltage'], 0)) + " V",
+                    };
+                    return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
+                            entity_id: this.entityId,
+                            state: state || lodash_1.default.get(this, ['params', 'switch']),
+                            attributes: attributes,
+                        })];
+                case 1:
+                    res = _b.sent();
+                    return [2 /*return*/];
+            }
         });
     });
 };
-exports.default = LanDualR3Controller;
+exports.default = LanPowerDetectionSwitchController;

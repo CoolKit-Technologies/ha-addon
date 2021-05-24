@@ -68,12 +68,10 @@ var language_1 = __importDefault(require("./route/language"));
 var stream_1 = __importDefault(require("./route/stream"));
 var initMdns_1 = __importDefault(require("./utils/initMdns"));
 var initCkWs_1 = __importDefault(require("./utils/initCkWs"));
-var initHaSocket_1 = __importDefault(require("./utils/initHaSocket"));
 var initCkApi_1 = __importDefault(require("./utils/initCkApi"));
 var app_1 = require("./config/app");
 var config_1 = require("./config/config");
-var sleep_1 = __importDefault(require("./utils/sleep"));
-var generateLovelace_1 = __importDefault(require("./utils/generateLovelace"));
+var redirectToAuth_1 = __importDefault(require("./middleware/redirectToAuth"));
 var AuthClass_1 = __importDefault(require("./class/AuthClass"));
 var eventBus_1 = __importDefault(require("./utils/eventBus"));
 coolkit_open_api_1.default.init({
@@ -81,33 +79,25 @@ coolkit_open_api_1.default.init({
     appSecret: app_1.appSecret,
 });
 (function () { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 initMdns_1.default(); // 扫描局域网设备
-                // todo
-                // 完善认证逻辑
                 return [4 /*yield*/, AuthClass_1.default.init()];
             case 1:
-                // todo
-                // 完善认证逻辑
-                _a.sent();
+                res = _a.sent();
                 if (AuthClass_1.default.curAuth) {
                     eventBus_1.default.emit('init-ha-socket');
                 }
-                return [4 /*yield*/, initHaSocket_1.default()];
+                // await initHaSocket(); // 跟HA建立socket连接
+                return [4 /*yield*/, initCkApi_1.default()];
             case 2:
-                _a.sent(); // 跟HA建立socket连接
+                // await initHaSocket(); // 跟HA建立socket连接
+                _a.sent(); // 初始化v2接口并保持登录
                 return [4 /*yield*/, initCkWs_1.default()];
             case 3:
                 _a.sent(); // 跟易微联Socket建立连接
-                return [4 /*yield*/, initCkApi_1.default()];
-            case 4:
-                _a.sent(); // 初始化v2接口并保持登录
-                return [4 /*yield*/, sleep_1.default(3000)];
-            case 5:
-                _a.sent();
-                generateLovelace_1.default();
                 return [2 /*return*/];
         }
     });
@@ -121,8 +111,9 @@ if (config_1.debugMode) {
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(apiPrefix + "/user", user_1.default);
-// app.use(redirectToAuth);
 app.use('/', express_1.default.static(path.join(__dirname, '/pages')));
+// app.use('/loading/', express.static(path.join(__dirname, '/pages')));
+app.use(redirectToAuth_1.default);
 app.use(apiPrefix + "/devices", devices_1.default);
 app.use(apiPrefix + "/language", language_1.default);
 app.use(apiPrefix + "/stream", stream_1.default);

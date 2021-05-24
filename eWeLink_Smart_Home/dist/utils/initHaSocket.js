@@ -83,6 +83,7 @@ var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3
 var eventBus_1 = __importDefault(require("./eventBus"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 /**
  * @param {string} entity_id 实体id
  * @param {string} state // on | off
@@ -128,6 +129,10 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
             case 8:
                 // lan 恒温恒湿
                 if (device instanceof LanTandHModificationController_1.default) {
+                    device.setSwitch(state);
+                }
+                // lan 单通道插座增强版（用电统计）
+                if (device instanceof LanPowerDetectionSwitchController_1.default) {
                     device.setSwitch(state);
                 }
                 if (!(device instanceof CloudSwitchController_1.default)) return [3 /*break*/, 10];
