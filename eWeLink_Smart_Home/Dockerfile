@@ -1,7 +1,6 @@
 # ARG BUILD_FROM
 # FROM $BUILD_FROM
 
-ARG registry-mirrors=["http://hub-mirror.c.163.com"]
 FROM node:14-slim
 RUN mkdir -p /workspace/node_modules
 COPY ["./dist", "./package.json", "/workspace/"]

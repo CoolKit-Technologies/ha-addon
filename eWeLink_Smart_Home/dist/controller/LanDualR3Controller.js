@@ -54,6 +54,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var restApi_1 = require("../apis/restApi");
+var dataUtil_1 = require("../utils/dataUtil");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
 var LanDualR3Controller = /** @class */ (function (_super) {
@@ -63,6 +64,7 @@ var LanDualR3Controller = /** @class */ (function (_super) {
         _this.maxChannel = 2;
         var deviceId = props.deviceId;
         _this.entityId = "switch." + deviceId;
+        _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
     }
     return LanDualR3Controller;
@@ -116,7 +118,7 @@ LanDualR3Controller.prototype.updateState = function (switches) {
                         entity_id: _this.entityId + "_" + (outlet + 1),
                         state: state,
                         attributes: {
-                            restored: true,
+                            restored: false,
                             supported_features: 0,
                             friendly_name: _this.deviceName + "-" + name,
                             state: state,

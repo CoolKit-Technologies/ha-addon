@@ -39,10 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAuth = void 0;
+exports.getCoreInfoAPI = void 0;
 var axios_1 = __importDefault(require("axios"));
 var SUPERVISOR_TOKEN = process.env.SUPERVISOR_TOKEN;
-console.log('Jia ~ file: supervisor.ts ~ line 3 ~ SUPERVISOR_TOKEN', SUPERVISOR_TOKEN);
 var supervisorRequest = axios_1.default.create({
     baseURL: 'http://supervisor',
     headers: {
@@ -50,15 +49,18 @@ var supervisorRequest = axios_1.default.create({
         'X-Supervisor-Token': "Bearer " + SUPERVISOR_TOKEN,
     },
 });
-var getAuth = function () { return __awaiter(void 0, void 0, void 0, function () {
+var getCoreInfoAPI = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
     return __generator(this, function (_a) {
-        return [2 /*return*/, supervisorRequest({
-                method: 'GET',
-                url: '/auth',
-            }).catch(function (e) {
-                console.log(e);
-                return null;
-            })];
+        res = supervisorRequest({
+            method: 'GET',
+            url: '/core/info',
+        });
+        res.catch(function (e) {
+            console.log(e);
+            return null;
+        });
+        return [2 /*return*/, res];
     });
 }); };
-exports.getAuth = getAuth;
+exports.getCoreInfoAPI = getCoreInfoAPI;

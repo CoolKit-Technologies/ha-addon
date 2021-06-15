@@ -10,4 +10,5 @@ router.post('/login', user_1.login);
 router.post('/logout', user_1.logout);
 router.post('/isLogin', user_1.isLogin);
 router.post('/auth', user_1.auth);
+router.get('/isAuth', user_1.isAuth);
 exports.default = router;

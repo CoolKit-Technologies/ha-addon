@@ -31,6 +31,8 @@ var UnsupportDeviceController_1 = __importDefault(require("./UnsupportDeviceCont
 var CloudDualR3Controller_1 = __importDefault(require("./CloudDualR3Controller"));
 var LanDualR3Controller_1 = __importDefault(require("./LanDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("./LanTandHModificationController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("./LanPowerDetectionSwitchController"));
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -84,16 +86,20 @@ var Controller = /** @class */ (function () {
             var params_1 = formatLanDevice_1.default(data);
             // 如果ip不存在说明该设备可能不支持局域网
             if (!params_1 || (!params_1.ip && !params_1.target)) {
-                console.log('该设备不支持局域网', params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId);
+                console.log('the device is not lan support', params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId);
                 return;
             }
             var old = Controller.getDevice(id);
             if (old instanceof LanDeviceController_1.default) {
                 old.iv = params_1 === null || params_1 === void 0 ? void 0 : params_1.iv;
                 old.encryptedData = params_1 === null || params_1 === void 0 ? void 0 : params_1.encryptedData;
+                if (old.iv && old.devicekey && old.encryptedData) {
+                    var tmpParams = old.parseEncryptedData();
+                    tmpParams && (old.params = mergeDeviceParams_1.default(old.params, tmpParams));
+                }
                 return old;
             }
-            // 如果设备之前是Cloud设备,需要保持设备的位置不变
+            // 如果设备之前是Cloud设备,需要保持设备的位置不变,防止前端页面跳动
             var tmpIndex = void 0;
             var oldDeviceParams = {};
             if (old instanceof CloudDeviceController_1.default) {
@@ -126,9 +132,23 @@ var Controller = /** @class */ (function () {
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
+            if (lanType === 'enhanced_plug') {
+                var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                Controller.deviceMap.set(id, lanDevice);
+                return lanDevice;
+            }
+            // if (lanType === 'light') {
+            //     const lanDevice = new LanDoubleColorLightController({
+            //         ...params,
+            //         disabled,
+            //         index: tmpIndex,
+            //     });
+            //     Controller.deviceMap.set(id, lanDevice);
+            //     return lanDevice;
+            // }
         }
-        // CLOUD
-        if (type === 4) {
+        // CLOUD & Zigbee
+        if (type >= 4) {
             if (uiid_1.switchUiidSet.has(data.extra.uiid)) {
                 var tmp = data;
                 var switchDevice = new CloudSwitchController_1.default({
@@ -147,7 +167,7 @@ var Controller = /** @class */ (function () {
             }
             if (uiid_1.multiChannelSwitchUiidSet.has(data.extra.uiid)) {
                 var tmp = data;
-                var device_1 = new CloudMultiChannelSwitchController_1.default({
+                var device = new CloudMultiChannelSwitchController_1.default({
                     deviceId: tmp.deviceid,
                     deviceName: tmp.name,
                     apikey: tmp.apikey,
@@ -159,8 +179,8 @@ var Controller = /** @class */ (function () {
                     disabled: disabled,
                     index: _index,
                 });
-                Controller.deviceMap.set(id, device_1);
-                return device_1;
+                Controller.deviceMap.set(id, device);
+                return device;
             }
             // 恒温恒湿改装件
             if (data.extra.uiid === 15) {
@@ -179,11 +199,12 @@ var Controller = /** @class */ (function () {
                 Controller.deviceMap.set(id, thmDevice);
                 return thmDevice;
             }
-            // RGB灯球
+            // // RGB灯球
             // if (data.extra.uiid === 22) {
-            //     const tmp = data as ICloudDevice<ICloudRGBLightParams>;
-            //     const rgbLight = new CloudRGBLightController({
+            //     const tmp = data as ICloudDevice<ICloudRGBBulbParams>;
+            //     const rgbLight = new CloudRGBBulbController({
             //         deviceId: tmp.deviceid,
+            //         devicekey: tmp.devicekey,
             //         deviceName: tmp.name,
             //         apikey: tmp.apikey,
             //         extra: tmp.extra,
@@ -228,11 +249,12 @@ var Controller = /** @class */ (function () {
             //     Controller.deviceMap.set(id, dimming);
             //     return dimming;
             // }
-            // RGB灯带
+            // // RGB灯带
             // if (data.extra.uiid === 59) {
             //     const tmp = data as ICloudDevice<ICloudRGBLightStripParams>;
             //     const device = new CloudRGBLightStripController({
             //         deviceId: tmp.deviceid,
+            //         devicekey: tmp.devicekey,
             //         deviceName: tmp.name,
             //         apikey: tmp.apikey,
             //         extra: tmp.extra,
@@ -244,18 +266,54 @@ var Controller = /** @class */ (function () {
             //     Controller.deviceMap.set(id, device);
             //     return device;
             // }
-            // 双色冷暖灯
-            // if (data.extra.uiid === 103) {
-            //     const tmp = data as ICloudDevice<IDoubleCloudLightParams>;
-            //     const device = new CloudDoubleColorLightController({
+            // // DW2-WiFi 门磁
+            // if (data.extra.uiid === 102) {
+            //     const tmp = data as ICloudDevice<ICloudDW2Params>;
+            //     const device = new CloudDW2WiFiController({
             //         deviceId: tmp.deviceid,
             //         deviceName: tmp.name,
             //         apikey: tmp.apikey,
             //         extra: tmp.extra,
             //         params: tmp.params,
+            //         devicekey: tmp.devicekey,
             //         disabled,
             //         online: tmp.online,
             //         index: _index,
+            //         devConfig: tmp.devConfig as any,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
+            // // 双色冷暖灯
+            // if (data.extra.uiid === 103) {
+            //     const tmp = data as ICloudDevice<IDoubleColorLightParams>;
+            //     const device = new CloudDoubleColorBulbController({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         params: tmp.params,
+            //         online: tmp.online,
+            //         apikey: tmp.apikey,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
+            // // 五色灯球——支持随调场景
+            // if (data.extra.uiid === 104) {
+            //     const tmp = data as ICloudDevice<IUIID104Params>;
+            //     const device = new CloudUIID104Controller({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         params: tmp.params,
+            //         online: tmp.online,
+            //         apikey: tmp.apikey,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
             //     });
             //     Controller.deviceMap.set(id, device);
             //     return device;
@@ -263,7 +321,7 @@ var Controller = /** @class */ (function () {
             // DualR3
             if (data.extra.uiid === 126) {
                 var tmp = data;
-                var device_2 = new CloudDualR3Controller_1.default({
+                var device = new CloudDualR3Controller_1.default({
                     deviceId: tmp.deviceid,
                     deviceName: tmp.name,
                     apikey: tmp.apikey,
@@ -274,12 +332,90 @@ var Controller = /** @class */ (function () {
                     online: tmp.online,
                     index: _index,
                 });
-                Controller.deviceMap.set(id, device_2);
-                return device_2;
+                Controller.deviceMap.set(id, device);
+                return device;
             }
+            // // Zigbee 无线按键
+            // if (data.extra.uiid === 1000) {
+            //     const tmp = data as ICloudDevice<IZigbeeUIID1000Params>;
+            //     const device = new CloudZigbeeUIID1000Controller({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         apikey: tmp.apikey,
+            //         params: tmp.params,
+            //         online: tmp.online,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
+            // // Zigbee 温湿度传感器
+            // if (data.extra.uiid === 1770) {
+            //     const tmp = data as ICloudDevice<IZigbeeUIID1770Params>;
+            //     const device = new CloudZigbeeUIID1770Controller({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         apikey: tmp.apikey,
+            //         params: tmp.params,
+            //         online: tmp.online,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
+            // // Zigbee 移动传感器
+            // if (data.extra.uiid === 2026) {
+            //     const tmp = data as ICloudDevice<IZigbeeUIID2026Params>;
+            //     const device = new CloudZigbeeUIID2026Controller({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         apikey: tmp.apikey,
+            //         params: tmp.params,
+            //         online: tmp.online,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
+            // // Zigbee 门磁
+            // if (data.extra.uiid === 3026) {
+            //     const tmp = data as ICloudDevice<IZigbeeUIID3026Params>;
+            //     const device = new ZigbeeUIID3026Controller({
+            //         devicekey: tmp.devicekey,
+            //         deviceId: tmp.deviceid,
+            //         deviceName: tmp.name,
+            //         params: tmp.params,
+            //         apikey: tmp.apikey,
+            //         online: tmp.online,
+            //         extra: tmp.extra,
+            //         index: _index,
+            //         disabled,
+            //     });
+            //     Controller.deviceMap.set(id, device);
+            //     return device;
+            // }
             // 暂不支持的设备
             if (!Controller.deviceMap.has(id)) {
-                var unsupportDevice = new UnsupportDeviceController_1.default(data);
+                var unsupportDevice = new UnsupportDeviceController_1.default({
+                    deviceId: data.deviceid,
+                    deviceName: data.name,
+                    apikey: data.apikey,
+                    extra: data.extra,
+                    params: data.params,
+                    online: data.online,
+                    devicekey: data.devicekey,
+                    disabled: disabled,
+                    index: -_index,
+                });
                 Controller.unsupportDeviceMap.set(id, unsupportDevice);
             }
         }

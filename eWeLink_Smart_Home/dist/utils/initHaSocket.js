@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -71,18 +82,21 @@ var Controller_1 = __importDefault(require("../controller/Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanSwitchController_1 = __importDefault(require("../controller/LanSwitchController"));
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
-var CloudRGBLightController_1 = __importDefault(require("../controller/CloudRGBLightController"));
+var CloudRGBBulbController_1 = __importDefault(require("../controller/CloudRGBBulbController"));
 var CloudDimmingController_1 = __importDefault(require("../controller/CloudDimmingController"));
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudRGBLightStripController_1 = __importDefault(require("../controller/CloudRGBLightStripController"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
-var CloudDoubleColorLightController_1 = __importDefault(require("../controller/CloudDoubleColorLightController"));
+var CloudDoubleColorBulbController_1 = __importDefault(require("../controller/CloudDoubleColorBulbController"));
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var eventBus_1 = __importDefault(require("./eventBus"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
+var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
+var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
 /**
  * @param {string} entity_id 实体id
  * @param {string} state // on | off
@@ -91,28 +105,28 @@ var LanTandHModificationController_1 = __importDefault(require("../controller/La
  * @return {*}
  */
 var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) { return __awaiter(void 0, void 0, void 0, function () {
-    var device, _a, id, outlet, _b, hs_color, _c, brightness_pct, params, brightness_pct, _d, id, outlet, _e, hs_color, color_temp, _f, brightness_pct, params, _g, color_temp, brightness_pct;
-    return __generator(this, function (_h) {
-        switch (_h.label) {
+    var device, _a, id, outlet, brightness_pct, _b, id, outlet, params;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 device = Controller_1.default.getDevice(entity_id.replace(/_\d+$/, ''));
                 if (!(device instanceof DiyDeviceController_1.default)) return [3 /*break*/, 2];
                 return [4 /*yield*/, device.setSwitch(state)];
             case 1:
-                _h.sent();
-                _h.label = 2;
+                _c.sent();
+                _c.label = 2;
             case 2:
                 if (!(device instanceof LanSwitchController_1.default)) return [3 /*break*/, 4];
                 return [4 /*yield*/, device.setSwitch(state)];
             case 3:
-                _h.sent();
-                _h.label = 4;
+                _c.sent();
+                _c.label = 4;
             case 4:
                 if (!(device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default)) return [3 /*break*/, 8];
                 if (!mutiSwitchState) return [3 /*break*/, 6];
                 return [4 /*yield*/, device.setSwitch(mutiSwitchState)];
             case 5:
-                _h.sent();
+                _c.sent();
                 return [3 /*break*/, 8];
             case 6:
                 _a = __read(entity_id.split('_'), 2), id = _a[0], outlet = _a[1];
@@ -123,110 +137,89 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                         },
                     ])];
             case 7:
-                _h.sent();
-                _h.label = 8;
+                _c.sent();
+                _c.label = 8;
             case 8:
                 // lan 恒温恒湿
                 if (device instanceof LanTandHModificationController_1.default) {
                     device.setSwitch(state);
                 }
+                // lan 单通道插座增强版（用电统计）
+                if (device instanceof LanPowerDetectionSwitchController_1.default) {
+                    device.setSwitch(state);
+                }
+                // lan 双色灯球
+                if (device instanceof LanDoubleColorLightController_1.default) {
+                    device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)));
+                }
                 if (!(device instanceof CloudSwitchController_1.default)) return [3 /*break*/, 10];
                 return [4 /*yield*/, device.updateSwitch(state)];
             case 9:
-                _h.sent();
-                _h.label = 10;
+                _c.sent();
+                _c.label = 10;
             case 10:
-                if (!(device instanceof CloudRGBLightController_1.default)) return [3 /*break*/, 14];
-                if (!(state === 'off')) return [3 /*break*/, 12];
-                return [4 /*yield*/, device.updateLight({
-                        state: state,
-                    })];
+                if (!(device instanceof CloudRGBBulbController_1.default)) return [3 /*break*/, 12];
+                return [4 /*yield*/, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 11:
-                _h.sent();
-                return [2 /*return*/];
+                _c.sent();
+                _c.label = 12;
             case 12:
-                _b = res.service_data, hs_color = _b.hs_color, _c = _b.brightness_pct, brightness_pct = _c === void 0 ? 0 : _c;
-                params = device.parseHaData2Ck({ hs_color: hs_color, brightness_pct: brightness_pct, state: state });
-                return [4 /*yield*/, device.updateLight(params)];
-            case 13:
-                _h.sent();
-                _h.label = 14;
-            case 14:
-                if (!(device instanceof CloudDimmingController_1.default)) return [3 /*break*/, 16];
+                if (!(device instanceof CloudDimmingController_1.default)) return [3 /*break*/, 14];
                 brightness_pct = res.service_data.brightness_pct;
                 return [4 /*yield*/, device.updateLight({
                         switch: state,
                         bright: brightness_pct,
                     })];
+            case 13:
+                _c.sent();
+                _c.label = 14;
+            case 14:
+                if (!(device instanceof CloudPowerDetectionSwitchController_1.default)) return [3 /*break*/, 16];
+                return [4 /*yield*/, device.updateSwitch(state)];
             case 15:
-                _h.sent();
-                _h.label = 16;
+                _c.sent();
+                _c.label = 16;
             case 16:
-                if (!(device instanceof CloudPowerDetectionSwitchController_1.default)) return [3 /*break*/, 18];
+                if (!(device instanceof CloudTandHModificationController_1.default)) return [3 /*break*/, 18];
                 return [4 /*yield*/, device.updateSwitch(state)];
             case 17:
-                _h.sent();
-                _h.label = 18;
+                _c.sent();
+                _c.label = 18;
             case 18:
-                if (!(device instanceof CloudTandHModificationController_1.default)) return [3 /*break*/, 20];
-                return [4 /*yield*/, device.updateSwitch(state)];
-            case 19:
-                _h.sent();
-                _h.label = 20;
-            case 20:
-                if (!(device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default)) return [3 /*break*/, 24];
-                if (!mutiSwitchState) return [3 /*break*/, 22];
+                if (!(device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default)) return [3 /*break*/, 22];
+                if (!mutiSwitchState) return [3 /*break*/, 20];
                 return [4 /*yield*/, device.updateSwitch(mutiSwitchState)];
-            case 21:
-                _h.sent();
-                return [3 /*break*/, 24];
-            case 22:
-                _d = __read(entity_id.split('_'), 2), id = _d[0], outlet = _d[1];
+            case 19:
+                _c.sent();
+                return [3 /*break*/, 22];
+            case 20:
+                _b = __read(entity_id.split('_'), 2), id = _b[0], outlet = _b[1];
                 return [4 /*yield*/, device.updateSwitch([
                         {
                             outlet: +outlet - 1,
                             switch: state,
                         },
                     ])];
+            case 21:
+                _c.sent();
+                _c.label = 22;
+            case 22:
+                if (device instanceof CloudRGBLightStripController_1.default) {
+                    params = device.parseHaData2Ck(__assign({ state: state }, res.service_data));
+                    device.updateLight(params);
+                }
+                if (!(device instanceof CloudDoubleColorBulbController_1.default)) return [3 /*break*/, 24];
+                return [4 /*yield*/, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 23:
-                _h.sent();
-                _h.label = 24;
+                _c.sent();
+                _c.label = 24;
             case 24:
-                if (!(device instanceof CloudRGBLightStripController_1.default)) return [3 /*break*/, 28];
-                if (!(state === 'off')) return [3 /*break*/, 26];
-                return [4 /*yield*/, device.updateLight({
-                        switch: state,
-                    })];
+                if (!(device instanceof CloudUIID104Controller_1.default)) return [3 /*break*/, 26];
+                return [4 /*yield*/, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 25:
-                _h.sent();
-                return [2 /*return*/];
-            case 26:
-                _e = res.service_data, hs_color = _e.hs_color, color_temp = _e.color_temp, _f = _e.brightness_pct, brightness_pct = _f === void 0 ? 0 : _f;
-                params = device.parseHaData2Ck({ hs_color: hs_color, brightness_pct: brightness_pct, state: state });
-                return [4 /*yield*/, device.updateLight(params)];
-            case 27:
-                _h.sent();
-                _h.label = 28;
-            case 28:
-                if (!(device instanceof CloudDoubleColorLightController_1.default)) return [3 /*break*/, 32];
-                if (!(state === 'off')) return [3 /*break*/, 30];
-                return [4 /*yield*/, device.updateLight({
-                        switch: state,
-                    })];
-            case 29:
-                _h.sent();
-                return [2 /*return*/];
-            case 30:
-                _g = res.service_data, color_temp = _g.color_temp, brightness_pct = _g.brightness_pct;
-                return [4 /*yield*/, device.updateLight({
-                        switch: state,
-                        ct: color_temp,
-                        br: brightness_pct,
-                    })];
-            case 31:
-                _h.sent();
-                _h.label = 32;
-            case 32: return [2 /*return*/];
+                _c.sent();
+                _c.label = 26;
+            case 26: return [2 /*return*/];
         }
     });
 }); };

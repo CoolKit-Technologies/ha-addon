@@ -61,7 +61,6 @@ var CloudDimmingController = /** @class */ (function (_super) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 36;
         _this.entityId = "light." + params.deviceId;
-        _this.disabled = params.disabled;
         _this.params = params.params;
         return _this;
     }
@@ -106,7 +105,7 @@ CloudDimmingController.prototype.updateState = function (_a) {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {
-                    restored: true,
+                    restored: false,
                     supported_features: 1,
                     friendly_name: this.deviceName,
                     state: state,

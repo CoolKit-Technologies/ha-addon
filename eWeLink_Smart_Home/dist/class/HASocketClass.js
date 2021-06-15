@@ -51,8 +51,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ws_1 = __importDefault(require("ws"));
-var auth_1 = require("../config/auth");
 var url_1 = require("../config/url");
+var AuthClass_1 = __importDefault(require("./AuthClass"));
 var initHaSocket_1 = __importDefault(require("../utils/initHaSocket"));
 var syncDevice2Ha_1 = __importDefault(require("../utils/syncDevice2Ha"));
 var HaSocket = /** @class */ (function () {
@@ -69,7 +69,7 @@ var HaSocket = /** @class */ (function () {
             });
         }
         catch (error) {
-            console.log('初始化HA-WS连接出错', error);
+            console.log('init HA-WS error', error);
         }
     };
     HaSocket.createInstance = function () {
@@ -94,13 +94,12 @@ var HaSocket = /** @class */ (function () {
                             }
                             _this.client.send(JSON.stringify({
                                 type: 'auth',
-                                access_token: auth_1.HaToken,
+                                access_token: AuthClass_1.default.curAuth,
                             }));
                         });
                         _this.client.on('message', (handler = function (res) {
                             try {
                                 var data = JSON.parse(res);
-                                console.log('Jia ~ file: HASocketClass.ts ~ line 37 ~ HaSocket ~ init ~ data', data);
                                 if (data.type === 'auth_ok') {
                                     resolve(0);
                                     // 由于ha重启会丢失实体,所以需要重新同步一次实体
@@ -225,7 +224,32 @@ var HaSocket = /** @class */ (function () {
                         })];
                     case 1:
                         res = _a.sent();
-                        console.log('Jia ~ file: HASocketClass.ts ~ line 125 ~ HaSocket ~ getLovelace ~ res', res);
+                        return [2 /*return*/, res];
+                }
+            });
+        });
+    };
+    /**
+     *
+     * @memberof HaSocket
+     * @deprecated 无须申请长期令牌
+     */
+    HaSocket.prototype.getLongLivedToken = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (this.client.readyState !== 1) {
+                            return [2 /*return*/, null];
+                        }
+                        return [4 /*yield*/, this.query({
+                                type: 'auth/long_lived_access_token',
+                                client_name: 'eWeLink Smart Home',
+                                lifespan: 3650,
+                            })];
+                    case 1:
+                        res = _a.sent();
                         return [2 /*return*/, res];
                 }
             });

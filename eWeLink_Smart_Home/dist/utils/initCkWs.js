@@ -56,16 +56,22 @@ var Controller_1 = __importDefault(require("../controller/Controller"));
 var app_1 = require("../config/app");
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
-var CloudRGBLightController_1 = __importDefault(require("../controller/CloudRGBLightController"));
+var CloudRGBBulbController_1 = __importDefault(require("../controller/CloudRGBBulbController"));
 var CloudDimmingController_1 = __importDefault(require("../controller/CloudDimmingController"));
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudRGBLightStripController_1 = __importDefault(require("../controller/CloudRGBLightStripController"));
 var restApi_1 = require("../apis/restApi");
-var CloudDoubleColorLightController_1 = __importDefault(require("../controller/CloudDoubleColorLightController"));
+var CloudDoubleColorBulbController_1 = __importDefault(require("../controller/CloudDoubleColorBulbController"));
 var eventBus_1 = __importDefault(require("./eventBus"));
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
+var CloudDW2WiFiController_1 = __importDefault(require("../controller/CloudDW2WiFiController"));
+var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
+var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
+var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
+var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
+var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var apikey = dataUtil_1.getDataSync('user.json', ['user', 'apikey']);
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var at, region;
@@ -88,14 +94,14 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 _a.sent();
                 console.log('Jia ~ file: initCkWs.ts ~ line 29 ~ at', at);
                 coolkit_ws_1.default.on('message', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, params, _b, bright, status_1, _c, current, voltage, power, status_2, switches, online, res, error_1;
+                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, online, res, error_1;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
                                 _d.trys.push([0, 4, , 5]);
                                 type = ws.type, data = ws.data;
-                                console.log('接受到CKWS消息:type-->', data);
-                                console.log('接受到CKWS消息:\n', data);
+                                console.log('receive CKWS msg:type-->', data);
+                                console.log('receive CKWS msg:\n', data);
                                 if (!(type === 'message' && data !== 'pong')) return [3 /*break*/, 3];
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {
@@ -115,9 +121,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                             device.updateState(state);
                                         }
                                     }
-                                    if (device instanceof CloudRGBLightController_1.default) {
-                                        params = device.parseCkData2Ha(tmp.params);
-                                        device.updateState(params);
+                                    if (device instanceof CloudRGBBulbController_1.default) {
+                                        device.updateState(device.parseCkData2Ha(tmp.params));
                                     }
                                     if (device instanceof CloudDimmingController_1.default) {
                                         _b = tmp.params, bright = _b.bright, status_1 = _b.switch;
@@ -139,20 +144,55 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     if (device instanceof CloudMultiChannelSwitchController_1.default) {
                                         switches = tmp.params.switches;
                                         if (Array.isArray(switches)) {
-                                            device.updateState(switches.slice(0, device.maxChannel));
+                                            device.updateState(switches);
                                         }
                                     }
                                     if (device instanceof CloudRGBLightStripController_1.default) {
+                                        console.log('接收到灯带的消息：', tmp.params);
                                         device.updateState(device.parseCkData2Ha(tmp.params));
                                     }
-                                    if (device instanceof CloudDoubleColorLightController_1.default) {
+                                    if (device instanceof CloudDoubleColorBulbController_1.default) {
                                         console.log('接收到双色灯的信息：', tmp.params);
+                                        device.updateState(tmp.params);
+                                    }
+                                    if (device instanceof CloudUIID104Controller_1.default) {
+                                        console.log('接收到随调五色灯的信息：', tmp.params);
                                         device.updateState(tmp.params);
                                     }
                                     if (device instanceof CloudDualR3Controller_1.default || device instanceof LanDualR3Controller_1.default) {
                                         console.log('接收到DualR3的信息：', tmp.params);
                                         if (tmp.params && tmp.params.switches) {
                                             device.updateState(tmp.params.switches);
+                                        }
+                                    }
+                                    if (device instanceof CloudDW2WiFiController_1.default) {
+                                        console.log('接收到DW2的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    if (device instanceof CloudZigbeeUIID1000Controller_1.default) {
+                                        console.log('接收到Zigbee无线按键的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    if (device instanceof CloudZigbeeUIID1770Controller_1.default) {
+                                        console.log('接收到Zigbee温湿度传感器的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    if (device instanceof CloudZigbeeUIID2026Controller_1.default) {
+                                        console.log('接收到Zigbee移动传感器的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
+                                        console.log('接收到Zigbee门磁的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
                                         }
                                     }
                                     eventBus_1.default.emit('update-controller', data);

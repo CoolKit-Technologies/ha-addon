@@ -48,6 +48,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
+var auth_1 = require("../config/auth");
+var config_1 = require("../config/config");
 var dataUtil_1 = require("../utils/dataUtil");
 var AuthClass = /** @class */ (function () {
     function AuthClass() {
@@ -65,40 +67,52 @@ var AuthClass = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _c.trys.push([0, 5, , 6]);
+                        if (config_1.debugMode) {
+                            this.curAuth = auth_1.HaToken;
+                            return [2 /*return*/];
+                        }
+                        // 通过Addon方式安装自带TOKEN
+                        if (config_1.isSupervisor) {
+                            this.curAuth = process.env.SUPERVISOR_TOKEN;
+                            return [2 /*return*/];
+                        }
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 6, , 7]);
                         auths = dataUtil_1.getDataSync('auth.json', []);
                         _a = [];
                         for (_b in auths)
                             _a.push(_b);
                         _i = 0;
-                        _c.label = 1;
-                    case 1:
-                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        _c.label = 2;
+                    case 2:
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
                         origin_1 = _a[_i];
                         auth = JSON.parse(auths[origin_1]);
-                        if (!(auth && Date.now() < +auth.expires_time)) return [3 /*break*/, 3];
+                        if (!(auth && Date.now() < +auth.expires_time)) return [3 /*break*/, 4];
+                        AuthClass.AuthMap.set(origin_1, auth);
                         return [4 /*yield*/, this.refresh(origin_1)];
-                    case 2:
+                    case 3:
                         tmp = _c.sent();
                         if (tmp) {
                             this.curAuth = auth.access_token;
                         }
-                        _c.label = 3;
-                    case 3:
+                        _c.label = 4;
+                    case 4:
                         _i++;
-                        return [3 /*break*/, 1];
-                    case 4: return [3 /*break*/, 6];
-                    case 5:
+                        return [3 /*break*/, 2];
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
                         error_1 = _c.sent();
                         console.log('Jia ~ file: AuthClass.ts ~ line 52 ~ AuthClass ~ init ~ error', error_1);
-                        return [3 /*break*/, 6];
-                    case 6: return [2 /*return*/];
+                        return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
-    AuthClass.prototype.isValid = function (origin) {
-        var auth = AuthClass.AuthMap.get(origin);
+    AuthClass.prototype.isValid = function (host) {
+        var auth = AuthClass.AuthMap.get(host);
         if (auth && auth.expires_time > Date.now()) {
             this.curAuth = auth.access_token;
             return true;
@@ -113,6 +127,7 @@ var AuthClass = /** @class */ (function () {
         dataUtil_1.appendData('auth.json', [origin], JSON.stringify(data));
         setTimeout(function () {
             _this.refresh(origin);
+            console.log("it's time to refresh token");
         }, (auth.expires_in - 300) * 1000);
     };
     AuthClass.prototype.refresh = function (origin) {
@@ -124,9 +139,16 @@ var AuthClass = /** @class */ (function () {
                         auth = AuthClass.AuthMap.get(origin);
                         if (!auth) return [3 /*break*/, 2];
                         cliend_id = auth.cliend_id, refresh_token = auth.refresh_token;
+                        // supervisor形式不需要刷新token,token到期了直接删除
+                        if (config_1.isSupervisor) {
+                            AuthClass.AuthMap.delete(origin);
+                            return [2 /*return*/];
+                        }
+                        console.log('refreshing...');
                         return [4 /*yield*/, restApi_1.refreshAuth(cliend_id, refresh_token)];
                     case 1:
                         res = _a.sent();
+                        console.log('refresh token success!');
                         if (res && res.status === 200) {
                             this.setAuth(origin, cliend_id, __assign(__assign({}, auth), res.data));
                         }

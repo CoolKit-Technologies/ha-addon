@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.refreshAuth = exports.getAuth = exports.registerService = exports.removeStates = exports.updateStates = exports.getStateByEntityId = void 0;
 var axios_1 = __importDefault(require("axios"));
-var auth_1 = require("../config/auth");
+var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var url_1 = require("../config/url");
 var restRequest = axios_1.default.create({
     baseURL: url_1.HaRestURL,
@@ -49,7 +49,7 @@ var restRequest = axios_1.default.create({
 });
 restRequest.interceptors.request.use(function (val) {
     val.headers = {
-        Authorization: "Bearer " + auth_1.HaToken,
+        Authorization: "Bearer " + AuthClass_1.default.curAuth,
     };
     return val;
 });
@@ -100,7 +100,7 @@ var registerService = function (domain, service) { return __awaiter(void 0, void
                     service: service,
                 },
             }).catch(function (e) {
-                console.log('注册服务', domain, ':', service, '出错');
+                console.log('registerService error: ', domain, ':', service);
             })];
     });
 }); };
@@ -117,7 +117,7 @@ var getAuth = function (clientId, code) { return __awaiter(void 0, void 0, void 
                     data: "grant_type=authorization_code&client_id=" + clientId + "&code=" + code,
                 });
                 res.catch(function (e) {
-                    console.log('获取Auth出错:', clientId, '\ncode:' + code + '\n', e);
+                    console.log('获取Auth出错: \n client_id:', clientId, '\ncode:' + code);
                 });
                 return [4 /*yield*/, res];
             case 1: return [2 /*return*/, _a.sent()];
@@ -137,7 +137,7 @@ var refreshAuth = function (clientId, refreshToken) { return __awaiter(void 0, v
                     data: "grant_type=refresh_token&client_id=" + clientId + "&refresh_token=" + refreshToken,
                 });
                 res.catch(function (e) {
-                    console.log('刷新Auth出错:', clientId, '\n', e);
+                    console.log('refresh Auth error:', clientId, '\n', e);
                 });
                 return [4 /*yield*/, res];
             case 1: return [2 /*return*/, _a.sent()];
