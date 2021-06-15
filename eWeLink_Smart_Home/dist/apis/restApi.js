@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.refreshAuth = exports.getAuth = exports.registerService = exports.removeStates = exports.updateStates = exports.getStateByEntityId = void 0;
 var axios_1 = __importDefault(require("axios"));
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
-// import { HaToken } from '../config/auth';
 var url_1 = require("../config/url");
 var restRequest = axios_1.default.create({
     baseURL: url_1.HaRestURL,

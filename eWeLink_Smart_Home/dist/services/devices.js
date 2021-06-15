@@ -184,6 +184,7 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                         error: 0,
                         data: null,
                     });
+                    eventBus_1.default.emit('sse');
                 }
                 else {
                     res.json({
@@ -464,25 +465,25 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 return [4 /*yield*/, diyDeviceApi_1.updateDiySwitchAPI(reqParams)];
             case 2:
                 result = _b.sent();
-                _b.label = 3;
+                return [3 /*break*/, 11];
             case 3:
                 if (!(type === 'startup')) return [3 /*break*/, 5];
                 return [4 /*yield*/, diyDeviceApi_1.updateDiyStartupAPI(reqParams)];
             case 4:
                 result = _b.sent();
-                _b.label = 5;
+                return [3 /*break*/, 11];
             case 5:
                 if (!(type === 'pulse')) return [3 /*break*/, 7];
                 return [4 /*yield*/, diyDeviceApi_1.updateDiyPulseAPI(reqParams)];
             case 6:
                 result = _b.sent();
-                _b.label = 7;
+                return [3 /*break*/, 11];
             case 7:
                 if (!(type === 'sledOnline')) return [3 /*break*/, 9];
                 return [4 /*yield*/, diyDeviceApi_1.updateDiySledOnlineAPI(reqParams)];
             case 8:
                 result = _b.sent();
-                _b.label = 9;
+                return [3 /*break*/, 11];
             case 9:
                 if (!(type === 'deviceName')) return [3 /*break*/, 11];
                 return [4 /*yield*/, updateDiyDeviceName_1.default(id, params)];
@@ -511,8 +512,6 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                     error: 500,
                     data: null,
                 });
-                // Controller.deviceMap.delete(id);
-                eventBus_1.default.emit('sse');
                 return [3 /*break*/, 14];
             case 14: return [2 /*return*/];
         }
@@ -586,8 +585,6 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                     error: 500,
                     data: null,
                 });
-                Controller_1.default.deviceMap.delete(id);
-                eventBus_1.default.emit('sse');
                 return [3 /*break*/, 13];
             case 13: return [2 /*return*/];
         }

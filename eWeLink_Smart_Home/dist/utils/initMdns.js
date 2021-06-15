@@ -14,6 +14,7 @@ var mergeDeviceParams_1 = __importDefault(require("./mergeDeviceParams"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
 exports.default = (function () {
     return MdnsClass_1.default.createInstance({
         queryParams: {
@@ -40,13 +41,21 @@ exports.default = (function () {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData.switch);
-                    device.params = decryptData;
+                    device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
             if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData.switches);
+                    device.params = mergeDeviceParams_1.default(device.params, decryptData);
+                }
+            }
+            if (device instanceof LanDoubleColorLightController_1.default) {
+                var decryptData = device.parseEncryptedData();
+                if (decryptData) {
+                    console.log("Jia ~ file: initMdns.ts ~ line 56 ~ onResponseCb ~ decryptData", decryptData);
+                    device.updateState(decryptData);
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }

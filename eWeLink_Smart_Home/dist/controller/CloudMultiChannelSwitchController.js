@@ -63,11 +63,9 @@ var CloudMultiChannelSwitchController = /** @class */ (function (_super) {
         var _a;
         var _this = _super.call(this, params) || this;
         _this.entityId = "switch." + params.deviceId;
-        _this.disabled = params.disabled;
         _this.uiid = params.extra.uiid;
         _this.channelName = (_a = params.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
         _this.maxChannel = channelMap_1.getMaxChannelByUiid(params.extra.uiid);
-        _this.online = params.online;
         _this.params = params.params;
         return _this;
     }
@@ -101,29 +99,29 @@ CloudMultiChannelSwitchController.prototype.updateSwitch = function (switches) {
  */
 CloudMultiChannelSwitchController.prototype.updateState = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
+        var i, _a, outlet, status_1, name_1, state;
+        return __generator(this, function (_b) {
             if (this.disabled) {
                 return [2 /*return*/];
             }
-            switches.forEach(function (_a) {
-                var outlet = _a.outlet, status = _a.switch;
-                var name = _this.channelName ? _this.channelName[outlet] : outlet + 1;
-                var state = status;
-                if (!_this.online) {
+            for (i = 0; i < this.maxChannel; i++) {
+                _a = switches[i], outlet = _a.outlet, status_1 = _a.switch;
+                name_1 = this.channelName ? this.channelName[outlet] : outlet + 1;
+                state = status_1;
+                if (!this.online) {
                     state = 'unavailable';
                 }
-                restApi_1.updateStates(_this.entityId + "_" + (outlet + 1), {
-                    entity_id: _this.entityId + "_" + (outlet + 1),
+                restApi_1.updateStates(this.entityId + "_" + (outlet + 1), {
+                    entity_id: this.entityId + "_" + (outlet + 1),
                     state: state,
                     attributes: {
-                        restored: true,
+                        restored: false,
                         supported_features: 0,
-                        friendly_name: _this.deviceName + "-" + name,
+                        friendly_name: this.deviceName + "-" + name_1,
                         state: state,
                     },
                 });
-            });
+            }
             return [2 /*return*/];
         });
     });

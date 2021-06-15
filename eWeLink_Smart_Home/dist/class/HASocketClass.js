@@ -100,7 +100,6 @@ var HaSocket = /** @class */ (function () {
                         _this.client.on('message', (handler = function (res) {
                             try {
                                 var data = JSON.parse(res);
-                                console.log('Jia ~ file: HASocketClass.ts ~ line 37 ~ HaSocket ~ init ~ data', data);
                                 if (data.type === 'auth_ok') {
                                     resolve(0);
                                     // 由于ha重启会丢失实体,所以需要重新同步一次实体
@@ -225,7 +224,6 @@ var HaSocket = /** @class */ (function () {
                         })];
                     case 1:
                         res = _a.sent();
-                        console.log('Jia ~ file: HASocketClass.ts ~ line 125 ~ HaSocket ~ getLovelace ~ res', res);
                         return [2 /*return*/, res];
                 }
             });

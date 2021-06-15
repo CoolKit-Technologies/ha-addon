@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HaRestURL = exports.HaSocketURL = void 0;
-var dataUtil_1 = require("../utils/dataUtil");
 var config_1 = require("./config");
 var url = 'http://homeassistant:8123';
 // let url = 'http://192.168.1.111:8123';
 if (!config_1.debugMode && config_1.isSupervisor) {
-    url = dataUtil_1.getDataSync('options.json', ['home_assistant_url']);
+    // url = getDataSync('options.json', ['home_assistant_url']);
+    url = 'http://supervisor/core';
 }
 if (!config_1.debugMode && !config_1.isSupervisor) {
     url = process.env.HA_URL;

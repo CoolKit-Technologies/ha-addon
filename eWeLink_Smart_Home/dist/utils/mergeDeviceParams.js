@@ -34,5 +34,6 @@ exports.default = (function (source, params) {
             }
             return objVal;
         }
+        return srcVal;
     });
 });

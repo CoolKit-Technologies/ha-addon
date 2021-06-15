@@ -134,7 +134,7 @@ CloudDoubleColorLightController.prototype.updateState = function (params) {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {
-                    restored: true,
+                    restored: false,
                     supported_features: 3,
                     friendly_name: this.deviceName,
                     state: state,

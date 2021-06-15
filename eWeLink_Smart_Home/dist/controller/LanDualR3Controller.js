@@ -118,7 +118,7 @@ LanDualR3Controller.prototype.updateState = function (switches) {
                         entity_id: _this.entityId + "_" + (outlet + 1),
                         state: state,
                         attributes: {
-                            restored: true,
+                            restored: false,
                             supported_features: 0,
                             friendly_name: _this.deviceName + "-" + name,
                             state: state,

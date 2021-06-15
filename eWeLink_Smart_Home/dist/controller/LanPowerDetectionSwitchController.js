@@ -62,7 +62,6 @@ var LanPowerDetectionSwitchController = /** @class */ (function (_super) {
     __extends(LanPowerDetectionSwitchController, _super);
     function LanPowerDetectionSwitchController(params) {
         var _this = _super.call(this, params) || this;
-        _this.uiid = 32;
         _this.entityId = "switch." + params.deviceId;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
@@ -121,7 +120,7 @@ LanPowerDetectionSwitchController.prototype.updateState = function (_a) {
                         state = 'unavailable';
                     }
                     attributes = {
-                        restored: true,
+                        restored: false,
                         supported_features: 0,
                         friendly_name: this.deviceName,
                         power: (power || lodash_1.default.get(this, ['params', 'power'], 0)) + " W",

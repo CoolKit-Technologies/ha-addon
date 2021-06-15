@@ -74,9 +74,7 @@ var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
         var _this = _super.call(this, params) || this;
         _this.entityId = "switch." + params.deviceId;
         _this.params = params.params;
-        _this.disabled = params.disabled;
         _this.uiid = params.extra.uiid;
-        _this.online = params.online;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
         // // 如果电流电压功率有更新就通知我
@@ -131,7 +129,7 @@ CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
                         state = 'unavailable';
                     }
                     attributes = {
-                        restored: true,
+                        restored: false,
                         supported_features: 0,
                         friendly_name: this.deviceName,
                         power: (power || lodash_1.default.get(this, ['params', 'power'], 0)) + " W",

@@ -88,7 +88,7 @@ DiyController.prototype.updateState = function (status) {
                 entity_id: this.entityId,
                 state: status,
                 attributes: {
-                    restored: true,
+                    restored: false,
                     supported_features: 0,
                     friendly_name: this.deviceName || this.entityId,
                     state: status,

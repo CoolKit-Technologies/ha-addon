@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
-var coolkit_open_api_1 = __importDefault(require("coolkit-open-api"));
+var coolkit_api_1 = __importDefault(require("coolkit-api"));
 /**
  * @param {string} deviceid
  * @param {string} name
@@ -50,7 +50,7 @@ var coolkit_open_api_1 = __importDefault(require("coolkit-open-api"));
 var updateDeviceNameAPI = function (deviceid, name) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_open_api_1.default.device.updateDeviceInfo({
+            case 0: return [4 /*yield*/, coolkit_api_1.default.device.updateDeviceInfo({
                     deviceid: deviceid,
                     name: name,
                 })];
@@ -71,7 +71,7 @@ var updateChannelNameAPI = function (deviceid, tags) { return __awaiter(void 0, 
     var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_open_api_1.default.device.updateDeviceTag({
+            case 0: return [4 /*yield*/, coolkit_api_1.default.device.updateDeviceTag({
                     deviceid: deviceid,
                     type: 'merge',
                     tags: tags,
@@ -87,7 +87,7 @@ exports.updateChannelNameAPI = updateChannelNameAPI;
 var getOTAinfoAPI = function (list) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_open_api_1.default.device.getOtaInfo({
+            case 0: return [4 /*yield*/, coolkit_api_1.default.device.getOtaInfo({
                     deviceInfoList: list,
                 })];
             case 1: return [2 /*return*/, _a.sent()];

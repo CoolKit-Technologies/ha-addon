@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var coolkit_open_api_1 = __importDefault(require("coolkit-open-api"));
+var coolkit_api_1 = __importDefault(require("coolkit-api"));
 var dataUtil_1 = require("./dataUtil");
 var getThings_1 = __importDefault(require("./getThings"));
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -61,7 +61,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 loginParams = dataUtil_1.getDataSync('user.json', ['login']);
                 console.log('Jia ~ file: initCkApi.ts ~ line 9 ~ loginParams', loginParams);
                 if (!loginParams) return [3 /*break*/, 4];
-                return [4 /*yield*/, coolkit_open_api_1.default.user.login(loginParams)];
+                return [4 /*yield*/, coolkit_api_1.default.user.login(loginParams)];
             case 1:
                 result = _a.sent();
                 console.log('Jia ~ file: initCkApi.ts ~ line 10 ~ result', result);

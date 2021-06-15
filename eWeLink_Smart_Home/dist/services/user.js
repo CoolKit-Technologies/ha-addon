@@ -78,7 +78,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuth = exports.auth = exports.isLogin = exports.logout = exports.login = void 0;
-var coolkit_open_api_1 = __importDefault(require("coolkit-open-api"));
+var coolkit_api_1 = __importDefault(require("coolkit-api"));
 var dataUtil_1 = require("../utils/dataUtil");
 var getThings_1 = __importDefault(require("../utils/getThings"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
@@ -92,6 +92,7 @@ var restApi_1 = require("../apis/restApi");
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var generateLovelace_1 = __importDefault(require("../utils/generateLovelace"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
+var config_1 = require("../config/config");
 /**
  * @param {string} lang
  * @param {string} email
@@ -106,7 +107,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
             case 0:
                 _b.trys.push([0, 5, , 6]);
                 _a = req.body, countryCode = _a.countryCode, phoneNumber = _a.phoneNumber, lang = _a.lang, password = _a.password, email = _a.email;
-                return [4 /*yield*/, coolkit_open_api_1.default.user.login({
+                return [4 /*yield*/, coolkit_api_1.default.user.login({
                         countryCode: countryCode,
                         phoneNumber: phoneNumber,
                         lang: lang,
@@ -184,7 +185,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     finally { if (e_1) throw e_1.error; }
                 }
                 Controller_1.default.unsupportDeviceMap.clear();
-                return [4 /*yield*/, coolkit_open_api_1.default.user.logout()];
+                return [4 /*yield*/, coolkit_api_1.default.user.logout()];
             case 2:
                 ckRes = _e.sent();
                 console.log('Jia ~ file: user.ts ~ line 41 ~ logout ~ ckRes', ckRes);
@@ -242,12 +243,23 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 exports.isLogin = isLogin;
 var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, code, clientId, result, err_4;
+    var ip, headers, _a, code, clientId, result, err_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                console.log('Jia ~ file: user.ts ~ line 110 ~ auth ~ req.body', req.body);
+                ip = req.ip, headers = req.headers;
+                if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
+                    res.json({
+                        error: 0,
+                        data: {
+                            isAuth: true,
+                        },
+                    });
+                    return [2 /*return*/];
+                }
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
                 if (AuthClass_1.default.isValid(req.ip)) {
                     res.json({
                         error: 0,
@@ -257,7 +269,7 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 }
                 _a = req.body, code = _a.code, clientId = _a.clientId;
                 return [4 /*yield*/, restApi_1.getAuth(clientId, code)];
-            case 1:
+            case 2:
                 result = _b.sent();
                 if (result && result.status === 200) {
                     AuthClass_1.default.setAuth(req.ip, clientId, result.data);
@@ -274,24 +286,34 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                         data: null,
                     });
                 }
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 err_4 = _b.sent();
                 res.json({
                     error: 500,
                     data: err_4,
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.auth = auth;
 var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var status_1;
+    var ip, headers, status_1;
     return __generator(this, function (_a) {
+        ip = req.ip, headers = req.headers;
+        if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
+            res.json({
+                error: 0,
+                data: {
+                    isAuth: true,
+                },
+            });
+            return [2 /*return*/];
+        }
         try {
-            status_1 = AuthClass_1.default.isValid(req.ip);
+            status_1 = AuthClass_1.default.isValid(ip);
             res.json({
                 error: 0,
                 data: {
@@ -300,7 +322,7 @@ var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             });
         }
         catch (err) {
-            console.log(err);
+            console.log('Jia ~ file: user.ts ~ line 170 ~ isAuth ~ err', err);
             res.json({
                 error: 500,
                 data: err,

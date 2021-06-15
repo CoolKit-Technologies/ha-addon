@@ -5,6 +5,8 @@ var switchUiidSet = new Set([
     1,
     6,
     14,
+    1009,
+    1256,
 ]);
 exports.switchUiidSet = switchUiidSet;
 var multiChannelSwitchUiidSet = new Set([
@@ -13,7 +15,9 @@ var multiChannelSwitchUiidSet = new Set([
     4,
     7,
     8,
+    9,
     77,
+    78,
     112,
     113,
     114,

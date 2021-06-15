@@ -82,62 +82,77 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var colorUitl_1 = require("../utils/colorUitl");
+var light_1 = require("../config/light");
 var CloudRGBLightStripController = /** @class */ (function (_super) {
     __extends(CloudRGBLightStripController, _super);
     function CloudRGBLightStripController(params) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 59;
+        _this.effectList = light_1.effectList;
         _this.entityId = "light." + params.deviceId;
         _this.params = params.params;
-        _this.disabled = params.disabled;
-        _this.online = params.online;
-        _this.brightness = _this.params.bright * 2.55;
         _this.mode = _this.params.mode;
-        _this.speed = _this.params.speed;
-        _this.sensitive = _this.params.sensitive;
-        _this.hsColor = _this.parseRGB2HS(_this.params.colorR, _this.params.colorG, _this.params.colorB);
         return _this;
     }
     return CloudRGBLightStripController;
 }(CloudDeviceController_1.default));
-CloudRGBLightStripController.prototype.parseRGB2HS = colorUitl_1.parseRGB2HS;
-CloudRGBLightStripController.prototype.parseHS2RGB = colorUitl_1.parseHS2RGB;
-CloudRGBLightStripController.prototype.parseHaData2Ck = function (_a) {
-    var _b;
-    var hs_color = _a.hs_color, brightness_pct = _a.brightness_pct, state = _a.state;
-    var colorR, colorG, colorB, bright = this.brightness / 2.55;
-    if (hs_color) {
-        _b = __read(this.parseHS2RGB(hs_color), 3), colorR = _b[0], colorG = _b[1], colorB = _b[2];
-    }
-    if (brightness_pct) {
-        bright = brightness_pct;
-    }
-    return {
-        switch: state,
-        colorR: colorR,
-        colorG: colorG,
-        colorB: colorB,
-        bright: bright,
+CloudRGBLightStripController.prototype.parseHaData2Ck = function (params) {
+    var state = params.state, effect = params.effect, brightness_pct = params.brightness_pct, rgb_color = params.rgb_color, color_temp = params.color_temp;
+    var res = {
+        mode: 1,
     };
+    brightness_pct && (res.bright = brightness_pct);
+    if (state) {
+        res.switch = state;
+    }
+    if (rgb_color) {
+        res.colorR = rgb_color[0];
+        res.colorG = rgb_color[1];
+        res.colorB = rgb_color[2];
+        res.light_type = 1;
+    }
+    if (color_temp) {
+        res.light_type = 2;
+        var _a = __read(light_1.fakeTempList[color_temp].split(','), 3), r = _a[0], g = _a[1], b = _a[2];
+        res.colorR = +r;
+        res.colorG = +g;
+        res.colorB = +b;
+    }
+    if (effect) {
+        res.mode = this.effectList.indexOf(effect);
+    }
+    return res;
 };
-CloudRGBLightStripController.prototype.parseCkData2Ha = function (_a) {
-    var colorR = _a.colorR, colorB = _a.colorB, colorG = _a.colorG, bright = _a.bright, mode = _a.mode, speed = _a.speed, sensitive = _a.sensitive, _b = _a.switch, status = _b === void 0 ? 'on' : _b;
-    var hs_color, brightness;
-    if (colorR !== undefined && colorG !== undefined && colorB !== undefined) {
-        hs_color = this.parseRGB2HS(colorR, colorG, colorB);
-    }
-    if (bright !== undefined) {
-        brightness = bright * 2.55;
-    }
-    return {
-        mode: mode,
-        status: status,
-        speed: speed,
-        hs_color: hs_color,
-        sensitive: sensitive,
-        brightness: brightness,
+CloudRGBLightStripController.prototype.parseCkData2Ha = function (params) {
+    var colorR = params.colorR, colorG = params.colorG, colorB = params.colorB, mode = params.mode, bright = params.bright, light_type = params.light_type, _a = params.switch, state = _a === void 0 ? 'on' : _a;
+    var res = {
+        state: state,
+        effect: this.effectList[1],
     };
+    bright && (res.brightness = (bright * 2.55) << 0);
+    // * 彩光
+    if (light_type === 1) {
+        if (colorR && colorG && colorB) {
+            res.rgb_color = [colorR, colorG, colorB];
+        }
+    }
+    // * 白光
+    if (light_type === 2) {
+        if (colorR && colorG && colorB) {
+            var temp = light_1.fakeTempList.indexOf(colorR + "," + colorG + "," + colorB);
+            if (temp !== -1) {
+                res.color_temp = temp;
+            }
+            else {
+                // todo
+                // ? 找不到对应的值时取临近值
+            }
+        }
+    }
+    if (mode) {
+        res.effect = this.effectList[mode];
+    }
+    return res;
 };
 CloudRGBLightStripController.prototype.updateLight = function (params) {
     return __awaiter(this, void 0, void 0, function () {
@@ -147,15 +162,13 @@ CloudRGBLightStripController.prototype.updateLight = function (params) {
                 case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
-                        params: __assign(__assign({}, params), { mode: 1, speed: this.speed, sensitive: this.sensitive }),
+                        params: params,
                     })];
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        this.updateState({
-                            status: params.switch,
-                            mode: 1,
-                        });
+                        this.params = __assign(__assign({}, this.params), params);
+                        this.updateState(this.parseCkData2Ha(params));
                     }
                     return [2 /*return*/];
             }
@@ -165,11 +178,11 @@ CloudRGBLightStripController.prototype.updateLight = function (params) {
 /**
  * @description 更新状态到HA
  */
-CloudRGBLightStripController.prototype.updateState = function (_a) {
-    var status = _a.status, brightness = _a.brightness, hs_color = _a.hs_color, mode = _a.mode, speed = _a.speed, sensitive = _a.sensitive;
+CloudRGBLightStripController.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
-        var state;
-        return __generator(this, function (_b) {
+        var status, state;
+        return __generator(this, function (_a) {
+            status = params.state;
             if (this.disabled) {
                 return [2 /*return*/];
             }
@@ -180,23 +193,8 @@ CloudRGBLightStripController.prototype.updateState = function (_a) {
             restApi_1.updateStates(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
-                attributes: {
-                    restored: true,
-                    supported_features: 17,
-                    friendly_name: this.deviceName,
-                    state: state,
-                    brightness: brightness === undefined ? this.brightness : brightness,
-                    hs_color: hs_color,
-                    mode: mode === undefined ? this.mode : mode,
-                    speed: speed === undefined ? this.speed : speed,
-                    sensitive: sensitive === undefined ? this.sensitive : sensitive,
-                },
+                attributes: __assign(__assign(__assign({ restored: false, supported_features: 4, supported_color_modes: ['color_temp', 'rgb'], effect_list: this.effectList.slice(1), min_mireds: 1, max_mireds: 142, friendly_name: this.deviceName }, this.parseCkData2Ha(this.params)), params), { state: state }),
             });
-            brightness !== undefined && (this.brightness = brightness);
-            mode !== undefined && (this.mode = mode);
-            speed !== undefined && (this.speed = speed);
-            sensitive !== undefined && (this.sensitive = sensitive);
-            hs_color && (this.hsColor = hs_color);
             return [2 /*return*/];
         });
     });

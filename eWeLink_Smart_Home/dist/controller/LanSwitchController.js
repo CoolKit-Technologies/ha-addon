@@ -112,7 +112,7 @@ LanSwitchController.prototype.updateState = function (status) {
                             entity_id: this.entityId,
                             state: state,
                             attributes: {
-                                restored: true,
+                                restored: false,
                                 supported_features: 0,
                                 friendly_name: this.deviceName || this.entityId,
                                 state: state,

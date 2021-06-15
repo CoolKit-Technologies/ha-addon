@@ -116,9 +116,6 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         device instanceof LanMultiChannelSwitchController_1.default ||
                         device instanceof CloudDualR3Controller_1.default ||
                         device instanceof LanDualR3Controller_1.default) {
-                        if (device instanceof LanDualR3Controller_1.default) {
-                            console.log('Jia ~ file: generateLovelace.ts ~ line 71 ~ generateLovelace ~ device', device);
-                        }
                         if (device.maxChannel === 1 && device.deviceName) {
                             singalSwitchCard.entities.push(device.entityId + "_1");
                             return "continue";
@@ -188,7 +185,6 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                 if (views) {
                     views[0] = lovelace_1;
                 }
-                console.log('Jia ~ file: generateLovelace.ts ~ line 53 ~ generateLovelace ~ lovelace', lovelace_1);
                 return [4 /*yield*/, HASocketClass_1.default.query({
                         type: 'lovelace/config/save',
                         config: {

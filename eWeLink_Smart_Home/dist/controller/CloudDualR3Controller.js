@@ -62,13 +62,11 @@ var CloudDualR3Controller = /** @class */ (function (_super) {
     function CloudDualR3Controller(params) {
         var _a;
         var _this = _super.call(this, params) || this;
+        _this.uiid = 126;
         _this.maxChannel = 2;
         _this.entityId = "switch." + params.deviceId;
         _this.params = params.params;
-        _this.disabled = params.disabled;
-        _this.uiid = params.extra.uiid;
         _this.channelName = (_a = params.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
-        _this.online = params.online;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
     }
@@ -120,7 +118,7 @@ CloudDualR3Controller.prototype.updateState = function (switches) {
                         entity_id: _this.entityId + "_" + (outlet + 1),
                         state: state,
                         attributes: {
-                            restored: true,
+                            restored: false,
                             supported_features: 0,
                             friendly_name: _this.deviceName + "-" + name,
                             state: state,

@@ -56,7 +56,7 @@ var Mdns = /** @class */ (function () {
      */
     Mdns.prototype.onResponse = function (callback) {
         this.mdns.on('response', function (packet) {
-            var _a, _b, _c, _d, _e, _f;
+            var _a, _b, _c, _d, _e, _f, _g;
             var answers = packet.answers;
             if (Array.isArray(answers)) {
                 var tmp = {};
@@ -161,6 +161,18 @@ var Mdns = /** @class */ (function () {
                         lanType: 'th_plug',
                     });
                     callback && callback(device);
+                }
+                if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === 'light') {
+                    console.log('Found Lan 双色灯球 or RBG五色灯');
+                    // todo 如何区分双色灯跟五色灯
+                    // * 目前发现无法通过局域网进行控制
+                    // const device = Controller.setDevice({
+                    //     id: key,
+                    //     data: tmp as TypeLanDevice,
+                    //     type: 2,
+                    //     lanType: 'light',
+                    // });
+                    // callback && callback(device);
                 }
             }
         });
