@@ -52,58 +52,79 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
-var ZigbeeDeviceController_1 = __importDefault(require("./ZigbeeDeviceController"));
-var ZigbeeUIID2026Controller = /** @class */ (function (_super) {
-    __extends(ZigbeeUIID2026Controller, _super);
-    function ZigbeeUIID2026Controller(props) {
-        var _this = _super.call(this, props) || this;
-        _this.entityId = "binary_sensor." + _this.deviceId;
-        _this.params = props.params;
+var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var lodash_1 = __importDefault(require("lodash"));
+var CloudCoverController = /** @class */ (function (_super) {
+    __extends(CloudCoverController, _super);
+    function CloudCoverController(params) {
+        var _this = _super.call(this, params) || this;
+        _this.uiid = 11;
+        _this.entityId = "cover." + params.deviceId;
+        _this.params = params.params;
         return _this;
     }
-    return ZigbeeUIID2026Controller;
-}(ZigbeeDeviceController_1.default));
+    return CloudCoverController;
+}(CloudDeviceController_1.default));
+CloudCoverController.prototype.setCover = function (params) {
+    return __awaiter(this, void 0, void 0, function () {
+        var reqParams, res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    reqParams = params;
+                    if (lodash_1.default.isNumber(params.setclose)) {
+                        reqParams = {
+                            setclose: 100 - params.setclose,
+                        };
+                    }
+                    console.log('Jia ~ file: CloudCoverController.ts ~ line 21 ~ params', params);
+                    return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                            ownerApikey: this.apikey,
+                            deviceid: this.deviceId,
+                            params: reqParams,
+                        })];
+                case 1:
+                    res = _a.sent();
+                    if (res.error === 0) {
+                        // this.updateState(params);
+                        this.params = mergeDeviceParams_1.default(this.params, params);
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+};
 /**
  * @description 更新状态到HA
  */
-ZigbeeUIID2026Controller.prototype.updateState = function (_a) {
-    var status = _a.motion, battery = _a.battery;
+CloudCoverController.prototype.updateState = function (_a) {
+    var _b = _a.switch, status = _b === void 0 ? 'on' : _b, setclose = _a.setclose;
     return __awaiter(this, void 0, void 0, function () {
         var state;
-        return __generator(this, function (_b) {
+        return __generator(this, function (_c) {
             if (this.disabled) {
                 return [2 /*return*/];
             }
-            state = status === 1 ? 'on' : 'off';
+            state = status;
             if (!this.online) {
                 state = 'unavailable';
             }
-            // 更新开关
-            restApi_1.updateStates(this.entityId + "_motion", {
-                entity_id: this.entityId + "_motion",
+            restApi_1.updateStates(this.entityId, {
+                entity_id: this.entityId,
                 state: state,
                 attributes: {
                     restored: false,
-                    friendly_name: this.deviceName + "-Motion",
-                    device_class: 'motion',
+                    supported_features: 15,
+                    friendly_name: this.deviceName,
+                    current_position: 100 - (setclose || this.params.setclose),
                     state: state,
-                },
-            });
-            // 更新电量
-            restApi_1.updateStates("sensor." + this.deviceId + "_battery", {
-                entity_id: "sensor." + this.deviceId + "_battery",
-                state: battery,
-                attributes: {
-                    restored: false,
-                    friendly_name: this.deviceName + "-Battery",
-                    device_class: 'battery',
-                    unit_of_measurement: '%',
-                    state: battery,
                 },
             });
             return [2 /*return*/];
         });
     });
 };
-exports.default = ZigbeeUIID2026Controller;
+exports.default = CloudCoverController;

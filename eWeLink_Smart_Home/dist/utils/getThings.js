@@ -66,6 +66,7 @@ var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/Clo
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
+var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var lang, _a, error, data, thingList, i, item, deviceIndex, _b, extra, deviceid, name_1, params, devicekey, apikey, tags, old, decryptData, decryptData, decryptData, decryptData, decryptData, device, status_1, power, voltage, current;
@@ -195,6 +196,9 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 !device.disabled && device.updateState(params);
                             }
                             if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
+                                !device.disabled && device.updateState(params);
+                            }
+                            if (device instanceof CloudCoverController_1.default) {
                                 !device.disabled && device.updateState(params);
                             }
                         }

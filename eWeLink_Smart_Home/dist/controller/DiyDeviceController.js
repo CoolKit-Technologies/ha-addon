@@ -42,8 +42,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
-var DiyController = /** @class */ (function () {
-    function DiyController(_a) {
+var DiyDeviceController = /** @class */ (function () {
+    function DiyDeviceController(_a) {
         var deviceId = _a.deviceId, ip = _a.ip, _b = _a.port, port = _b === void 0 ? 8081 : _b, disabled = _a.disabled, txt = _a.txt;
         this.type = 1;
         this.uiid = 1;
@@ -56,9 +56,9 @@ var DiyController = /** @class */ (function () {
         this.txt = txt;
         this.deviceName = dataUtil_1.getDataSync('diy.json', [deviceId, 'deviceName']) || "DIY-" + deviceId;
     }
-    return DiyController;
+    return DiyDeviceController;
 }());
-DiyController.prototype.setSwitch = function (status) {
+DiyDeviceController.prototype.setSwitch = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -77,7 +77,7 @@ DiyController.prototype.setSwitch = function (status) {
         });
     });
 };
-DiyController.prototype.updateState = function (status) {
+DiyDeviceController.prototype.updateState = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -100,4 +100,4 @@ DiyController.prototype.updateState = function (status) {
         });
     });
 };
-exports.default = DiyController;
+exports.default = DiyDeviceController;

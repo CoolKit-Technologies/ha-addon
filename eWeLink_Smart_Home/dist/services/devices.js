@@ -331,22 +331,28 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         data: result,
                     });
                     device = Controller_1.default.getDevice(id);
-                    if (device instanceof CloudDeviceController_1.default) {
+                    if (device instanceof CloudDeviceController_1.default || device instanceof LanDeviceController_1.default) {
                         device.params = mergeDeviceParams_1.default(device.params, params);
                         device.online = true;
                         eventBus_1.default.emit('sse');
                     }
-                    if (device instanceof CloudSwitchController_1.default || device instanceof CloudTandHModificationController_1.default) {
+                    if (device instanceof CloudSwitchController_1.default ||
+                        device instanceof LanSwitchController_1.default ||
+                        device instanceof CloudTandHModificationController_1.default ||
+                        device instanceof LanTandHModificationController_1.default) {
                         // 同步到HA
                         device.updateState(device.params.switch);
                     }
-                    if (device instanceof CloudPowerDetectionSwitchController_1.default) {
+                    if (device instanceof CloudPowerDetectionSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
                         // 同步到HA
                         device.updateState({
                             status: device.params.switch,
                         });
                     }
-                    if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default) {
+                    if (device instanceof CloudMultiChannelSwitchController_1.default ||
+                        device instanceof LanMultiChannelSwitchController_1.default ||
+                        device instanceof CloudDualR3Controller_1.default ||
+                        device instanceof LanDualR3Controller_1.default) {
                         // 同步到HA
                         device.updateState(device.params.switches);
                     }

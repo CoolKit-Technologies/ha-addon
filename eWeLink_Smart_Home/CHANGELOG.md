@@ -1,5 +1,26 @@
 # Changelogs
 
+## v2.2.0-beta
+
+-   Optimized UI for mobile interfaces.
+-   Optimized the card layouts and rendering.
+-   Fixed some of the device control issues, improving user experience.
+
+-   Supported devices:  
+    **Support to synchronize to the Home Assistant Dashboard.**  
+    **Does not support to display on the eWeLink WebUI.**
+
+    -   Zigbee Temperature & Humidity Sensor
+    -   Zigbee Door Sensor
+    -   Zigbee Motion Sensor
+    -   Zigbee Wireless Button
+    -   Zigbee Plug - Sonoff S31 Lite US Type
+    -   Zigbee Mini Switch – BASICZBR3
+    -   Curtain Switch
+    -   Light Strip
+    -   Cool & Warm Light Bulb
+    -   RGB Light Bulb
+
 ## v2.1.0-beta
 
 -   **Optimized authorization process with Home Assistant built-in auth providers.**

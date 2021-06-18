@@ -43,7 +43,6 @@ var lodash_1 = __importDefault(require("lodash"));
 var config_1 = require("../config/config");
 var url_1 = require("../config/url");
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
-var supervisorApi_1 = require("../apis/supervisorApi");
 var genAuthorizeUrl = function (hassUrl, clientId, redirectUrl, state) {
     var authorizeUrl = hassUrl + "/auth/authorize?response_type=code&redirect_uri=" + encodeURIComponent(redirectUrl);
     authorizeUrl += "&client_id=" + encodeURIComponent(clientId);
@@ -53,40 +52,34 @@ var genAuthorizeUrl = function (hassUrl, clientId, redirectUrl, state) {
     return authorizeUrl;
 };
 exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, headers, data, _a, ip_address, port;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                ip = req.ip, headers = req.headers;
-                if (config_1.debugMode) {
-                    next();
-                    return [2 /*return*/];
-                }
-                if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
-                    next();
-                    return [2 /*return*/];
-                }
-                if (AuthClass_1.default.isValid(ip)) {
-                    next();
-                    return [2 /*return*/];
-                }
-                if (!config_1.isSupervisor) return [3 /*break*/, 2];
-                return [4 /*yield*/, supervisorApi_1.getCoreInfoAPI()];
-            case 1:
-                data = _b.sent();
-                _a = data.data, ip_address = _a.ip_address, port = _a.port;
-                res.json({
-                    error: 302,
-                    data: ip_address + ":" + port,
-                });
-                return [3 /*break*/, 3];
-            case 2:
-                res.json({
-                    error: 302,
-                    data: url_1.HaRestURL,
-                });
-                _b.label = 3;
-            case 3: return [2 /*return*/];
+    var ip, headers;
+    return __generator(this, function (_a) {
+        ip = req.ip, headers = req.headers;
+        if (config_1.debugMode) {
+            next();
+            return [2 /*return*/];
         }
+        if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
+            next();
+            return [2 /*return*/];
+        }
+        if (AuthClass_1.default.isValid(ip)) {
+            next();
+            return [2 /*return*/];
+        }
+        if (config_1.isSupervisor) {
+            // todo
+            res.json({
+                error: 302,
+                data: 'http://homeassistant:8123',
+            });
+        }
+        else {
+            res.json({
+                error: 302,
+                data: url_1.HaRestURL,
+            });
+        }
+        return [2 /*return*/];
     });
 }); });

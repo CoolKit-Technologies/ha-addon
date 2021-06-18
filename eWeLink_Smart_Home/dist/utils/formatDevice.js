@@ -52,6 +52,7 @@ var formatDevice = function (data) {
             rssi: (_a = data.txt.data1) === null || _a === void 0 ? void 0 : _a.rssi,
             params: data.txt,
             online: true,
+            index: 19,
         };
     }
     if (data instanceof LanDeviceController_1.default) {
@@ -64,6 +65,10 @@ var formatDevice = function (data) {
         }
         if (data instanceof LanDualR3Controller_1.default || data instanceof LanPowerDetectionSwitchController_1.default) {
             rate = data.rate;
+        }
+        var index = 5;
+        if (data.online) {
+            index += 16;
         }
         return {
             key: data.deviceId,
@@ -79,7 +84,7 @@ var formatDevice = function (data) {
             apikey: data.selfApikey,
             params: data.params,
             online: data.online,
-            index: data.index,
+            index: index,
             tags: tags,
             unit: unit,
             rate: rate,
@@ -98,6 +103,10 @@ var formatDevice = function (data) {
         }
         if (data instanceof CloudDW2WiFiController_1.default) {
             lowVolAlarm = data.lowVolAlarm;
+        }
+        var index = 9;
+        if (data.online) {
+            index += 16;
         }
         return {
             key: data.deviceId,
@@ -168,6 +177,7 @@ var getFormattedDeviceList = function () {
                     type: 1,
                     deviceId: key,
                     deviceName: lodash_1.default.get(oldDiyDevices, [key, 'deviceName']),
+                    index: 3,
                 });
             }
         }
@@ -177,6 +187,7 @@ var getFormattedDeviceList = function () {
                     online: false,
                     type: 1,
                     deviceId: key,
+                    index: 3,
                 });
             }
         }
@@ -188,7 +199,7 @@ var getFormattedDeviceList = function () {
         if (!b.index) {
             return -1;
         }
-        return a.index - b.index;
+        return b.index - a.index;
     });
     return result;
 };
