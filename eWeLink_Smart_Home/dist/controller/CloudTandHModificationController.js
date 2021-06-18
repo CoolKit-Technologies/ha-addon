@@ -124,30 +124,34 @@ CloudTandHModificationController.prototype.updateState = function (status) {
 CloudTandHModificationController.prototype.updateTandH = function (currentTemperature, currentHumidity) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            restApi_1.updateStates("sensor." + this.deviceId + "_t", {
-                entity_id: "sensor." + this.deviceId + "_t",
-                state: currentTemperature,
-                attributes: {
-                    restored: false,
-                    supported_features: 0,
-                    friendly_name: this.deviceName + "-Temperature",
-                    device_class: 'temperature',
+            if (currentTemperature && currentTemperature !== 'unavailable') {
+                restApi_1.updateStates("sensor." + this.deviceId + "_t", {
+                    entity_id: "sensor." + this.deviceId + "_t",
                     state: currentTemperature,
-                    unit_of_measurement: '°C',
-                },
-            });
-            restApi_1.updateStates("sensor." + this.deviceId + "_h", {
-                entity_id: "sensor." + this.deviceId + "_h",
-                state: currentHumidity,
-                attributes: {
-                    restored: false,
-                    supported_features: 0,
-                    friendly_name: this.deviceName + "-Humidity",
-                    device_class: 'humidity',
+                    attributes: {
+                        restored: false,
+                        supported_features: 0,
+                        friendly_name: this.deviceName + "-Temperature",
+                        device_class: 'temperature',
+                        state: currentTemperature,
+                        unit_of_measurement: '°C',
+                    },
+                });
+            }
+            if (currentHumidity && currentHumidity !== 'unavailable') {
+                restApi_1.updateStates("sensor." + this.deviceId + "_h", {
+                    entity_id: "sensor." + this.deviceId + "_h",
                     state: currentHumidity,
-                    unit_of_measurement: '%',
-                },
-            });
+                    attributes: {
+                        restored: false,
+                        supported_features: 0,
+                        friendly_name: this.deviceName + "-Humidity",
+                        device_class: 'humidity',
+                        state: currentHumidity,
+                        unit_of_measurement: '%',
+                    },
+                });
+            }
             return [2 /*return*/];
         });
     });

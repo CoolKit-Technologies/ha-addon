@@ -115,11 +115,9 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(apiPrefix + "/user", user_1.default);
 app.use('/', express_1.default.static(path.join(__dirname, '/pages')));
-// app.use('/loading/', express.static(path.join(__dirname, '/pages')));
-// todo
 app.use(redirectToAuth_1.default);
-app.use(apiPrefix + "/devices", devices_1.default);
 app.use(apiPrefix + "/language", language_1.default);
+app.use(apiPrefix + "/devices", devices_1.default);
 app.use(apiPrefix + "/stream", stream_1.default);
 app.use('/', function (req, res) {
     res.type('.html');

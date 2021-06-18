@@ -72,6 +72,7 @@ var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/Clo
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
+var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
 var apikey = dataUtil_1.getDataSync('user.json', ['user', 'apikey']);
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var at, region;
@@ -191,6 +192,12 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     }
                                     if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
                                         console.log('接收到Zigbee门磁的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    if (device instanceof CloudCoverController_1.default) {
+                                        console.log('接收到电动窗帘的信息：', tmp.params);
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }

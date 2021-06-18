@@ -64,24 +64,11 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var restApi_1 = require("../apis/restApi");
-var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var CloudRFBridgeController = /** @class */ (function (_super) {
     __extends(CloudRFBridgeController, _super);
     function CloudRFBridgeController(params) {
@@ -110,24 +97,8 @@ var CloudRFBridgeController = /** @class */ (function (_super) {
 }(CloudDeviceController_1.default));
 CloudRFBridgeController.prototype.updateSwitch = function (status) {
     return __awaiter(this, void 0, void 0, function () {
-        var res;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
-                        ownerApikey: this.apikey,
-                        deviceid: this.deviceId,
-                        params: {
-                            switch: status,
-                        },
-                    })];
-                case 1:
-                    res = _a.sent();
-                    if (res.error === 0) {
-                        this.updateState(status);
-                        this.params.switch = status;
-                    }
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     });
 };
@@ -136,40 +107,7 @@ CloudRFBridgeController.prototype.updateSwitch = function (status) {
  */
 CloudRFBridgeController.prototype.updateState = function (status) {
     return __awaiter(this, void 0, void 0, function () {
-        var state, _a, _b, key, tmp, attributes;
-        var e_1, _c;
-        return __generator(this, function (_d) {
-            if (this.disabled || !this.zxyInfo) {
-                return [2 /*return*/];
-            }
-            state = status;
-            if (!this.online) {
-                state = 'unavailable';
-            }
-            try {
-                for (_a = __values(this.zxyInfo.keys()), _b = _a.next(); !_b.done; _b = _a.next()) {
-                    key = _b.value;
-                    tmp = this.zxyInfo.get(key);
-                    attributes = {};
-                    restApi_1.updateStates(key, {
-                        entity_id: key,
-                        state: state,
-                        attributes: {
-                            restored: false,
-                            supported_features: 4,
-                            friendly_name: tmp.name,
-                            state: state,
-                        },
-                    });
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
-                }
-                finally { if (e_1) throw e_1.error; }
-            }
+        return __generator(this, function (_a) {
             return [2 /*return*/];
         });
     });

@@ -77,6 +77,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __importDefault(require("lodash"));
 var HASocketClass_1 = __importDefault(require("../class/HASocketClass"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
@@ -97,6 +98,8 @@ var LanTandHModificationController_1 = __importDefault(require("../controller/La
 var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
 var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
+var haServiceMap_1 = __importDefault(require("../config/haServiceMap"));
+var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
 /**
  * @param {string} entity_id 实体id
  * @param {string} state // on | off
@@ -219,7 +222,13 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
             case 25:
                 _c.sent();
                 _c.label = 26;
-            case 26: return [2 /*return*/];
+            case 26:
+                if (!(device instanceof CloudCoverController_1.default)) return [3 /*break*/, 28];
+                return [4 /*yield*/, device.setCover({ switch: state, setclose: lodash_1.default.get(res, 'service_data.position') })];
+            case 27:
+                _c.sent();
+                _c.label = 28;
+            case 28: return [2 /*return*/];
         }
     });
 }); };
@@ -244,7 +253,7 @@ exports.default = (function (reconnect) {
                                     case 0:
                                         console.log('HA emit call_service event', res);
                                         entity_id = res.service_data.entity_id, service = res.service;
-                                        state = service === 'turn_off' ? 'off' : 'on';
+                                        state = haServiceMap_1.default.get(service);
                                         if (!Array.isArray(entity_id)) return [3 /*break*/, 8];
                                         tmpMap_1 = new Map();
                                         entity_id.forEach(function (item) {
