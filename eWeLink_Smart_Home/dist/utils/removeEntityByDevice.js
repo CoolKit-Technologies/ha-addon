@@ -7,30 +7,56 @@ var restApi_1 = require("../apis/restApi");
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
+var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
+var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
+var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 exports.default = (function (device) {
+    console.log('try to remove entity from Ha', device.entityId);
     if (device instanceof DiyDeviceController_1.default) {
         return;
     }
-    if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
+    else if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
         restApi_1.removeStates(device.entityId);
         restApi_1.removeStates("sensor." + device.deviceId + "_h");
         restApi_1.removeStates("sensor." + device.deviceId + "_t");
+        return;
     }
-    if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default) {
+    else if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default) {
         for (var i = 0; i < device.maxChannel; i++) {
             restApi_1.removeStates(device.entityId + "_" + (i + 1));
         }
+        return;
     }
-    if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default) {
+    else if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default) {
         if (device.maxChannel) {
             for (var i = 0; i < device.maxChannel; i++) {
                 restApi_1.removeStates(device.entityId + "_" + (i + 1));
             }
         }
+        return;
     }
+    else if (device instanceof CloudZigbeeUIID1770Controller_1.default) {
+        restApi_1.removeStates(device.entityId + "_temperature");
+        restApi_1.removeStates(device.entityId + "_humidity");
+        restApi_1.removeStates(device.entityId + "_battery");
+        return;
+    }
+    else if (device instanceof CloudZigbeeUIID1000Controller_1.default) {
+        restApi_1.removeStates(device.entityId);
+        restApi_1.removeStates(device.entityId + "_battery");
+        return;
+    }
+    else if (device instanceof CloudZigbeeUIID2026Controller_1.default || device instanceof CloudZigbeeUIID3026Controller_1.default) {
+        restApi_1.removeStates(device.entityId);
+        restApi_1.removeStates("sensor." + device.deviceId + "_battery");
+        return;
+    }
+    // todo
+    // rfBridge设备
     restApi_1.removeStates(device.entityId);
 });

@@ -64,51 +64,142 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __importDefault(require("lodash"));
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
+var restApi_1 = require("../apis/restApi");
 var CloudRFBridgeController = /** @class */ (function (_super) {
     __extends(CloudRFBridgeController, _super);
     function CloudRFBridgeController(params) {
         var _a;
         var _this = _super.call(this, params) || this;
         _this.uiid = 28;
-        _this.entityId = "remote." + params.deviceId;
+        _this.entityMap = new Map();
+        _this.rfValMap = new Map();
+        _this.entityId = "binary_sensor." + params.deviceId;
         _this.params = params.params;
         _this.uiid = params.extra.uiid;
-        if ((_a = params.tags) === null || _a === void 0 ? void 0 : _a.zyx_info) {
-            params.tags.zyx_info.forEach(function (item) {
-                var _a;
-                var name = item.name, buttonName = item.buttonName, remote_type = item.remote_type;
-                var domain = +remote_type < 6 ? 'remote' : 'alert';
-                var suffix = buttonName.reduce(function (prev, curr) {
-                    var _a = __read(Object.entries(curr), 1), key = _a[0];
-                    return prev + key;
-                }, '');
-                var entityId = domain + "." + _this.deviceId + "_" + suffix;
-                (_a = _this.zxyInfo) === null || _a === void 0 ? void 0 : _a.set(entityId, item);
+        _this.tags = params.tags;
+        if (Array.isArray(params.params.rfList)) {
+            params.params.rfList.forEach(function (_a) {
+                var rfChl = _a.rfChl, rfVal = _a.rfVal;
+                _this.rfValMap.set(rfChl, rfVal);
+            });
+        }
+        if (((_a = params.tags) === null || _a === void 0 ? void 0 : _a.zyx_info) && _this.rfValMap.size) {
+            params.tags.zyx_info.forEach(function (_a) {
+                var name = _a.name, buttonName = _a.buttonName, remote_type = _a.remote_type;
+                buttonName.forEach(function (item) {
+                    var _a = __read(Object.entries(item)[0], 2), key = _a[0], childName = _a[1];
+                    var entityName = name + "-" + childName;
+                    var suffix = _this.rfValMap.get(+key);
+                    var entityId = _this.entityId + "_" + suffix;
+                    if (suffix) {
+                        _this.entityMap.set(+key, {
+                            entityId: entityId,
+                            name: entityName,
+                            icon: +remote_type < 6 ? 'mdi:remote' : 'mdi:alert',
+                        });
+                    }
+                });
             });
         }
         return _this;
     }
     return CloudRFBridgeController;
 }(CloudDeviceController_1.default));
-CloudRFBridgeController.prototype.updateSwitch = function (status) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/];
+CloudRFBridgeController.prototype.parseCkData2Ha = function (data) {
+    var res = [];
+    if (data.cmd === 'trigger') {
+        var keys = Object.keys(data);
+        keys.forEach(function (item) {
+            var tmp = item.match(/(?<=rfTrig)\d+/);
+            if (tmp && tmp[0]) {
+                res.push(+tmp[0]);
+            }
         });
-    });
+    }
+    if (data.cmd === 'transmit') {
+        var values = Object.values(data);
+        values.forEach(function (item) {
+            if (lodash_1.default.isNumber(item)) {
+                res.push(item);
+            }
+        });
+    }
+    return res;
 };
 /**
  * @description 更新状态到HA
  */
-CloudRFBridgeController.prototype.updateState = function (status) {
+CloudRFBridgeController.prototype.updateState = function (ids) {
     return __awaiter(this, void 0, void 0, function () {
+        var state, i, entity, entityId, icon, name_1;
+        var _this = this;
         return __generator(this, function (_a) {
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    if (this.disabled) {
+                        return [2 /*return*/];
+                    }
+                    state = 'on';
+                    if (!ids) {
+                        ids = __spread(this.entityMap.keys());
+                        state = 'off';
+                    }
+                    i = 0;
+                    _a.label = 1;
+                case 1:
+                    if (!(i < ids.length)) return [3 /*break*/, 4];
+                    entity = this.entityMap.get(ids[i]);
+                    if (!entity) return [3 /*break*/, 3];
+                    entityId = entity.entityId, icon = entity.icon, name_1 = entity.name;
+                    return [4 /*yield*/, restApi_1.updateStates(entityId, {
+                            entity_id: "" + entityId,
+                            state: state,
+                            attributes: {
+                                restored: false,
+                                friendly_name: name_1,
+                                state: state,
+                                icon: icon,
+                            },
+                        })];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 4:
+                    if (state === 'on' && ids) {
+                        setTimeout(function () {
+                            ids.map(function (id) {
+                                var entity = _this.entityMap.get(id);
+                                if (entity) {
+                                    var entityId = entity.entityId, icon = entity.icon, name_2 = entity.name;
+                                    restApi_1.updateStates(entityId, {
+                                        entity_id: "" + entityId,
+                                        state: 'off',
+                                        attributes: {
+                                            restored: false,
+                                            friendly_name: name_2,
+                                            state: 'off',
+                                            icon: icon,
+                                        },
+                                    });
+                                }
+                            });
+                        }, 1000);
+                    }
+                    return [2 /*return*/];
+            }
         });
     });
 };

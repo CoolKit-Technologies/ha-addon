@@ -48,52 +48,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
-var restApi_1 = require("../apis/restApi");
-var dataUtil_1 = require("../utils/dataUtil");
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
+var restApi_1 = require("../apis/restApi");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var LanPowerDetectionSwitchController = /** @class */ (function (_super) {
-    __extends(LanPowerDetectionSwitchController, _super);
-    function LanPowerDetectionSwitchController(params) {
-        var _this = _super.call(this, params) || this;
-        _this.entityId = "switch." + params.deviceId;
-        _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
+var LanRFBridgeController = /** @class */ (function (_super) {
+    __extends(LanRFBridgeController, _super);
+    function LanRFBridgeController(props) {
+        var _this = _super.call(this, props) || this;
+        _this.entityMap = new Map();
+        _this.rfValMap = new Map();
+        var deviceId = props.deviceId;
+        _this.entityId = "binary_sensor." + deviceId;
         return _this;
     }
-    return LanPowerDetectionSwitchController;
+    return LanRFBridgeController;
 }(LanDeviceController_1.default));
-LanPowerDetectionSwitchController.prototype.setSwitch = function (status) {
+LanRFBridgeController.prototype.parseMdnsData2Ha = function (data) {
+    var res = [];
+    var keys = Object.keys(data);
+    keys.forEach(function (item) {
+        var tmp = item.match(/(?<=rfTrig)\d+/);
+        if (tmp && tmp[0]) {
+            res.push(+tmp[0]);
+        }
+    });
+    return res;
+};
+LanRFBridgeController.prototype.transmitRfChl = function (data) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                    return [4 /*yield*/, lanDeviceApi_1.transmitRfChlAPI({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
                             devicekey: this.devicekey,
                             selfApikey: this.selfApikey,
-                            data: JSON.stringify({
-                                switch: status,
-                            }),
+                            data: JSON.stringify(data),
                         })];
                 case 1:
                     res = _a.sent();
-                    if (res && res.data && res.data.error === 0) {
-                        this.updateState({
-                            status: status,
-                        });
-                        this.params = mergeDeviceParams_1.default(this.params, {
-                            switch: status,
-                        });
+                    if ((res === null || res === void 0 ? void 0 : res.data) && res.data.error === 0 && lodash_1.default.isNumber(data.rfChl)) {
+                        this.updateState([data.rfChl], 1000);
                         return [2 /*return*/, 0];
                     }
                     _a.label = 2;
@@ -102,41 +126,70 @@ LanPowerDetectionSwitchController.prototype.setSwitch = function (status) {
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
-LanPowerDetectionSwitchController.prototype.updateState = function (params) {
+LanRFBridgeController.prototype.updateState = function (ids, time) {
+    var _a;
+    if (time === void 0) { time = 3000; }
     return __awaiter(this, void 0, void 0, function () {
-        var power, current, voltage, status, state, attributes, res;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var state, i, entity, entityId, icon, name_1;
+        var _this = this;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    if (this.disabled || lodash_1.default.isEmpty(params)) {
+                    if (this.disabled || !((_a = this.entityMap) === null || _a === void 0 ? void 0 : _a.size)) {
                         return [2 /*return*/];
                     }
-                    power = params.power, current = params.current, voltage = params.voltage, status = params.status;
-                    state = status;
-                    if (!this.online) {
-                        state = 'unavailable';
+                    state = 'on';
+                    if (!ids) {
+                        ids = __spread(this.entityMap.keys());
+                        state = 'off';
                     }
-                    attributes = {
-                        restored: false,
-                        supported_features: 0,
-                        friendly_name: this.deviceName,
-                        power: (power || lodash_1.default.get(this, ['params', 'power'], 0)) + " W",
-                        current: (current || lodash_1.default.get(this, ['params', 'current'], 0)) + " A",
-                        voltage: (voltage || lodash_1.default.get(this, ['params', 'voltage'], 0)) + " V",
-                    };
-                    return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
-                            entity_id: this.entityId,
-                            state: state || lodash_1.default.get(this, ['params', 'switch']),
-                            attributes: attributes,
-                        })];
+                    i = 0;
+                    _b.label = 1;
                 case 1:
-                    res = _a.sent();
+                    if (!(i < ids.length)) return [3 /*break*/, 4];
+                    entity = this.entityMap.get(ids[i]);
+                    if (!entity) return [3 /*break*/, 3];
+                    entityId = entity.entityId, icon = entity.icon, name_1 = entity.name;
+                    return [4 /*yield*/, restApi_1.updateStates(entityId, {
+                            entity_id: "" + entityId,
+                            state: state,
+                            attributes: {
+                                restored: false,
+                                friendly_name: name_1,
+                                state: state,
+                                icon: icon,
+                            },
+                        })];
+                case 2:
+                    _b.sent();
+                    _b.label = 3;
+                case 3:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 4:
+                    if (state === 'on' && ids) {
+                        setTimeout(function () {
+                            ids.map(function (id) {
+                                var entity = _this.entityMap.get(id);
+                                if (entity) {
+                                    var entityId = entity.entityId, icon = entity.icon, name_2 = entity.name;
+                                    restApi_1.updateStates(entityId, {
+                                        entity_id: "" + entityId,
+                                        state: 'off',
+                                        attributes: {
+                                            restored: false,
+                                            friendly_name: name_2,
+                                            state: 'off',
+                                            icon: icon,
+                                        },
+                                    });
+                                }
+                            });
+                        }, time);
+                    }
                     return [2 /*return*/];
             }
         });
     });
 };
-exports.default = LanPowerDetectionSwitchController;
+exports.default = LanRFBridgeController;

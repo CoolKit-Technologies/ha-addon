@@ -35,6 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -67,75 +83,111 @@ var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/Clo
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
+var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBridgeController"));
+var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var lang, _a, error, data, thingList, i, item, deviceIndex, _b, extra, deviceid, name_1, params, devicekey, apikey, tags, old, decryptData, decryptData, decryptData, decryptData, decryptData, device, status_1, power, voltage, current;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var lang, _a, error, data, thingList, _loop_1, i;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 lang = dataUtil_1.getDataSync('user.json', ['region']) === 'cn' ? 'cn' : 'en';
                 return [4 /*yield*/, coolkit_api_1.default.device.getThingList({
                         lang: lang,
                     })];
             case 1:
-                _a = _c.sent(), error = _a.error, data = _a.data;
+                _a = _b.sent(), error = _a.error, data = _a.data;
                 if (error === 0) {
                     thingList = data.thingList;
                     console.log('Jia ~ file: getThings.ts ~ line 25 ~ thingList', JSON.stringify(thingList, null, 2));
-                    for (i = 0; i < thingList.length; i++) {
-                        item = thingList[i];
-                        deviceIndex = item.index;
+                    _loop_1 = function (i) {
+                        var item = thingList[i];
+                        var deviceIndex = item.index;
                         if (item.itemType === 1 || item.itemType === 2) {
-                            _b = item.itemData, extra = _b.extra, deviceid = _b.deviceid, name_1 = _b.name, params = _b.params, devicekey = _b.devicekey, apikey = _b.apikey, tags = _b.tags;
-                            old = Controller_1.default.getDevice(deviceid);
-                            if (old instanceof DiyDeviceController_1.default) {
-                                // 如果设备已经存在并且是DIY设备就不做任何操作
-                                continue;
+                            var _a = item.itemData, extra = _a.extra, deviceid = _a.deviceid, name_1 = _a.name, params = _a.params, devicekey = _a.devicekey, apikey = _a.apikey, tags = _a.tags;
+                            var old_1 = Controller_1.default.getDevice(deviceid);
+                            if (old_1 instanceof DiyDeviceController_1.default) {
+                                return "continue";
                             }
                             // 如果设备已经存在并且是Lan设备就添加该设备的deviceKey
-                            if (old instanceof LanDeviceController_1.default) {
-                                old.devicekey = devicekey;
-                                old.selfApikey = apikey;
-                                old.deviceName = name_1;
-                                old.extra = extra;
-                                old.params = params;
-                                old.index = deviceIndex;
-                                if (old instanceof LanSwitchController_1.default) {
-                                    decryptData = old.parseEncryptedData();
+                            if (old_1 instanceof LanDeviceController_1.default) {
+                                old_1.devicekey = devicekey;
+                                old_1.selfApikey = apikey;
+                                old_1.deviceName = name_1;
+                                old_1.extra = extra;
+                                old_1.params = params;
+                                old_1.index = deviceIndex;
+                                if (old_1 instanceof LanSwitchController_1.default) {
+                                    var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
-                                        old.updateState(decryptData.switch);
+                                        old_1.updateState(decryptData.switch);
                                     }
                                 }
-                                if (old instanceof LanMultiChannelSwitchController_1.default) {
-                                    old.channelName = tags === null || tags === void 0 ? void 0 : tags.ck_channel_name;
-                                    old.maxChannel = channelMap_1.getMaxChannelByUiid(extra.uiid);
-                                    decryptData = old.parseEncryptedData();
+                                if (old_1 instanceof LanMultiChannelSwitchController_1.default) {
+                                    old_1.channelName = tags === null || tags === void 0 ? void 0 : tags.ck_channel_name;
+                                    old_1.maxChannel = channelMap_1.getMaxChannelByUiid(extra.uiid);
+                                    var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
-                                        old.updateState(decryptData.switches);
+                                        old_1.updateState(decryptData.switches);
                                     }
                                 }
-                                if (old instanceof LanDualR3Controller_1.default) {
-                                    old.channelName = tags === null || tags === void 0 ? void 0 : tags.ck_channel_name;
-                                    decryptData = old.parseEncryptedData();
+                                if (old_1 instanceof LanDualR3Controller_1.default) {
+                                    old_1.channelName = tags === null || tags === void 0 ? void 0 : tags.ck_channel_name;
+                                    var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
-                                        old.updateState(decryptData.switches);
+                                        old_1.updateState(decryptData.switches);
                                     }
                                 }
-                                if (old instanceof LanPowerDetectionSwitchController_1.default) {
-                                    decryptData = old.parseEncryptedData();
+                                if (old_1 instanceof LanPowerDetectionSwitchController_1.default) {
+                                    var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
-                                        old.updateState(decryptData.switch);
+                                        old_1.updateState(decryptData.switch);
                                     }
                                 }
-                                if (old instanceof LanDoubleColorLightController_1.default) {
-                                    decryptData = old.parseEncryptedData();
+                                if (old_1 instanceof LanDoubleColorLightController_1.default) {
+                                    var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
-                                        old.updateState(decryptData);
+                                        old_1.updateState(decryptData);
                                     }
                                 }
-                                continue;
+                                if (old_1 instanceof LanTandHModificationController_1.default) {
+                                    var decryptData = old_1.parseEncryptedData();
+                                    if (decryptData) {
+                                        old_1.updateState(decryptData.switch);
+                                    }
+                                }
+                                if (old_1 instanceof LanRFBridgeController_1.default) {
+                                    old_1.tags = tags;
+                                    if (Array.isArray(params.rfList)) {
+                                        params.rfList.forEach(function (_a) {
+                                            var rfChl = _a.rfChl, rfVal = _a.rfVal;
+                                            old_1.rfValMap.set(rfChl, rfVal);
+                                        });
+                                    }
+                                    if ((tags === null || tags === void 0 ? void 0 : tags.zyx_info) && old_1.rfValMap.size) {
+                                        tags.zyx_info.forEach(function (_a) {
+                                            var name = _a.name, buttonName = _a.buttonName, remote_type = _a.remote_type;
+                                            buttonName.forEach(function (item) {
+                                                var _a = __read(Object.entries(item)[0], 2), key = _a[0], childName = _a[1];
+                                                var entityName = name + "-" + childName;
+                                                var suffix = old_1.rfValMap.get(+key);
+                                                var entityId = old_1.entityId + "_" + suffix;
+                                                if (suffix) {
+                                                    old_1.entityMap.set(+key, {
+                                                        entityId: entityId,
+                                                        name: entityName,
+                                                        icon: +remote_type < 6 ? 'mdi:remote' : 'mdi:alert',
+                                                    });
+                                                }
+                                            });
+                                        });
+                                    }
+                                    old_1.updateState();
+                                }
+                                return "continue";
                             }
-                            device = Controller_1.default.setDevice({
+                            // 添加为Cloud设备
+                            var device = Controller_1.default.setDevice({
                                 id: deviceid,
                                 type: 12,
                                 data: item.itemData,
@@ -159,7 +211,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     });
                             }
                             if (device instanceof CloudPowerDetectionSwitchController_1.default) {
-                                status_1 = params.switch, power = params.power, voltage = params.voltage, current = params.current;
+                                var status_1 = params.switch, power = params.power, voltage = params.voltage, current = params.current;
                                 !device.disabled &&
                                     device.updateState({
                                         status: status_1,
@@ -201,7 +253,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             if (device instanceof CloudCoverController_1.default) {
                                 !device.disabled && device.updateState(params);
                             }
+                            if (device instanceof CloudRFBridgeController_1.default) {
+                                !device.disabled && device.updateState();
+                            }
                         }
+                    };
+                    for (i = 0; i < thingList.length; i++) {
+                        _loop_1(i);
                     }
                     return [2 /*return*/, 0];
                 }

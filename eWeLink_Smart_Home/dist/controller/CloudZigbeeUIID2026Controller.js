@@ -54,9 +54,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var CloudZigbeeUIID3026Controller = /** @class */ (function (_super) {
-    __extends(CloudZigbeeUIID3026Controller, _super);
-    function CloudZigbeeUIID3026Controller(props) {
+var CloudZigbeeUIID2026Controller = /** @class */ (function (_super) {
+    __extends(CloudZigbeeUIID2026Controller, _super);
+    function CloudZigbeeUIID2026Controller(props) {
         var _this = _super.call(this, props) || this;
         _this.type = 8;
         _this.uiid = props.extra.uiid;
@@ -64,12 +64,12 @@ var CloudZigbeeUIID3026Controller = /** @class */ (function (_super) {
         _this.params = props.params;
         return _this;
     }
-    return CloudZigbeeUIID3026Controller;
+    return CloudZigbeeUIID2026Controller;
 }(CloudDeviceController_1.default));
 /**
  * @description 更新状态到HA
  */
-CloudZigbeeUIID3026Controller.prototype.updateState = function (_a) {
+CloudZigbeeUIID2026Controller.prototype.updateState = function (_a) {
     var motion = _a.motion, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var state;
@@ -83,12 +83,12 @@ CloudZigbeeUIID3026Controller.prototype.updateState = function (_a) {
             }
             if (motion !== undefined) {
                 // 更新开关
-                restApi_1.updateStates(this.entityId + "_motion", {
-                    entity_id: this.entityId + "_motion",
+                restApi_1.updateStates("" + this.entityId, {
+                    entity_id: "" + this.entityId,
                     state: state,
                     attributes: {
                         restored: false,
-                        friendly_name: this.deviceName + "-Motion",
+                        friendly_name: "" + this.deviceName,
                         device_class: 'motion',
                         state: state,
                     },
@@ -112,4 +112,4 @@ CloudZigbeeUIID3026Controller.prototype.updateState = function (_a) {
         });
     });
 };
-exports.default = CloudZigbeeUIID3026Controller;
+exports.default = CloudZigbeeUIID2026Controller;

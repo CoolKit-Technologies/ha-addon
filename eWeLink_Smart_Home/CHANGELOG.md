@@ -1,5 +1,24 @@
 # Changelogs
 
+## v2.3.0-beta
+
+-   Fixed an issue that failed to update the temperature and humidity sensor.
+-   Fixed an issue that the ZigBee wireless button could not trigger the same command continuously.
+-   Fixed an issue that failed to disable entities for some devices.
+-   Support RF Bridge.
+-   **eWeLink WebUI now support**
+    -   RF Bridge
+    -   Zigbee Temperature & Humidity Sensor
+    -   Zigbee Door Sensor
+    -   Zigbee Motion Sensor
+    -   Zigbee Wireless Button
+    -   Zigbee Plug - Sonoff S31 Lite US Type
+    -   Zigbee Mini Switch – BASICZBR3
+    -   Curtain Switch
+    -   Light Strip
+    -   Cool & Warm Light Bulb
+    -   RGB Light Bulb
+
 ## v2.2.0-beta
 
 -   Optimized UI for mobile interfaces.

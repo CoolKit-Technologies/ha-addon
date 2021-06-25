@@ -58,7 +58,7 @@ var getDataSync = function (fileName, namePath) {
         return namePath.reduce(function (cur, path) { return cur[path]; }, JSON.parse(data));
     }
     catch (err) {
-        console.log('getDataSync-> no data');
+        console.log("getDataSync: " + fileName + " -> " + namePath + " no data");
         return null;
     }
 };

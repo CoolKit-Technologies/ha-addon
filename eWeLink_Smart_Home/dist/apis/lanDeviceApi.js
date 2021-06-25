@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateLanLight = exports.getLanDeviceParams = exports.setSwitches = exports.setSwitch = void 0;
+exports.transmitRfChlAPI = exports.updateLanLight = exports.getLanDeviceParams = exports.setSwitches = exports.setSwitch = void 0;
 var axios_1 = __importDefault(require("axios"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lanControlAuthenticationUtils_1 = __importDefault(require("../utils/lanControlAuthenticationUtils"));
@@ -123,6 +123,50 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.setSwitches = setSwitches;
+/**
+ *
+ * @description RF-Bridge 发送通道值
+ */
+var transmitRfChlAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
+    var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ip = params.ip, port = params.port, deviceid = params.deviceid, devicekey = params.devicekey, data = params.data, selfApikey = params.selfApikey;
+                iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
+                reqData = {
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
+                    deviceid: deviceid,
+                    selfApikey: selfApikey,
+                    encrypt: true,
+                    sequence: "" + Date.now(),
+                    data: lanControlAuthenticationUtils_1.default.encryptionData({
+                        iv: iv,
+                        data: data,
+                        key: devicekey,
+                    }),
+                };
+                res = axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/transmit", reqData);
+                res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log('控制局域网RF-Bridge出错', reqData);
+                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                        deviceid: deviceid,
+                                        ownerApikey: selfApikey,
+                                        params: JSON.parse(data),
+                                    })];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, res];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.transmitRfChlAPI = transmitRfChlAPI;
 /**
  *
  * @deprecated 局域网设备好像不支持该接口

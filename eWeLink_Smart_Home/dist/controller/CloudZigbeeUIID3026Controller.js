@@ -83,12 +83,12 @@ CloudZigbeeUIID3026Controller.prototype.updateState = function (_a) {
             }
             if (lock !== undefined) {
                 // 更新开关
-                restApi_1.updateStates(this.entityId + "_lock", {
-                    entity_id: this.entityId + "_lock",
+                restApi_1.updateStates("" + this.entityId, {
+                    entity_id: "" + this.entityId,
                     state: state,
                     attributes: {
                         restored: false,
-                        friendly_name: this.deviceName + "-Lock",
+                        friendly_name: "" + this.deviceName,
                         device_class: 'lock',
                         state: state,
                     },

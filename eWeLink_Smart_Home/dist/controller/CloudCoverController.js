@@ -89,7 +89,7 @@ CloudCoverController.prototype.setCover = function (params) {
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        // this.updateState(params);
+                        this.updateState(params);
                         this.params = mergeDeviceParams_1.default(this.params, params);
                     }
                     return [2 /*return*/];
