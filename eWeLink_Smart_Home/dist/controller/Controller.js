@@ -43,6 +43,8 @@ var CloudZigbeeUIID3026Controller_1 = __importDefault(require("./CloudZigbeeUIID
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("./CloudZigbeeUIID1000Controller"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var CloudCoverController_1 = __importDefault(require("./CloudCoverController"));
+var CloudRFBridgeController_1 = __importDefault(require("./CloudRFBridgeController"));
+var LanRFBridgeController_1 = __importDefault(require("./LanRFBridgeController"));
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -110,7 +112,6 @@ var Controller = /** @class */ (function () {
                 return old;
             }
             // 如果设备之前是Cloud设备,需要保持设备的位置不变,防止前端页面跳动
-            var tmpIndex = void 0;
             var oldDeviceParams = {};
             if (old instanceof CloudDeviceController_1.default) {
                 oldDeviceParams = {
@@ -123,35 +124,40 @@ var Controller = /** @class */ (function () {
                 };
             }
             if (lanType === 'plug') {
-                var lanDevice = new LanSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                var lanDevice = new LanSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
             if (lanType === 'strip') {
-                var lanDevice = new LanMultiChannelSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                var lanDevice = new LanMultiChannelSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
             if (lanType === 'multifun_switch') {
-                var lanDevice = new LanDualR3Controller_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                var lanDevice = new LanDualR3Controller_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
             if (lanType === 'th_plug') {
-                var lanDevice = new LanTandHModificationController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                var lanDevice = new LanTandHModificationController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
             if (lanType === 'enhanced_plug') {
-                var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign({}, params_1), { disabled: disabled, index: tmpIndex }));
+                var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
+                Controller.deviceMap.set(id, lanDevice);
+                return lanDevice;
+            }
+            if (lanType === 'rf') {
+                var lanDevice = new LanRFBridgeController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
             // if (lanType === 'light') {
             //     const lanDevice = new LanDoubleColorLightController({
-            //         ...params,
+            //          ...params,
+            //          ...oldDeviceParams,
             //         disabled,
-            //         index: tmpIndex,
             //     });
             //     Controller.deviceMap.set(id, lanDevice);
             //     return lanDevice;
@@ -242,6 +248,24 @@ var Controller = /** @class */ (function () {
                 });
                 Controller.deviceMap.set(id, rgbLight);
                 return rgbLight;
+            }
+            // RFBridge
+            if (data.extra.uiid === 28) {
+                var tmp = data;
+                var rfBirdge = new CloudRFBridgeController_1.default({
+                    deviceId: tmp.deviceid,
+                    devicekey: tmp.devicekey,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    online: tmp.online,
+                    disabled: disabled,
+                    index: _index,
+                    tags: tmp.tags,
+                });
+                Controller.deviceMap.set(id, rfBirdge);
+                return rfBirdge;
             }
             // 功率检测告警开关
             if (data.extra.uiid === 32 || data.extra.uiid === 5) {

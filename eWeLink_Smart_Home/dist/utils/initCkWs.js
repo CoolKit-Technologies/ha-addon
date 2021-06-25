@@ -73,6 +73,8 @@ var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/Clo
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
+var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBridgeController"));
 var apikey = dataUtil_1.getDataSync('user.json', ['user', 'apikey']);
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var at, region;
@@ -95,7 +97,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 _a.sent();
                 console.log('Jia ~ file: initCkWs.ts ~ line 29 ~ at', at);
                 coolkit_ws_1.default.on('message', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, online, res, error_1;
+                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, ids, online, res, error_1;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
@@ -113,9 +115,9 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     if (device instanceof CloudSwitchController_1.default) {
                                         device.updateState(tmp.params.switch);
                                     }
-                                    if (device instanceof CloudTandHModificationController_1.default) {
+                                    if (device instanceof CloudTandHModificationController_1.default || device instanceof LanTandHModificationController_1.default) {
                                         _a = tmp.params, currentTemperature = _a.currentTemperature, currentHumidity = _a.currentHumidity, state = _a.switch;
-                                        if (currentHumidity && currentTemperature) {
+                                        if (currentHumidity || currentTemperature) {
                                             device.updateTandH(currentTemperature, currentHumidity);
                                         }
                                         else if (state) {
@@ -201,6 +203,11 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
+                                    }
+                                    if (device instanceof CloudRFBridgeController_1.default) {
+                                        console.log('接收到RFBridge的信息：', tmp.params);
+                                        ids = device.parseCkData2Ha(tmp.params);
+                                        device.updateState(ids);
                                     }
                                     eventBus_1.default.emit('update-controller', data);
                                 }

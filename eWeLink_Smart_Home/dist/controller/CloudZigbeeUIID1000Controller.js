@@ -73,47 +73,66 @@ CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
     var key = _a.key, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var state, keyMap;
+        var _this = this;
         return __generator(this, function (_b) {
-            if (this.disabled) {
-                return [2 /*return*/];
+            switch (_b.label) {
+                case 0:
+                    if (this.disabled) {
+                        return [2 /*return*/];
+                    }
+                    state = "" + key;
+                    if (!this.online) {
+                        state = 'unavailable';
+                    }
+                    keyMap = new Map([
+                        ['0', 'Click'],
+                        ['1', 'Double Click'],
+                        ['2', 'Long Press'],
+                        ['unavailable', 'unavailable'],
+                    ]);
+                    if (!(key !== undefined)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, restApi_1.updateStates("" + this.entityId, {
+                            entity_id: "" + this.entityId,
+                            state: keyMap.get(state),
+                            attributes: {
+                                restored: false,
+                                friendly_name: "" + this.deviceName,
+                                icon: 'mdi:remote',
+                                state: state,
+                            },
+                        })];
+                case 1:
+                    _b.sent();
+                    setTimeout(function () {
+                        restApi_1.updateStates("" + _this.entityId, {
+                            entity_id: "" + _this.entityId,
+                            state: 'None',
+                            attributes: {
+                                restored: false,
+                                friendly_name: "" + _this.deviceName,
+                                icon: 'mdi:remote',
+                                state: 'None',
+                            },
+                        });
+                    }, 1000);
+                    _b.label = 2;
+                case 2:
+                    if (battery !== undefined) {
+                        // 更新电量
+                        restApi_1.updateStates(this.entityId + "_battery", {
+                            entity_id: this.entityId + "_battery",
+                            state: battery,
+                            attributes: {
+                                restored: false,
+                                friendly_name: this.deviceName + "-Battery",
+                                device_class: 'battery',
+                                unit_of_measurement: '%',
+                                state: battery,
+                            },
+                        });
+                    }
+                    return [2 /*return*/];
             }
-            state = "" + key;
-            if (!this.online) {
-                state = 'unavailable';
-            }
-            keyMap = new Map([
-                ['0', 'Click'],
-                ['1', 'Double Click'],
-                ['2', 'Long Press'],
-                ['unavailable', 'unavailable'],
-            ]);
-            if (key !== undefined) {
-                restApi_1.updateStates("" + this.entityId, {
-                    entity_id: "" + this.entityId,
-                    state: keyMap.get(state),
-                    attributes: {
-                        restored: false,
-                        friendly_name: "" + this.deviceName,
-                        icon: 'mdi:remote',
-                        state: state,
-                    },
-                });
-            }
-            if (battery !== undefined) {
-                // 更新电量
-                restApi_1.updateStates(this.entityId + "_battery", {
-                    entity_id: this.entityId + "_battery",
-                    state: battery,
-                    attributes: {
-                        restored: false,
-                        friendly_name: this.deviceName + "-Battery",
-                        device_class: 'battery',
-                        unit_of_measurement: '%',
-                        state: battery,
-                    },
-                });
-            }
-            return [2 /*return*/];
         });
     });
 };

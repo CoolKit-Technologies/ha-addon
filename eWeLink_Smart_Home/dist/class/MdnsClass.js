@@ -56,7 +56,7 @@ var Mdns = /** @class */ (function () {
      */
     Mdns.prototype.onResponse = function (callback) {
         this.mdns.on('response', function (packet) {
-            var _a, _b, _c, _d, _e, _f, _g;
+            var _a, _b, _c, _d, _e, _f, _g, _h;
             var answers = packet.answers;
             if (Array.isArray(answers)) {
                 var tmp = {};
@@ -162,7 +162,17 @@ var Mdns = /** @class */ (function () {
                     });
                     callback && callback(device);
                 }
-                if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === 'light') {
+                if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === 'rf') {
+                    console.log('Found Lan RF-Bridge');
+                    var device = Controller_1.default.setDevice({
+                        id: key,
+                        data: tmp,
+                        type: 2,
+                        lanType: 'rf',
+                    });
+                    callback && callback(device);
+                }
+                if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === 'light') {
                     console.log('Found Lan 双色灯球 or RBG五色灯');
                     // todo 如何区分双色灯跟五色灯
                     // * 目前发现无法通过局域网进行控制

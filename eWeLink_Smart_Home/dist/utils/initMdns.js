@@ -15,6 +15,7 @@ var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Cont
 var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
+var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
 exports.default = (function () {
     return MdnsClass_1.default.createInstance({
         queryParams: {
@@ -51,12 +52,25 @@ exports.default = (function () {
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
+            if (device instanceof LanTandHModificationController_1.default) {
+                var decryptData = device.parseEncryptedData();
+                if (decryptData) {
+                    device.updateState(decryptData.switch);
+                    device.updateTandH(decryptData.currentTemperature, decryptData.currentHumidity);
+                    device.params = mergeDeviceParams_1.default(device.params, decryptData);
+                }
+            }
             if (device instanceof LanDoubleColorLightController_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
-                    console.log("Jia ~ file: initMdns.ts ~ line 56 ~ onResponseCb ~ decryptData", decryptData);
                     device.updateState(decryptData);
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
+                }
+            }
+            if (device instanceof LanRFBridgeController_1.default) {
+                var decryptData = device.parseEncryptedData();
+                if (decryptData) {
+                    device.updateState(device.parseMdnsData2Ha(decryptData));
                 }
             }
             // 触发sse

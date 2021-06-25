@@ -54,9 +54,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var ZigbeeUIID1770Controller = /** @class */ (function (_super) {
-    __extends(ZigbeeUIID1770Controller, _super);
-    function ZigbeeUIID1770Controller(props) {
+var CloudZigbeeUIID1770Controller = /** @class */ (function (_super) {
+    __extends(CloudZigbeeUIID1770Controller, _super);
+    function CloudZigbeeUIID1770Controller(props) {
         var _this = _super.call(this, props) || this;
         _this.type = 8;
         _this.uiid = props.extra.uiid;
@@ -64,12 +64,12 @@ var ZigbeeUIID1770Controller = /** @class */ (function (_super) {
         _this.params = props.params;
         return _this;
     }
-    return ZigbeeUIID1770Controller;
+    return CloudZigbeeUIID1770Controller;
 }(CloudDeviceController_1.default));
 /**
  * @description 更新状态到HA
  */
-ZigbeeUIID1770Controller.prototype.updateState = function (_a) {
+CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
     var temperature = _a.temperature, humidity = _a.humidity, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var t, h;
@@ -128,4 +128,4 @@ ZigbeeUIID1770Controller.prototype.updateState = function (_a) {
         });
     });
 };
-exports.default = ZigbeeUIID1770Controller;
+exports.default = CloudZigbeeUIID1770Controller;

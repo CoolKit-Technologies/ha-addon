@@ -62,6 +62,10 @@ var CloudSwitchController = /** @class */ (function (_super) {
         _this.entityId = "switch." + params.deviceId;
         _this.params = params.params;
         _this.uiid = params.extra.uiid;
+        // Zigbee插座
+        if (_this.uiid === 1009 || _this.uiid === 1256) {
+            _this.type = 8;
+        }
         return _this;
     }
     return CloudSwitchController;

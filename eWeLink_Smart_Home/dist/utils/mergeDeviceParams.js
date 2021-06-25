@@ -16,13 +16,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
 exports.default = (function (source, params) {
-    return lodash_1.default.mergeWith(source, params, function (objVal, srcVal) {
+    return lodash_1.default.mergeWith(source, params, function (objVal, srcVal, key) {
         var e_1, _a;
+        // RF-Bridge
+        if (key === 'rfList') {
+            return srcVal;
+        }
+        // Muti-Switch
         if (Array.isArray(objVal) && Array.isArray(srcVal)) {
             try {
                 for (var srcVal_1 = __values(srcVal), srcVal_1_1 = srcVal_1.next(); !srcVal_1_1.done; srcVal_1_1 = srcVal_1.next()) {
                     var item = srcVal_1_1.value;
-                    objVal[item.outlet] = item;
+                    if (item.outlet) {
+                        objVal[item.outlet] = item;
+                    }
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
