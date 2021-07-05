@@ -18,6 +18,8 @@ switch:
 
 ```
 
+---
+
 -   To solve `Failed to call service cover.open_cover. Service not found.` issue, use`File editor` to edit `configuration.yaml`. Append the following info to end of file:
 
 ```

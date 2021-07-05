@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.0.0
+
+-   Fixed known issues
+
 ## v2.3.0-beta
 
 -   Fixed an issue that failed to update the temperature and humidity sensor.

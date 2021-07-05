@@ -141,7 +141,7 @@ var HaSocket = /** @class */ (function () {
                         return [2 /*return*/];
                 }
             });
-        }); }, 15000);
+        }); }, 120000);
     };
     HaSocket.prototype.subscribeEvents = function (eventType) {
         this.client.send(JSON.stringify({
