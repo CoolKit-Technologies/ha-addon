@@ -85,6 +85,10 @@ var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/Clo
 var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
 var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBridgeController"));
 var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
+var uiid_1 = require("../config/uiid");
+var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44Controller"));
+var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
+var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var lang, _a, error, data, thingList, _loop_1, i;
@@ -110,7 +114,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 return "continue";
                             }
                             // 如果设备已经存在并且是Lan设备就添加该设备的deviceKey
-                            if (old_1 instanceof LanDeviceController_1.default) {
+                            if (old_1 instanceof LanDeviceController_1.default && !uiid_1.unsupportedLanModeUiidSet.has(extra.uiid)) {
                                 old_1.devicekey = devicekey;
                                 old_1.selfApikey = apikey;
                                 old_1.deviceName = name_1;
@@ -154,6 +158,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     var decryptData = old_1.parseEncryptedData();
                                     if (decryptData) {
                                         old_1.updateState(decryptData.switch);
+                                    }
+                                }
+                                if (old_1 instanceof LanUIID34Controller_1.default) {
+                                    var decryptData = old_1.parseEncryptedData();
+                                    if (decryptData) {
+                                        var switches = old_1.parseMdnsData2Ck(decryptData);
+                                        old_1.updateState(switches);
                                     }
                                 }
                                 if (old_1 instanceof LanRFBridgeController_1.default) {
@@ -255,6 +266,12 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             }
                             if (device instanceof CloudRFBridgeController_1.default) {
                                 !device.disabled && device.updateState();
+                            }
+                            if (device instanceof CloudUIID44Controller_1.default) {
+                                !device.disabled && device.updateState(params);
+                            }
+                            if (device instanceof CloudUIID34Controller_1.default) {
+                                !device.disabled && device.updateState(params.switches);
                             }
                         }
                     };

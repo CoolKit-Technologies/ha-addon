@@ -16,6 +16,7 @@ var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
 var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
+var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 exports.default = (function () {
     return MdnsClass_1.default.createInstance({
         queryParams: {
@@ -71,6 +72,14 @@ exports.default = (function () {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(device.parseMdnsData2Ha(decryptData));
+                }
+            }
+            if (device instanceof LanUIID34Controller_1.default) {
+                var decryptData = device.parseEncryptedData();
+                if (decryptData) {
+                    var switches = device.parseMdnsData2Ck(decryptData);
+                    device.updateState(switches);
+                    device.params = mergeDeviceParams_1.default(device.params, switches);
                 }
             }
             // 触发sse

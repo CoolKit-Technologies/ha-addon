@@ -1,5 +1,13 @@
 # Changelogs
 
+## v1.1.0
+
+-   Support for ceiling fan with light
+-   Support for dimmer switch
+-   Support for MINI-R3
+-   Fixed sync error of channel 1 of multi-channel device
+-   Improved LAN control
+
 ## v1.0.0
 
 -   Fixed known issues

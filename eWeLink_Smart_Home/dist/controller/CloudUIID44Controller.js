@@ -52,27 +52,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __importDefault(require("lodash"));
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var channelMap_1 = require("../config/channelMap");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var CloudMultiChannelSwitchController = /** @class */ (function (_super) {
-    __extends(CloudMultiChannelSwitchController, _super);
-    function CloudMultiChannelSwitchController(props) {
-        var _a;
-        var _this = _super.call(this, props) || this;
-        _this.entityId = "switch." + props.deviceId;
-        _this.uiid = props.extra.uiid;
-        _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
-        _this.maxChannel = channelMap_1.getMaxChannelByUiid(props.extra.uiid);
-        _this.params = props.params;
+/**
+ *
+ * @class CloudUIID44Controller
+ * @extends {CloudDeviceController}
+ * @description 单路调光开关
+ */
+var CloudUIID44Controller = /** @class */ (function (_super) {
+    __extends(CloudUIID44Controller, _super);
+    function CloudUIID44Controller(params) {
+        var _this = _super.call(this, params) || this;
+        _this.uiid = 44;
+        _this.entityId = "light." + params.deviceId;
+        _this.params = params.params;
         return _this;
     }
-    return CloudMultiChannelSwitchController;
+    return CloudUIID44Controller;
 }(CloudDeviceController_1.default));
-CloudMultiChannelSwitchController.prototype.updateSwitch = function (switches) {
+CloudUIID44Controller.prototype.updateLight = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
@@ -80,15 +81,13 @@ CloudMultiChannelSwitchController.prototype.updateSwitch = function (switches) {
                 case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
-                        params: {
-                            switches: switches,
-                        },
+                        params: params,
                     })];
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.params = mergeDeviceParams_1.default(this.params, params);
+                        this.updateState(params);
                     }
                     return [2 /*return*/];
             }
@@ -98,37 +97,33 @@ CloudMultiChannelSwitchController.prototype.updateSwitch = function (switches) {
 /**
  * @description 更新状态到HA
  */
-CloudMultiChannelSwitchController.prototype.updateState = function (switches) {
+CloudUIID44Controller.prototype.updateState = function (_a) {
+    var brightness = _a.brightness, status = _a.switch;
     return __awaiter(this, void 0, void 0, function () {
-        var i, _a, outlet, status_1, name_1, state;
+        var state, br;
         return __generator(this, function (_b) {
             if (this.disabled) {
                 return [2 /*return*/];
             }
-            for (i = 0; i < this.maxChannel; i++) {
-                _a = switches[i] || {}, outlet = _a.outlet, status_1 = _a.switch;
-                if (!lodash_1.default.isNumber(outlet) || status_1 === undefined) {
-                    // todo
-                    return [2 /*return*/];
-                }
-                name_1 = lodash_1.default.get(this, ['channelName', outlet], outlet + 1);
-                state = status_1;
-                if (!this.online) {
-                    state = 'unavailable';
-                }
-                restApi_1.updateStates(this.entityId + "_" + (outlet + 1), {
-                    entity_id: this.entityId + "_" + (outlet + 1),
-                    state: state,
-                    attributes: {
-                        restored: false,
-                        supported_features: 0,
-                        friendly_name: this.deviceName + "-" + name_1,
-                        state: state,
-                    },
-                });
+            state = status;
+            if (!this.online) {
+                state = 'unavailable';
             }
+            br = brightness !== undefined ? brightness : this.params.brightness;
+            restApi_1.updateStates(this.entityId, {
+                entity_id: this.entityId,
+                state: state,
+                attributes: {
+                    restored: false,
+                    supported_features: 4,
+                    friendly_name: this.deviceName,
+                    supported_color_modes: ['brightness'],
+                    state: state,
+                    brightness: (br * 2.55) >> 0,
+                },
+            });
             return [2 /*return*/];
         });
     });
 };
-exports.default = CloudMultiChannelSwitchController;
+exports.default = CloudUIID44Controller;

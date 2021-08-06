@@ -54,6 +54,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
+/**
+ *
+ * @class CloudZigbeeUIID3026Controller
+ * @extends {CloudDeviceController}
+ * @description ZigBee门磁
+ */
 var CloudZigbeeUIID3026Controller = /** @class */ (function (_super) {
     __extends(CloudZigbeeUIID3026Controller, _super);
     function CloudZigbeeUIID3026Controller(props) {

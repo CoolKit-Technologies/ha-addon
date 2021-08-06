@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore
 var multicast_dns_1 = __importDefault(require("multicast-dns"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
+var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
 var Mdns = /** @class */ (function () {
     function Mdns(params) {
         var onResponseCb = params.onResponseCb, queryParams = params.queryParams, queryCb = params.queryCb;
@@ -56,7 +57,7 @@ var Mdns = /** @class */ (function () {
      */
     Mdns.prototype.onResponse = function (callback) {
         this.mdns.on('response', function (packet) {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j;
             var answers = packet.answers;
             if (Array.isArray(answers)) {
                 var tmp = {};
@@ -112,67 +113,67 @@ var Mdns = /** @class */ (function () {
                     });
                     callback && callback(diyDevice);
                 }
-                if (((_b = tmp.txt) === null || _b === void 0 ? void 0 : _b.type) === 'plug') {
+                if (((_b = tmp.txt) === null || _b === void 0 ? void 0 : _b.type) === ELanType_1.default.Plug) {
                     console.log('Found Lan Switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'plug',
+                        lanType: ELanType_1.default.Plug,
                     });
                     callback && callback(lanDevice);
                 }
-                if (((_c = tmp.txt) === null || _c === void 0 ? void 0 : _c.type) === 'strip') {
+                if (((_c = tmp.txt) === null || _c === void 0 ? void 0 : _c.type) === ELanType_1.default.Strip) {
                     console.log('Found Lan Multi-Switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'strip',
+                        lanType: ELanType_1.default.Strip,
                     });
                     callback && callback(lanDevice);
                 }
-                if (((_d = tmp.txt) === null || _d === void 0 ? void 0 : _d.type) === 'multifun_switch') {
+                if (((_d = tmp.txt) === null || _d === void 0 ? void 0 : _d.type) === ELanType_1.default.MultifunSwitch) {
                     console.log('Found Lan DualR3');
                     var dualR3 = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'multifun_switch',
+                        lanType: ELanType_1.default.MultifunSwitch,
                     });
                     callback && callback(dualR3);
                 }
-                if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === 'enhanced_plug') {
+                if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === ELanType_1.default.EnhancedPlug) {
                     console.log('Found Lan 单通道插座增强版（用电统计）');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'enhanced_plug',
+                        lanType: ELanType_1.default.EnhancedPlug,
                     });
                     callback && callback(device);
                 }
-                if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === 'th_plug') {
+                if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === ELanType_1.default.THPlug) {
                     console.log('Found Lan 单通道温湿度控制器');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'th_plug',
+                        lanType: ELanType_1.default.THPlug,
                     });
                     callback && callback(device);
                 }
-                if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === 'rf') {
+                if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === ELanType_1.default.RF) {
                     console.log('Found Lan RF-Bridge');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
                         type: 2,
-                        lanType: 'rf',
+                        lanType: ELanType_1.default.RF,
                     });
                     callback && callback(device);
                 }
-                if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === 'light') {
+                if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === ELanType_1.default.Light) {
                     console.log('Found Lan 双色灯球 or RBG五色灯');
                     // todo 如何区分双色灯跟五色灯
                     // * 目前发现无法通过局域网进行控制
@@ -180,9 +181,19 @@ var Mdns = /** @class */ (function () {
                     //     id: key,
                     //     data: tmp as TypeLanDevice,
                     //     type: 2,
-                    //     lanType: 'light',
+                    //     lanType: ELanType.Light,
                     // });
                     // callback && callback(device);
+                }
+                if (((_j = tmp.txt) === null || _j === void 0 ? void 0 : _j.type) === ELanType_1.default.FanLight) {
+                    console.log('Found Lan 风扇灯');
+                    var device = Controller_1.default.setDevice({
+                        id: key,
+                        data: tmp,
+                        type: 2,
+                        lanType: ELanType_1.default.FanLight,
+                    });
+                    callback && callback(device);
                 }
             }
         });

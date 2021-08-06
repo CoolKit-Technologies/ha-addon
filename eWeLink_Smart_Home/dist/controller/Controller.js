@@ -45,6 +45,10 @@ var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"))
 var CloudCoverController_1 = __importDefault(require("./CloudCoverController"));
 var CloudRFBridgeController_1 = __importDefault(require("./CloudRFBridgeController"));
 var LanRFBridgeController_1 = __importDefault(require("./LanRFBridgeController"));
+var CloudUIID44Controller_1 = __importDefault(require("./CloudUIID44Controller"));
+var CloudUIID34Controller_1 = __importDefault(require("./CloudUIID34Controller"));
+var LanUIID34Controller_1 = __importDefault(require("./LanUIID34Controller"));
+var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
 var Controller = /** @class */ (function () {
     function Controller() {
     }
@@ -121,35 +125,49 @@ var Controller = /** @class */ (function () {
                     deviceName: old.deviceName,
                     extra: old.extra,
                     params: old.params,
+                    uiid: old.uiid,
                 };
             }
-            if (lanType === 'plug') {
+            if (old instanceof CloudMultiChannelSwitchController_1.default) {
+                oldDeviceParams.maxChannel = old.maxChannel;
+            }
+            if (uiid_1.unsupportedLanModeUiidSet.has(oldDeviceParams.uiid)) {
+                // ! UIID 138~141 (MiniR3)的设备type为plug，但数据格式为多通道设备 -_-||
+                return null;
+            }
+            if (lanType === ELanType_1.default.Plug) {
                 var lanDevice = new LanSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === 'strip') {
+            if (lanType === ELanType_1.default.Strip) {
+                var mutiSwitch = {};
                 var lanDevice = new LanMultiChannelSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === 'multifun_switch') {
+            if (lanType === ELanType_1.default.MultifunSwitch) {
                 var lanDevice = new LanDualR3Controller_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === 'th_plug') {
+            if (lanType === ELanType_1.default.THPlug) {
                 var lanDevice = new LanTandHModificationController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === 'enhanced_plug') {
+            if (lanType === ELanType_1.default.EnhancedPlug) {
                 var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === 'rf') {
+            if (lanType === ELanType_1.default.RF) {
                 var lanDevice = new LanRFBridgeController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
+                Controller.deviceMap.set(id, lanDevice);
+                return lanDevice;
+            }
+            if (lanType === ELanType_1.default.FanLight) {
+                var lanDevice = new LanUIID34Controller_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
@@ -284,6 +302,23 @@ var Controller = /** @class */ (function () {
                 Controller.deviceMap.set(id, switchDevice);
                 return switchDevice;
             }
+            // 风扇灯
+            if (data.extra.uiid === 34) {
+                var tmp = data;
+                var fanLight = new CloudUIID34Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    devicekey: tmp.devicekey,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    online: tmp.online,
+                    disabled: disabled,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, fanLight);
+                return fanLight;
+            }
             // // 调光开关
             // if (data.extra.uiid === 36) {
             //     const tmp = data as ICloudDevice<ICloudDimmingParams>;
@@ -300,6 +335,23 @@ var Controller = /** @class */ (function () {
             //     Controller.deviceMap.set(id, dimming);
             //     return dimming;
             // }
+            // 单路调光开关
+            if (data.extra.uiid === 44) {
+                var tmp = data;
+                var dimming = new CloudUIID44Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    devicekey: tmp.devicekey,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    online: tmp.online,
+                    disabled: disabled,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, dimming);
+                return dimming;
+            }
             // RGB灯带
             if (data.extra.uiid === 59) {
                 var tmp = data;
