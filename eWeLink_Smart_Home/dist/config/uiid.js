@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiChannelSwitchUiidSet = exports.switchUiidSet = void 0;
+exports.unsupportedLanModeUiidSet = exports.multiChannelSwitchUiidSet = exports.switchUiidSet = void 0;
 var switchUiidSet = new Set([
     1,
     6,
@@ -9,6 +9,7 @@ var switchUiidSet = new Set([
     1256,
 ]);
 exports.switchUiidSet = switchUiidSet;
+// not include DualR3
 var multiChannelSwitchUiidSet = new Set([
     2,
     3,
@@ -21,5 +22,17 @@ var multiChannelSwitchUiidSet = new Set([
     112,
     113,
     114,
+    138,
+    139,
+    140,
+    141,
 ]);
 exports.multiChannelSwitchUiidSet = multiChannelSwitchUiidSet;
+// 有局域网功能但不支持的设备
+var unsupportedLanModeUiidSet = new Set([
+    138,
+    139,
+    140,
+    141,
+]);
+exports.unsupportedLanModeUiidSet = unsupportedLanModeUiidSet;

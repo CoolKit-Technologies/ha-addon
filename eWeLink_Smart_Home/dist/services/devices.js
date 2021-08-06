@@ -80,6 +80,9 @@ var diyDeviceApi_1 = require("../apis/diyDeviceApi");
 var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller/LanPowerDetectionSwitchController"));
 var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
 var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBridgeController"));
+var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44Controller"));
+var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
+var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 var mdns = initMdns_1.default();
 var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var type, refresh, data, err_1;
@@ -245,7 +248,7 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
             case 3: return [3 /*break*/, 5];
             case 4:
                 err_3 = _b.sent();
-                console.log("Jia ~ file: devices.ts ~ line 159 ~ updateDeviceName ~ err", err_3);
+                console.log('Jia ~ file: devices.ts ~ line 159 ~ updateDeviceName ~ err', err_3);
                 res.json({
                     error: 500,
                     data: null,
@@ -320,7 +323,7 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
                 return [3 /*break*/, 6];
             case 5:
                 err_4 = _b.sent();
-                console.log("Jia ~ file: devices.ts ~ line 225 ~ updateChannelName ~ err", err_4);
+                console.log('Jia ~ file: devices.ts ~ line 225 ~ updateChannelName ~ err', err_4);
                 res.json({
                     error: 500,
                     data: null,
@@ -369,18 +372,24 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         // 同步到HA
                         device.updateState(device.params.switch);
                     }
-                    if (device instanceof CloudPowerDetectionSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
+                    else if (device instanceof CloudPowerDetectionSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
                         // 同步到HA
                         device.updateState({
                             status: device.params.switch,
                         });
                     }
-                    if (device instanceof CloudMultiChannelSwitchController_1.default ||
+                    else if (device instanceof CloudMultiChannelSwitchController_1.default ||
                         device instanceof LanMultiChannelSwitchController_1.default ||
                         device instanceof CloudDualR3Controller_1.default ||
                         device instanceof LanDualR3Controller_1.default) {
                         // 同步到HA
                         device.updateState(device.params.switches);
+                    }
+                    else if (device instanceof CloudUIID34Controller_1.default) {
+                        device.updateState(device.params.switches);
+                    }
+                    else if (device instanceof CloudUIID44Controller_1.default) {
+                        device.updateState(device.params);
                     }
                 }
                 else {
@@ -555,48 +564,66 @@ exports.updateDiyDevice = updateDiyDevice;
  * @description 仅开关局域网设备
  */
 var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, params, device, result, err_9;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, id, params, device, result, _b, _c, err_9;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 _a = req.body, id = _a.id, params = _a.params;
-                _b.label = 1;
+                _d.label = 1;
             case 1:
-                _b.trys.push([1, 14, , 15]);
+                _d.trys.push([1, 19, , 20]);
                 device = Controller_1.default.getDevice(id);
-                if (!(device instanceof LanDeviceController_1.default)) return [3 /*break*/, 12];
+                if (!(device instanceof LanDeviceController_1.default)) return [3 /*break*/, 17];
                 result = void 0;
                 if (!(device instanceof LanSwitchController_1.default)) return [3 /*break*/, 3];
                 return [4 /*yield*/, device.setSwitch(params.switch)];
             case 2:
-                result = _b.sent();
-                _b.label = 3;
+                result = _d.sent();
+                _d.label = 3;
             case 3:
                 if (!(device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default)) return [3 /*break*/, 5];
                 return [4 /*yield*/, device.setSwitch(params.switches)];
             case 4:
-                result = _b.sent();
-                _b.label = 5;
+                result = _d.sent();
+                _d.label = 5;
             case 5:
                 if (!(device instanceof LanTandHModificationController_1.default)) return [3 /*break*/, 7];
                 return [4 /*yield*/, device.setSwitch(params.switch)];
             case 6:
-                result = _b.sent();
-                _b.label = 7;
+                result = _d.sent();
+                _d.label = 7;
             case 7:
                 if (!(device instanceof LanPowerDetectionSwitchController_1.default)) return [3 /*break*/, 9];
                 return [4 /*yield*/, device.setSwitch(params.switch)];
             case 8:
-                result = _b.sent();
-                _b.label = 9;
+                result = _d.sent();
+                _d.label = 9;
             case 9:
                 if (!(device instanceof LanRFBridgeController_1.default)) return [3 /*break*/, 11];
-                console.log('Jia ~ file: devices.ts ~ line 395 ~ updateLanDevice ~ params', params);
                 return [4 /*yield*/, device.transmitRfChl(params)];
             case 10:
-                result = _b.sent();
-                _b.label = 11;
+                result = _d.sent();
+                _d.label = 11;
             case 11:
+                if (!(device instanceof LanUIID34Controller_1.default)) return [3 /*break*/, 16];
+                _b = params.fan;
+                if (!_b) return [3 /*break*/, 13];
+                return [4 /*yield*/, device.setFan(params)];
+            case 12:
+                _b = (result = _d.sent());
+                _d.label = 13;
+            case 13:
+                _b;
+                _c = params.light;
+                if (!_c) return [3 /*break*/, 15];
+                return [4 /*yield*/, device.toggleLight(params)];
+            case 14:
+                _c = (result = _d.sent());
+                _d.label = 15;
+            case 15:
+                _c;
+                _d.label = 16;
+            case 16:
                 if (result === 0) {
                     res.json({
                         error: 0,
@@ -609,23 +636,23 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                         data: null,
                     });
                 }
-                return [3 /*break*/, 13];
-            case 12:
+                return [3 /*break*/, 18];
+            case 17:
                 res.json({
                     error: 402,
                     msg: 'not such device',
                     data: null,
                 });
-                _b.label = 13;
-            case 13: return [3 /*break*/, 15];
-            case 14:
-                err_9 = _b.sent();
+                _d.label = 18;
+            case 18: return [3 /*break*/, 20];
+            case 19:
+                err_9 = _d.sent();
                 res.json({
                     error: 500,
                     data: null,
                 });
-                return [3 /*break*/, 15];
-            case 15: return [2 /*return*/];
+                return [3 /*break*/, 20];
+            case 20: return [2 /*return*/];
         }
     });
 }); };

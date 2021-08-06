@@ -69,6 +69,12 @@ var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lodash_1 = __importDefault(require("lodash"));
 var light_1 = require("../config/light");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+/**
+ *
+ * @class CloudUIID104Controller
+ * @extends {CloudDeviceController}
+ * @description RGB五色灯
+ */
 var CloudUIID104Controller = /** @class */ (function (_super) {
     __extends(CloudUIID104Controller, _super);
     function CloudUIID104Controller(params) {

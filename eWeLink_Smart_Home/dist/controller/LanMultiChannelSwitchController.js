@@ -64,6 +64,7 @@ var LanMultiChannelSwitchController = /** @class */ (function (_super) {
         var deviceId = props.deviceId;
         _this = _super.call(this, props) || this;
         _this.entityId = "switch." + deviceId;
+        _this.maxChannel = props.maxChannel;
         return _this;
     }
     return LanMultiChannelSwitchController;
@@ -107,7 +108,7 @@ LanMultiChannelSwitchController.prototype.updateState = function (switches) {
             }
             switches.forEach(function (_a) {
                 var outlet = _a.outlet, status = _a.switch;
-                var name = _this.channelName ? _this.channelName[outlet] : outlet + 1;
+                var name = lodash_1.default.get(_this, ['channelName', outlet], outlet + 1);
                 var state = status;
                 if (!_this.online) {
                     state = 'unavailable';

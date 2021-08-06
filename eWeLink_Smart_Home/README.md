@@ -4,7 +4,7 @@
 
 ## Troubleshooting
 
--   To solve `Failed to call service switch/turn_on. Service not found.` issue, use`File editor` to edit `configuration.yaml`. Append the following info to end of file:
+-   To solve `Failed to call service xxxxx/xxxxxxx. Service not found.` issue, use`File editor` to edit `configuration.yaml`. Append the following info to end of file:
 
 ```
 switch:
@@ -16,17 +16,10 @@ switch:
         turn_off:
           service: switch.turn_off
 
-```
-
----
-
--   To solve `Failed to call service cover.open_cover. Service not found.` issue, use`File editor` to edit `configuration.yaml`. Append the following info to end of file:
-
-```
 cover:
   - platform: template
     covers:
-      ewelink_create_cover_service:
+      ewelink_virtual_cover:
         open_cover:
           service: cover.open_cover
         close_cover:
@@ -35,4 +28,16 @@ cover:
           service: cover.stop_cover
         set_cover_position:
           service: cover.set_cover_position
+
+fan:
+  - platform: template
+    fans:
+      ewelink_virtual_fan:
+        value_template: "{{ states('input_boolean.state') }}"
+        turn_on:
+          service: fan.turn_on
+        turn_off:
+          service: fan.turn_off
+        set_preset_mode:
+          service: fan.set_preset_mode
 ```

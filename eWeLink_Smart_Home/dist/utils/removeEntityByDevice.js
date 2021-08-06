@@ -7,6 +7,7 @@ var restApi_1 = require("../apis/restApi");
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
@@ -15,6 +16,7 @@ var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceCont
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
+var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 exports.default = (function (device) {
     console.log('try to remove entity from Ha', device.entityId);
     if (device instanceof DiyDeviceController_1.default) {
@@ -54,6 +56,11 @@ exports.default = (function (device) {
     else if (device instanceof CloudZigbeeUIID2026Controller_1.default || device instanceof CloudZigbeeUIID3026Controller_1.default) {
         restApi_1.removeStates(device.entityId);
         restApi_1.removeStates("sensor." + device.deviceId + "_battery");
+        return;
+    }
+    else if (device instanceof CloudUIID34Controller_1.default || device instanceof LanUIID34Controller_1.default) {
+        restApi_1.removeStates(device.entityId);
+        restApi_1.removeStates("fan." + device.deviceId);
         return;
     }
     // todo

@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transmitRfChlAPI = exports.updateLanLight = exports.getLanDeviceParams = exports.setSwitches = exports.setSwitch = void 0;
+exports.setFanAPI = exports.toggleLanLightAPI = exports.transmitRfChlAPI = exports.updateLanLight = exports.getLanDeviceParams = exports.setSwitches = exports.setSwitch = void 0;
 var axios_1 = __importDefault(require("axios"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lanControlAuthenticationUtils_1 = __importDefault(require("../utils/lanControlAuthenticationUtils"));
@@ -247,3 +247,91 @@ var updateLanLight = function (params) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 exports.updateLanLight = updateLanLight;
+/**
+ * @description 开灯
+ * @description 目前仅针对UIID 34 风扇灯
+ */
+var toggleLanLightAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
+    var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ip = params.ip, port = params.port, deviceid = params.deviceid, devicekey = params.devicekey, data = params.data, selfApikey = params.selfApikey;
+                iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
+                reqData = {
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
+                    deviceid: deviceid,
+                    selfApikey: selfApikey,
+                    encrypt: true,
+                    sequence: "" + Date.now(),
+                    data: lanControlAuthenticationUtils_1.default.encryptionData({
+                        iv: iv,
+                        data: data,
+                        key: devicekey,
+                    }),
+                };
+                res = axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/light", reqData);
+                res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log('控制局域网灯设备出错', reqData);
+                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                        deviceid: deviceid,
+                                        ownerApikey: selfApikey,
+                                        params: JSON.parse(data),
+                                    })];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, res];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.toggleLanLightAPI = toggleLanLightAPI;
+/**
+ * @description 调节风扇档位
+ * @description 目前仅针对UIID 34 风扇灯
+ */
+var setFanAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
+    var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ip = params.ip, port = params.port, deviceid = params.deviceid, devicekey = params.devicekey, data = params.data, selfApikey = params.selfApikey;
+                iv = ("abcdef" + Date.now() + "abcdef").slice(0, 16);
+                reqData = {
+                    iv: lanControlAuthenticationUtils_1.default.encryptionBase64(iv),
+                    deviceid: deviceid,
+                    selfApikey: selfApikey,
+                    encrypt: true,
+                    sequence: "" + Date.now(),
+                    data: lanControlAuthenticationUtils_1.default.encryptionData({
+                        iv: iv,
+                        data: data,
+                        key: devicekey,
+                    }),
+                };
+                res = axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/fan", reqData);
+                res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log('控制局域网灯设备出错', reqData);
+                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                        deviceid: deviceid,
+                                        ownerApikey: selfApikey,
+                                        params: JSON.parse(data),
+                                    })];
+                            case 1: return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, res];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.setFanAPI = setFanAPI;
