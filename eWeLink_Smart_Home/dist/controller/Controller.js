@@ -40,6 +40,7 @@ var CloudUIID104Controller_1 = __importDefault(require("./CloudUIID104Controller
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("./CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("./CloudZigbeeUIID2026Controller"));
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("./CloudZigbeeUIID3026Controller"));
+var CloudZigbeeUIID4026Controller_1 = __importDefault(require("./CloudZigbeeUIID4026Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("./CloudZigbeeUIID1000Controller"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var CloudCoverController_1 = __importDefault(require("./CloudCoverController"));
@@ -107,17 +108,19 @@ var Controller = /** @class */ (function () {
             }
             var old = Controller.getDevice(id);
             if (old instanceof LanDeviceController_1.default) {
-                old.iv = params_1 === null || params_1 === void 0 ? void 0 : params_1.iv;
-                old.encryptedData = params_1 === null || params_1 === void 0 ? void 0 : params_1.encryptedData;
+                if (params_1.iv && params_1.encryptedData) {
+                    old.iv = params_1 === null || params_1 === void 0 ? void 0 : params_1.iv;
+                    old.encryptedData = params_1 === null || params_1 === void 0 ? void 0 : params_1.encryptedData;
+                }
                 if (old.iv && old.devicekey && old.encryptedData) {
                     var tmpParams = old.parseEncryptedData();
                     tmpParams && (old.params = mergeDeviceParams_1.default(old.params, tmpParams));
                 }
                 return old;
             }
-            // 如果设备之前是Cloud设备,需要保持设备的位置不变,防止前端页面跳动
             var oldDeviceParams = {};
             if (old instanceof CloudDeviceController_1.default) {
+                // 如果设备之前是Cloud设备,需要保持设备的位置不变,防止前端页面跳动
                 oldDeviceParams = {
                     index: old.index,
                     devicekey: old.devicekey,
@@ -127,6 +130,9 @@ var Controller = /** @class */ (function () {
                     params: old.params,
                     uiid: old.uiid,
                 };
+                if (uiid_1.unsupportedLanModeModelSet.has(old.extra.model)) {
+                    return old;
+                }
             }
             if (old instanceof CloudMultiChannelSwitchController_1.default) {
                 oldDeviceParams.maxChannel = old.maxChannel;
@@ -140,33 +146,32 @@ var Controller = /** @class */ (function () {
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.Strip) {
-                var mutiSwitch = {};
+            else if (lanType === ELanType_1.default.Strip) {
                 var lanDevice = new LanMultiChannelSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.MultifunSwitch) {
+            else if (lanType === ELanType_1.default.MultifunSwitch) {
                 var lanDevice = new LanDualR3Controller_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.THPlug) {
+            else if (lanType === ELanType_1.default.THPlug) {
                 var lanDevice = new LanTandHModificationController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.EnhancedPlug) {
+            else if (lanType === ELanType_1.default.EnhancedPlug) {
                 var lanDevice = new LanPowerDetectionSwitchController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.RF) {
+            else if (lanType === ELanType_1.default.RF) {
                 var lanDevice = new LanRFBridgeController_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
             }
-            if (lanType === ELanType_1.default.FanLight) {
+            else if (lanType === ELanType_1.default.FanLight) {
                 var lanDevice = new LanUIID34Controller_1.default(__assign(__assign(__assign({}, params_1), oldDeviceParams), { disabled: disabled }));
                 Controller.deviceMap.set(id, lanDevice);
                 return lanDevice;
@@ -493,6 +498,23 @@ var Controller = /** @class */ (function () {
             if (data.extra.uiid === 3026) {
                 var tmp = data;
                 var device = new CloudZigbeeUIID3026Controller_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    disabled: disabled,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            // Zigbee 水浸传感器
+            if (data.extra.uiid === 4026) {
+                var tmp = data;
+                var device = new CloudZigbeeUIID4026Controller_1.default({
                     devicekey: tmp.devicekey,
                     deviceId: tmp.deviceid,
                     deviceName: tmp.name,

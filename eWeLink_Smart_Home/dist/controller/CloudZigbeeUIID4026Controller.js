@@ -58,90 +58,67 @@ var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 /**
  *
- * @class CloudZigbeeUIID1000Controller
+ *
+ * @class CloudZigbeeUIID4026Controller
  * @extends {CloudDeviceController}
- * @description ZigBee无线按键
+ * @description ZigBee 水浸传感器
  */
-var CloudZigbeeUIID1000Controller = /** @class */ (function (_super) {
-    __extends(CloudZigbeeUIID1000Controller, _super);
-    function CloudZigbeeUIID1000Controller(props) {
+var CloudZigbeeUIID4026Controller = /** @class */ (function (_super) {
+    __extends(CloudZigbeeUIID4026Controller, _super);
+    function CloudZigbeeUIID4026Controller(props) {
         var _this = _super.call(this, props) || this;
         _this.type = 8;
         _this.uiid = props.extra.uiid;
-        _this.entityId = "sensor." + _this.deviceId;
+        _this.entityId = "binary_sensor." + _this.deviceId;
         _this.params = props.params;
         return _this;
     }
-    return CloudZigbeeUIID1000Controller;
+    return CloudZigbeeUIID4026Controller;
 }(CloudDeviceController_1.default));
 /**
  * @description 更新状态到HA
  */
-CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
-    var key = _a.key, battery = _a.battery;
+CloudZigbeeUIID4026Controller.prototype.updateState = function (_a) {
+    var water = _a.water, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
-        var state, keyMap;
-        var _this = this;
+        var state;
         return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    if (this.disabled) {
-                        return [2 /*return*/];
-                    }
-                    state = "" + key;
-                    if (!this.online) {
-                        state = 'unavailable';
-                    }
-                    keyMap = new Map([
-                        ['0', 'Click'],
-                        ['1', 'Double Click'],
-                        ['2', 'Long Press'],
-                        ['unavailable', 'unavailable'],
-                    ]);
-                    if (!(key !== undefined)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, restApi_1.updateStates("" + this.entityId, {
-                            entity_id: "" + this.entityId,
-                            state: keyMap.get(state),
-                            attributes: {
-                                restored: false,
-                                friendly_name: "" + this.deviceName,
-                                icon: 'mdi:remote',
-                                state: state,
-                            },
-                        })];
-                case 1:
-                    _b.sent();
-                    setTimeout(function () {
-                        restApi_1.updateStates("" + _this.entityId, {
-                            entity_id: "" + _this.entityId,
-                            state: 'None',
-                            attributes: {
-                                restored: false,
-                                friendly_name: "" + _this.deviceName,
-                                icon: 'mdi:remote',
-                                state: 'None',
-                            },
-                        });
-                    }, 1000);
-                    _b.label = 2;
-                case 2:
-                    if (battery !== undefined) {
-                        // 更新电量
-                        restApi_1.updateStates(this.entityId + "_battery", {
-                            entity_id: this.entityId + "_battery",
-                            state: battery,
-                            attributes: {
-                                restored: false,
-                                friendly_name: this.deviceName + "-Battery",
-                                device_class: 'battery',
-                                unit_of_measurement: '%',
-                                state: battery,
-                            },
-                        });
-                    }
-                    return [2 /*return*/];
+            if (this.disabled) {
+                return [2 /*return*/];
             }
+            state = water === 1 ? 'on' : 'off';
+            if (!this.online) {
+                state = 'unavailable';
+            }
+            if (water !== undefined) {
+                // 更新开关
+                restApi_1.updateStates("" + this.entityId, {
+                    entity_id: "" + this.entityId,
+                    state: state,
+                    attributes: {
+                        restored: false,
+                        friendly_name: "" + this.deviceName,
+                        device_class: 'moisture',
+                        state: state,
+                    },
+                });
+            }
+            if (battery !== undefined) {
+                // 更新电量
+                restApi_1.updateStates("sensor." + this.deviceId + "_battery", {
+                    entity_id: "sensor." + this.deviceId + "_battery",
+                    state: battery,
+                    attributes: {
+                        restored: false,
+                        friendly_name: this.deviceName + "-Battery",
+                        device_class: 'battery',
+                        unit_of_measurement: '%',
+                        state: battery,
+                    },
+                });
+            }
+            return [2 /*return*/];
         });
     });
 };
-exports.default = CloudZigbeeUIID1000Controller;
+exports.default = CloudZigbeeUIID4026Controller;

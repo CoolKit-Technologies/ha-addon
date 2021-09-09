@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -187,10 +198,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                 }
                 return [4 /*yield*/, HASocketClass_1.default.query({
                         type: 'lovelace/config/save',
-                        config: {
-                            title: title,
-                            views: views,
-                        },
+                        config: __assign(__assign({}, res), { title: title, views: views }),
                     })];
             case 2: return [2 /*return*/, _d.sent()];
             case 3: return [2 /*return*/];

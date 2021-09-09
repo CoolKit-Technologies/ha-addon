@@ -12,6 +12,7 @@ var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/Clo
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
+var CloudZigbeeUIID4026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID4026Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
@@ -53,7 +54,7 @@ exports.default = (function (device) {
         restApi_1.removeStates(device.entityId + "_battery");
         return;
     }
-    else if (device instanceof CloudZigbeeUIID2026Controller_1.default || device instanceof CloudZigbeeUIID3026Controller_1.default) {
+    else if (device instanceof CloudZigbeeUIID2026Controller_1.default || device instanceof CloudZigbeeUIID3026Controller_1.default || device instanceof CloudZigbeeUIID4026Controller_1.default) {
         restApi_1.removeStates(device.entityId);
         restApi_1.removeStates("sensor." + device.deviceId + "_battery");
         return;

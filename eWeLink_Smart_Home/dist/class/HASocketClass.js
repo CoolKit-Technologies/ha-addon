@@ -105,7 +105,7 @@ var HaSocket = /** @class */ (function () {
                                     // 由于ha重启会丢失实体,所以需要重新同步一次实体
                                     if (reconnect) {
                                         syncDevice2Ha_1.default({
-                                            syncLovelace: true,
+                                            syncLovelace: false,
                                             sleepTime: 2000,
                                         });
                                     }

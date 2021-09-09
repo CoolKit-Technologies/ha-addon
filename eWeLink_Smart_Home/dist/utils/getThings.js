@@ -79,6 +79,7 @@ var CloudDW2WiFiController_1 = __importDefault(require("../controller/CloudDW2Wi
 var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
 var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
+var CloudZigbeeUIID4026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID4026Controller"));
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
@@ -91,11 +92,16 @@ var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 // 获取设备并同步到HA
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var lang, _a, error, data, thingList, _loop_1, i;
+    var userData, lang, loginParams, _a, error, data, thingList, _loop_1, i;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                lang = dataUtil_1.getDataSync('user.json', ['region']) === 'cn' ? 'cn' : 'en';
+                userData = dataUtil_1.getDataSync('user.json', []) || {};
+                lang = userData.lang === 'cn' ? 'cn' : 'en';
+                loginParams = userData.login;
+                if (!loginParams) {
+                    return [2 /*return*/, -1];
+                }
                 return [4 /*yield*/, coolkit_api_1.default.device.getThingList({
                         lang: lang,
                     })];
@@ -108,7 +114,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         var item = thingList[i];
                         var deviceIndex = item.index;
                         if (item.itemType === 1 || item.itemType === 2) {
-                            var _a = item.itemData, extra = _a.extra, deviceid = _a.deviceid, name_1 = _a.name, params = _a.params, devicekey = _a.devicekey, apikey = _a.apikey, tags = _a.tags;
+                            var _c = item.itemData, extra = _c.extra, deviceid = _c.deviceid, name_1 = _c.name, params = _c.params, devicekey = _c.devicekey, apikey = _c.apikey, tags = _c.tags;
                             var old_1 = Controller_1.default.getDevice(deviceid);
                             if (old_1 instanceof DiyDeviceController_1.default) {
                                 return "continue";
@@ -259,6 +265,9 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 !device.disabled && device.updateState(params);
                             }
                             if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
+                                !device.disabled && device.updateState(params);
+                            }
+                            if (device instanceof CloudZigbeeUIID4026Controller_1.default) {
                                 !device.disabled && device.updateState(params);
                             }
                             if (device instanceof CloudCoverController_1.default) {

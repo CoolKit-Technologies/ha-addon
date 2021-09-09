@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.refreshAuth = exports.getAuth = exports.registerService = exports.removeStates = exports.updateStates = exports.getStateByEntityId = void 0;
+exports.refreshAuth = exports.getAuth = exports.removeStates = exports.updateStates = exports.getStateByEntityId = void 0;
 var axios_1 = __importDefault(require("axios"));
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var url_1 = require("../config/url");
@@ -90,21 +90,13 @@ var removeStates = function (entityId) { return __awaiter(void 0, void 0, void 0
     });
 }); };
 exports.removeStates = removeStates;
-var registerService = function (domain, service) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, restRequest({
-                method: 'POST',
-                url: "/api/events/service_registered",
-                data: {
-                    domain: domain,
-                    service: service,
-                },
-            }).catch(function (e) {
-                console.log('registerService error: ', domain, ':', service);
-            })];
-    });
-}); };
-exports.registerService = registerService;
+/**
+ *
+ * @param {string} clientId
+ * @param {string} code
+ * @description 通过code换取auth
+ * @description https://developers.home-assistant.io/docs/auth_api
+ */
 var getAuth = function (clientId, code) { return __awaiter(void 0, void 0, void 0, function () {
     var res;
     return __generator(this, function (_a) {
@@ -125,6 +117,13 @@ var getAuth = function (clientId, code) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.getAuth = getAuth;
+/**
+ *
+ * @param {string} clientId
+ * @param {string} code
+ * @description 刷新Auth
+ * @description https://developers.home-assistant.io/docs/auth_api
+ */
 var refreshAuth = function (clientId, refreshToken) { return __awaiter(void 0, void 0, void 0, function () {
     var res;
     return __generator(this, function (_a) {

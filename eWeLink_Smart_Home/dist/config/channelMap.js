@@ -17,7 +17,7 @@ var channelMap = new Map([
     [138, 1],
     [139, 2],
     [140, 3],
-    [141, 4],
+    [141, 4], // MiniR3
 ]);
 var getMaxChannelByUiid = function (uiid) {
     return channelMap.get(uiid) || 0;
