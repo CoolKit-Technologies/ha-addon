@@ -177,7 +177,7 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 }
                 if (!!disabled) return [3 /*break*/, 3];
                 return [4 /*yield*/, syncDevice2Ha_1.default({
-                        syncLovelace: true,
+                        syncLovelace: false,
                         sleepTime: 2000,
                     })];
             case 2:

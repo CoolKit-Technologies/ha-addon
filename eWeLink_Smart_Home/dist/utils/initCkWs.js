@@ -71,6 +71,7 @@ var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID1
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
 var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
+var CloudZigbeeUIID4026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID4026Controller"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
@@ -197,6 +198,12 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     }
                                     else if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
                                         console.log('接收到Zigbee门磁的信息：', tmp.params);
+                                        if (tmp.params) {
+                                            device.updateState(tmp.params);
+                                        }
+                                    }
+                                    else if (device instanceof CloudZigbeeUIID4026Controller_1.default) {
+                                        console.log('接收到Zigbee水浸传感器的信息：', tmp.params);
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }

@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.2.0
+
+-   Added a "Sync Lovelace Card" button to choose whether to synchronize the  card to the Lovelace
+-   Support zigbee water sensor
+-   Fixes of known issues
+
 ## v1.1.0
 
 -   Support for ceiling fan with light
@@ -37,8 +43,8 @@
 -   Optimized the card layouts and rendering.
 -   Fixed some of the device control issues, improving user experience.
 
--   Supported devices:  
-    **Support to synchronize to the Home Assistant Dashboard.**  
+-   Supported devices:
+    **Support to synchronize to the Home Assistant Dashboard.**
     **Does not support to display on the eWeLink WebUI.**
 
     -   Zigbee Temperature & Humidity Sensor

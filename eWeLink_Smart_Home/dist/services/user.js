@@ -90,7 +90,6 @@ var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceCont
 var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
-var generateLovelace_1 = __importDefault(require("../utils/generateLovelace"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
 var config_1 = require("../config/config");
 /**
@@ -135,7 +134,6 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
             case 3:
                 _b.sent();
                 eventBus_1.default.emit('sse');
-                generateLovelace_1.default();
                 _b.label = 4;
             case 4:
                 res.json(result);
@@ -248,6 +246,7 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
         switch (_b.label) {
             case 0:
                 ip = req.ip, headers = req.headers;
+                // 通过Addon安装无须HA认证
                 if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
                     res.json({
                         error: 0,

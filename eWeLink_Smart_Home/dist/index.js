@@ -66,6 +66,7 @@ var user_1 = __importDefault(require("./route/user"));
 var devices_1 = __importDefault(require("./route/devices"));
 var language_1 = __importDefault(require("./route/language"));
 var stream_1 = __importDefault(require("./route/stream"));
+var util_1 = __importDefault(require("./route/util"));
 var initMdns_1 = __importDefault(require("./utils/initMdns"));
 var initCkWs_1 = __importDefault(require("./utils/initCkWs"));
 var initHaSocket_1 = __importDefault(require("./utils/initHaSocket"));
@@ -119,6 +120,7 @@ app.use(redirectToAuth_1.default);
 app.use(apiPrefix + "/language", language_1.default);
 app.use(apiPrefix + "/devices", devices_1.default);
 app.use(apiPrefix + "/stream", stream_1.default);
+app.use(apiPrefix + "/util", util_1.default);
 app.use('/', function (req, res) {
     res.type('.html');
     res.sendFile(path.join(__dirname, '/pages/index.html'));

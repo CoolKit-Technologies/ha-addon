@@ -39,21 +39,21 @@ exports.default = (function () {
                 // 表示该diy设备在线
                 dataUtil_1.appendData('diy.json', [diyDevice.id, 'online'], true);
             }
-            if (device instanceof LanSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default || device instanceof LanTandHModificationController_1.default) {
+            else if (device instanceof LanSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData.switch);
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
-            if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default) {
+            else if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData.switches);
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
-            if (device instanceof LanTandHModificationController_1.default) {
+            else if (device instanceof LanTandHModificationController_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData.switch);
@@ -61,20 +61,20 @@ exports.default = (function () {
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
-            if (device instanceof LanDoubleColorLightController_1.default) {
+            else if (device instanceof LanDoubleColorLightController_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(decryptData);
                     device.params = mergeDeviceParams_1.default(device.params, decryptData);
                 }
             }
-            if (device instanceof LanRFBridgeController_1.default) {
+            else if (device instanceof LanRFBridgeController_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     device.updateState(device.parseMdnsData2Ha(decryptData));
                 }
             }
-            if (device instanceof LanUIID34Controller_1.default) {
+            else if (device instanceof LanUIID34Controller_1.default) {
                 var decryptData = device.parseEncryptedData();
                 if (decryptData) {
                     var switches = device.parseMdnsData2Ck(decryptData);
