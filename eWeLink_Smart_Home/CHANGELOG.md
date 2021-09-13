@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.1
+
+-   Fixes of known issues
+
 ## v1.2.0
 
 -   Added a "Sync Lovelace Card" button to choose whether to synchronize the  card to the Lovelace
