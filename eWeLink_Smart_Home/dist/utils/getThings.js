@@ -120,7 +120,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 return "continue";
                             }
                             // 如果设备已经存在并且是Lan设备就添加该设备的deviceKey
-                            if (old_1 instanceof LanDeviceController_1.default && !uiid_1.unsupportedLanModeUiidSet.has(extra.uiid)) {
+                            if (old_1 instanceof LanDeviceController_1.default && !uiid_1.unsupportedLanModeUiidSet.has(extra.uiid) && !uiid_1.unsupportedLanModeModelSet.has(extra.model)) {
                                 old_1.devicekey = devicekey;
                                 old_1.selfApikey = apikey;
                                 old_1.deviceName = name_1;
