@@ -78,7 +78,7 @@ var updateChannelNameAPI = function (deviceid, tags) { return __awaiter(void 0, 
                 })];
             case 1:
                 res = _a.sent();
-                console.log('Jia ~ file: ckApi.ts ~ line 32 ~ updateChannelNameAPI ~ res', JSON.stringify(res, null, 2));
+                // console.log('Jia ~ file: ckApi.ts ~ line 32 ~ updateChannelNameAPI ~ res', JSON.stringify(res, null, 2));
                 return [2 /*return*/, res];
         }
     });

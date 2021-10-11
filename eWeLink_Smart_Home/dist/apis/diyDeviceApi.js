@@ -47,7 +47,6 @@ var updateDiySwitchAPI = function (params) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                console.log('Jia ~ file: diyDeviceApi.ts ~ line 11 ~ updateDiySwitchAPI ~ params', params);
                 return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/switch", {
                         deviceid: deviceid,
                         data: {
@@ -67,7 +66,6 @@ var updateDiyStartupAPI = function (params) { return __awaiter(void 0, void 0, v
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                console.log('Jia ~ file: diyDeviceApi.ts ~ line 20 ~ updateDiyStartupAPI ~ params', params);
                 return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/startup", {
                         deviceid: deviceid,
                         data: {
@@ -87,7 +85,6 @@ var updateDiyPulseAPI = function (params) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid, width = params.width;
-                console.log('Jia ~ file: diyDeviceApi.ts ~ line 29 ~ updateDiyPulseAPI ~ params', params);
                 return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/pulse", {
                         deviceid: deviceid,
                         data: {
