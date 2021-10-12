@@ -59,7 +59,7 @@ var sse = function (req, res) { return __awaiter(void 0, void 0, void 0, functio
         res.on('close', function () {
             eventBus_1.default.removeListener('sse', handler);
             res.end();
-            console.log('clooooooooooooooooooooooooooooooooooooose');
+            console.log('SSE closed');
         });
         return [2 /*return*/];
     });

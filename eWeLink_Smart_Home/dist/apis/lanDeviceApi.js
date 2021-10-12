@@ -67,7 +67,8 @@ var setSwitch = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网单通道设备出错', reqData);
+                                // console.log('控制局域网单通道设备出错', reqData);
+                                console.log('update LAN single switch devices error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -107,7 +108,8 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网多通道设备出错', reqData);
+                                // console.log('控制局域网多通道设备出错', reqData);
+                                console.log('update LAN multi-switch devices error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -151,7 +153,8 @@ var transmitRfChlAPI = function (params) { return __awaiter(void 0, void 0, void
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网RF-Bridge出错', reqData);
+                                // console.log('控制局域网RF-Bridge出错', reqData);
+                                console.log('update LAN RF-Bridge error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -231,7 +234,8 @@ var updateLanLight = function (params) { return __awaiter(void 0, void 0, void 0
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网灯设备出错', reqData);
+                                // console.log('控制局域网灯设备出错', reqData);
+                                console.log('update LAN lamp device error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -275,7 +279,8 @@ var toggleLanLightAPI = function (params) { return __awaiter(void 0, void 0, voi
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网灯设备出错', reqData);
+                                // console.log('控制局域网灯设备出错', reqData);
+                                console.log('update LAN lamp device error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -319,7 +324,8 @@ var setFanAPI = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('控制局域网灯设备出错', reqData);
+                                // console.log('控制局域网灯设备出错', reqData);
+                                console.log('update LAN lamp device error', reqData);
                                 return [4 /*yield*/, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,

@@ -62,7 +62,8 @@ var getStateByEntityId = function (entityId) { return __awaiter(void 0, void 0, 
                 method: 'GET',
                 url: "/api/states/" + entityId,
             }).catch(function (e) {
-                console.log('获取HA实体出错：', entityId);
+                // console.log('获取HA实体出错：', entityId);
+                console.log('get HA entity error:', entityId);
             })];
     });
 }); };
@@ -74,7 +75,8 @@ var updateStates = function (entityId, data) { return __awaiter(void 0, void 0, 
                 url: "/api/states/" + entityId,
                 data: data,
             }).catch(function (e) {
-                console.log('更新设备到HA出错：', entityId, '\ndata: ', data);
+                // console.log('更新设备到HA出错：', entityId, '\ndata: ', data);
+                console.log('update device state to HA error:', entityId, '\ndata: ', data);
             })];
     });
 }); };
@@ -85,7 +87,8 @@ var removeStates = function (entityId) { return __awaiter(void 0, void 0, void 0
                 method: 'DELETE',
                 url: "/api/states/" + entityId,
             }).catch(function (e) {
-                console.log('删除HA实体出错：', entityId);
+                // console.log('删除HA实体出错：', entityId);
+                console.log('remove HA entity error:', entityId);
             })];
     });
 }); };
@@ -109,7 +112,8 @@ var getAuth = function (clientId, code) { return __awaiter(void 0, void 0, void 
                     data: "grant_type=authorization_code&client_id=" + clientId + "&code=" + code,
                 });
                 res.catch(function (e) {
-                    console.log('获取Auth出错: \n client_id:', clientId, '\ncode:' + code);
+                    // console.log('获取Auth出错: \n client_id:', clientId, '\ncode:' + code);
+                    console.log('get Auth error: \n client_id:', clientId, '\ncode:' + code);
                 });
                 return [4 /*yield*/, res];
             case 1: return [2 /*return*/, _a.sent()];

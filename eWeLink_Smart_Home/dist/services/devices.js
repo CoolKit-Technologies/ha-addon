@@ -232,7 +232,8 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
                     eventBus_1.default.emit('sse');
                 }
                 else {
-                    console.log('更新设备名称出错, id:', id, '\nerror:', error);
+                    // console.log('更新设备名称出错, id:', id, '\nerror:', error);
+                    console.log('update device name error, deviceid:', id, '\nerror:', error);
                     res.json({
                         error: error,
                         data: null,

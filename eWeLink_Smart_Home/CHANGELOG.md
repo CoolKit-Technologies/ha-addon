@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.2
+
+-   Fixes of known issues
+
 ## v1.2.1
 
 -   Fixes of known issues

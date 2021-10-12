@@ -71,7 +71,8 @@ DiyDeviceController.prototype.setSwitch = function (status) {
                 },
             })
                 .catch(function (e) {
-                console.log('控制DIY设备出错，设备id：', _this.deviceId);
+                // console.log('控制DIY设备出错，设备id：', this.deviceId);
+                console.log('update DIY device state error, deviceid:', _this.deviceId);
             });
             return [2 /*return*/];
         });
@@ -94,7 +95,8 @@ DiyDeviceController.prototype.updateState = function (status) {
                     state: status,
                 },
             }).catch(function (e) {
-                console.log('更新Diy设备到HA出错，设备id：', _this.deviceId);
+                // console.log('更新Diy设备到HA出错，设备id：', this.deviceId);
+                console.log('update DIY device state to HA error, deviceid:', _this.deviceId);
             });
             return [2 /*return*/];
         });

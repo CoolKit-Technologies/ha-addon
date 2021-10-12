@@ -65,7 +65,8 @@ var HaSocket = /** @class */ (function () {
         try {
             this.client = new ws_1.default(url_1.HaSocketURL);
             this.client.on('error', function () {
-                console.log('请检查HA是否正确运行');
+                // console.log('请检查HA是否正确运行');
+                console.log('Please check HA running state');
             });
         }
         catch (error) {
@@ -169,7 +170,8 @@ var HaSocket = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 if (this.client.readyState !== 1) {
-                    console.log('与HA-WS连接未建立，建议重启Addon');
+                    // console.log('与HA-WS连接未建立，建议重启Addon');
+                    console.log('Could not connect to HA-WS, please restart addon');
                     return [2 /*return*/, -1];
                 }
                 cur = this.count++;

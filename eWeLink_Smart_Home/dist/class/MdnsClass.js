@@ -144,7 +144,8 @@ var Mdns = /** @class */ (function () {
                     callback && callback(dualR3);
                 }
                 else if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === ELanType_1.default.EnhancedPlug) {
-                    console.log('Found Lan 单通道插座增强版（用电统计）');
+                    // console.log('Found Lan 单通道插座增强版（用电统计）');
+                    console.log('Found Lan enhanced plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -154,7 +155,8 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === ELanType_1.default.THPlug) {
-                    console.log('Found Lan 单通道温湿度控制器');
+                    // console.log('Found Lan 单通道温湿度控制器');
+                    console.log('Found Lan TH plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -174,7 +176,8 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === ELanType_1.default.FanLight) {
-                    console.log('Found Lan 风扇灯');
+                    // console.log('Found Lan 风扇灯');
+                    console.log('Found Lan fan light');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -184,7 +187,8 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_j = tmp.txt) === null || _j === void 0 ? void 0 : _j.type) === ELanType_1.default.Light) {
-                    console.log('Found Lan 双色灯球 or RBG五色灯');
+                    // console.log('Found Lan 双色灯球 or RBG五色灯');
+                    console.log('Found Lan multi-color lamp');
                     // todo 如何区分双色灯跟五色灯
                     // * 目前发现无法通过局域网进行控制
                     // const device = Controller.setDevice({
