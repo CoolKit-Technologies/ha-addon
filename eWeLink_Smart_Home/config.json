@@ -1,6 +1,6 @@
 {
     "name": "eWeLink Smart Home",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "slug": "ewelink_smart_home_slug",
     "description": "connect eWeLink with home-assistant",
     "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
