@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.3
+
+-   Update Dockerfile build script
+
 ## v1.2.2
 
 -   Fixes of known issues
