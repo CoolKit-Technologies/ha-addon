@@ -1,0 +1,5 @@
+  docker run -d \
+  --restart=always \
+  --network host \
+  -e HA_URL=http://192.168.1.76:8123 \
+  ewelink_smart_home
