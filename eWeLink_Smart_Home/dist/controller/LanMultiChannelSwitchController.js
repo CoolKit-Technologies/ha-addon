@@ -59,7 +59,7 @@ var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var restApi_1 = require("../apis/restApi");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanMultiChannelSwitchController = /** @class */ (function (_super) {
+var LanMultiChannelSwitchController = (function (_super) {
     __extends(LanMultiChannelSwitchController, _super);
     function LanMultiChannelSwitchController(props) {
         var _this = this;
@@ -77,8 +77,8 @@ LanMultiChannelSwitchController.prototype.setSwitch = function (switches) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitches({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.setSwitches({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -93,10 +93,10 @@ LanMultiChannelSwitchController.prototype.setSwitch = function (switches) {
                     if (lodash_1.default.get(res, ['data', 'error']) === 0) {
                         this.updateState(switches);
                         this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
@@ -106,7 +106,7 @@ LanMultiChannelSwitchController.prototype.updateState = function (switches) {
         var _this = this;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             switches.forEach(function (_a) {
                 var outlet = _a.outlet, status = _a.switch;
@@ -126,7 +126,7 @@ LanMultiChannelSwitchController.prototype.updateState = function (switches) {
                     },
                 });
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

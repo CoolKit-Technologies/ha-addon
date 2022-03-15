@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
-var DiyDeviceController = /** @class */ (function () {
+var DiyDeviceController = (function () {
     function DiyDeviceController(_a) {
         var deviceId = _a.deviceId, ip = _a.ip, _b = _a.port, port = _b === void 0 ? 8081 : _b, disabled = _a.disabled, txt = _a.txt;
         this.type = 1;
@@ -51,7 +51,6 @@ var DiyDeviceController = /** @class */ (function () {
         this.ip = ip;
         this.port = port;
         this.entityId = "switch." + deviceId;
-        // this.entityId = `switch.${deviceId}`;
         this.disabled = disabled;
         this.txt = txt;
         this.deviceName = dataUtil_1.getDataSync('diy.json', [deviceId, 'deviceName']) || "DIY-" + deviceId;
@@ -71,10 +70,9 @@ DiyDeviceController.prototype.setSwitch = function (status) {
                 },
             })
                 .catch(function (e) {
-                // console.log('控制DIY设备出错，设备id：', this.deviceId);
                 console.log('update DIY device state error, deviceid:', _this.deviceId);
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };
@@ -83,7 +81,7 @@ DiyDeviceController.prototype.updateState = function (status) {
         var _this = this;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             restApi_1.updateStates(this.entityId, {
                 entity_id: this.entityId,
@@ -95,10 +93,9 @@ DiyDeviceController.prototype.updateState = function (status) {
                     state: status,
                 },
             }).catch(function (e) {
-                // console.log('更新Diy设备到HA出错，设备id：', this.deviceId);
                 console.log('update DIY device state to HA error, deviceid:', _this.deviceId);
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

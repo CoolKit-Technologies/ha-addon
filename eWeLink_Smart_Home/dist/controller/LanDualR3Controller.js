@@ -59,7 +59,7 @@ var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanDualR3Controller = /** @class */ (function (_super) {
+var LanDualR3Controller = (function (_super) {
     __extends(LanDualR3Controller, _super);
     function LanDualR3Controller(props) {
         var _this = _super.call(this, props) || this;
@@ -77,8 +77,8 @@ LanDualR3Controller.prototype.setSwitch = function (switches) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitches({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.setSwitches({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -93,10 +93,10 @@ LanDualR3Controller.prototype.setSwitch = function (switches) {
                     if (res && res.data && res.data.error === 0) {
                         this.updateState(switches);
                         this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
@@ -106,7 +106,7 @@ LanDualR3Controller.prototype.updateState = function (switches) {
         var _this = this;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             switches &&
                 switches.forEach(function (_a) {
@@ -127,7 +127,7 @@ LanDualR3Controller.prototype.updateState = function (switches) {
                         },
                     });
                 });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

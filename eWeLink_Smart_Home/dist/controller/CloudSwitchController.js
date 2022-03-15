@@ -57,14 +57,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var CloudSwitchController = /** @class */ (function (_super) {
+var CloudSwitchController = (function (_super) {
     __extends(CloudSwitchController, _super);
     function CloudSwitchController(params) {
         var _this = _super.call(this, params) || this;
         _this.entityId = "switch." + params.deviceId;
         _this.params = params.params;
         _this.uiid = params.extra.uiid;
-        // Zigbee插座
         if (_this.uiid === 1009 || _this.uiid === 1256) {
             _this.type = 8;
         }
@@ -77,7 +76,7 @@ CloudSwitchController.prototype.updateSwitch = function (status) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: {
@@ -90,20 +89,17 @@ CloudSwitchController.prototype.updateSwitch = function (status) {
                         this.updateState(status);
                         this.params.switch = status;
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudSwitchController.prototype.updateState = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var state;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -119,7 +115,7 @@ CloudSwitchController.prototype.updateState = function (status) {
                     state: state,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

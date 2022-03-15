@@ -56,13 +56,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-/**
- *
- * @class CloudZigbeeUIID1770Controller
- * @extends {CloudDeviceController}
- * @description ZigBee温湿度传感器
- */
-var CloudZigbeeUIID1770Controller = /** @class */ (function (_super) {
+var CloudZigbeeUIID1770Controller = (function (_super) {
     __extends(CloudZigbeeUIID1770Controller, _super);
     function CloudZigbeeUIID1770Controller(props) {
         var _this = _super.call(this, props) || this;
@@ -74,16 +68,13 @@ var CloudZigbeeUIID1770Controller = /** @class */ (function (_super) {
     }
     return CloudZigbeeUIID1770Controller;
 }(CloudDeviceController_1.default));
-/**
- * @description 更新状态到HA
- */
 CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
     var temperature = _a.temperature, humidity = _a.humidity, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var t, h;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             t = "" + +(temperature || 0) / 100, h = "" + +(humidity || 0) / 100;
             if (!this.online) {
@@ -91,7 +82,6 @@ CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
                 h = 'unavailable';
             }
             if (humidity !== undefined) {
-                // 更新湿度
                 restApi_1.updateStates(this.entityId + "_humidity", {
                     entity_id: this.entityId + "_humidity",
                     state: h,
@@ -105,7 +95,6 @@ CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
                 });
             }
             if (temperature !== undefined) {
-                // 更新温度
                 restApi_1.updateStates(this.entityId + "_temperature", {
                     entity_id: this.entityId + "_temperature",
                     state: t,
@@ -119,7 +108,6 @@ CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
                 });
             }
             if (battery !== undefined) {
-                // 更新电量
                 restApi_1.updateStates(this.entityId + "_battery", {
                     entity_id: this.entityId + "_battery",
                     state: battery,
@@ -132,7 +120,7 @@ CloudZigbeeUIID1770Controller.prototype.updateState = function (_a) {
                     },
                 });
             }
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

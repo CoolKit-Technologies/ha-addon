@@ -47,7 +47,7 @@ var updateDiySwitchAPI = function (params) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/switch", {
+                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/switch", {
                         deviceid: deviceid,
                         data: {
                             switch: state,
@@ -55,7 +55,7 @@ var updateDiySwitchAPI = function (params) { return __awaiter(void 0, void 0, vo
                     })];
             case 1:
                 data = (_a.sent()).data;
-                return [2 /*return*/, data];
+                return [2, data];
         }
     });
 }); };
@@ -66,7 +66,7 @@ var updateDiyStartupAPI = function (params) { return __awaiter(void 0, void 0, v
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/startup", {
+                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/startup", {
                         deviceid: deviceid,
                         data: {
                             startup: state,
@@ -74,7 +74,7 @@ var updateDiyStartupAPI = function (params) { return __awaiter(void 0, void 0, v
                     })];
             case 1:
                 data = (_a.sent()).data;
-                return [2 /*return*/, data];
+                return [2, data];
         }
     });
 }); };
@@ -85,7 +85,7 @@ var updateDiyPulseAPI = function (params) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid, width = params.width;
-                return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/pulse", {
+                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/pulse", {
                         deviceid: deviceid,
                         data: {
                             pulse: state,
@@ -94,7 +94,7 @@ var updateDiyPulseAPI = function (params) { return __awaiter(void 0, void 0, voi
                     })];
             case 1:
                 data = (_a.sent()).data;
-                return [2 /*return*/, data];
+                return [2, data];
         }
     });
 }); };
@@ -105,7 +105,7 @@ var updateDiySledOnlineAPI = function (params) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4 /*yield*/, axios_1.default.post("http://" + ip + ":" + port + "/zero conf/sledonline", {
+                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zero conf/sledonline", {
                         deviceid: deviceid,
                         data: {
                             sledOnline: state,
@@ -113,7 +113,7 @@ var updateDiySledOnlineAPI = function (params) { return __awaiter(void 0, void 0
                     })];
             case 1:
                 data = (_a.sent()).data;
-                return [2 /*return*/, data];
+                return [2, data];
         }
     });
 }); };

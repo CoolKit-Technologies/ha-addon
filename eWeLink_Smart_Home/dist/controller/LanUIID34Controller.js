@@ -60,7 +60,7 @@ var restApi_1 = require("../apis/restApi");
 var EFanPresetModes_1 = __importDefault(require("../ts/enum/EFanPresetModes"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanUIID34Controller = /** @class */ (function (_super) {
+var LanUIID34Controller = (function (_super) {
     __extends(LanUIID34Controller, _super);
     function LanUIID34Controller(props) {
         var _this = _super.call(this, props) || this;
@@ -128,8 +128,8 @@ LanUIID34Controller.prototype.toggleLight = function (params) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.toggleLanLightAPI({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.toggleLanLightAPI({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -142,10 +142,10 @@ LanUIID34Controller.prototype.toggleLight = function (params) {
                     if (lodash_1.default.get(res, ['data', 'error']) === 0) {
                         this.params = mergeDeviceParams_1.default(this.params, { switches: [{ switch: params.light, outlet: 0 }] });
                         this.updateState(this.params.switches);
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
@@ -156,8 +156,8 @@ LanUIID34Controller.prototype.setFan = function (params) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setFanAPI({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.setFanAPI({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -193,10 +193,10 @@ LanUIID34Controller.prototype.setFan = function (params) {
                         }
                         this.params = mergeDeviceParams_1.default(this.params, { switches: tmp });
                         this.updateState(this.params.switches);
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
@@ -206,7 +206,7 @@ LanUIID34Controller.prototype.updateState = function (switches) {
         var lightState, fanState, presetMode;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             lightState = switches[0].switch;
             fanState = switches[1].switch;
@@ -243,7 +243,7 @@ LanUIID34Controller.prototype.updateState = function (switches) {
                     preset_modes: Object.values(EFanPresetModes_1.default),
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

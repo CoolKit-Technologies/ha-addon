@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.4
+
+-   Added new feature "Sync Home Assistant Devices"
+
 ## v1.2.3
 
 -   Update Dockerfile build script

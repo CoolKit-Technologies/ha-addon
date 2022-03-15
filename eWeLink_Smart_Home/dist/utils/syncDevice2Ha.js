@@ -58,11 +58,11 @@ exports.default = (function (_a) {
                             },
                         ],
                     });
-                    return [4 /*yield*/, getThings_1.default()];
+                    return [4, getThings_1.default()];
                 case 1:
                     _b.sent();
-                    if (!(sleepTime !== undefined)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, sleep_1.default(sleepTime)];
+                    if (!(sleepTime !== undefined)) return [3, 3];
+                    return [4, sleep_1.default(sleepTime)];
                 case 2:
                     _b.sent();
                     _b.label = 3;
@@ -70,7 +70,7 @@ exports.default = (function (_a) {
                     if (syncLovelace) {
                         generateLovelace_1.default();
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

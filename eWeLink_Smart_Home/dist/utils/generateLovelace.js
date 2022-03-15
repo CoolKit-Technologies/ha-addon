@@ -80,16 +80,12 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
     var e_1, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
-            case 0: return [4 /*yield*/, HASocketClass_1.default.getLovelace()];
+            case 0: return [4, HASocketClass_1.default.getLovelace()];
             case 1:
                 res = _d.sent();
-                if (!(res && Array.isArray(res.views))) return [3 /*break*/, 3];
+                if (!(res && Array.isArray(res.views))) return [3, 3];
                 title = res.title, views = res.views;
                 lovelace_1 = { path: '', title: 'eWeLink Smart Home', badges: [], cards: [] };
-                // const tmp = _.findIndex(views, { title: 'eWeLink Smart Home' });
-                // if (~tmp) {
-                //     lovelace = views[tmp];
-                // }
                 if (views.length) {
                     lovelace_1 = views[0];
                 }
@@ -185,23 +181,18 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                     }
                     finally { if (e_1) throw e_1.error; }
                 }
-                // if (~tmp) {
-                //     views[tmp] = lovelace;
-                // } else {
-                //     views.push(lovelace);
-                // }
                 if (singalSwitchCard.entities.length) {
                     lovelace_1.cards.unshift(singalSwitchCard);
                 }
                 if (views) {
                     views[0] = lovelace_1;
                 }
-                return [4 /*yield*/, HASocketClass_1.default.query({
+                return [4, HASocketClass_1.default.query({
                         type: 'lovelace/config/save',
                         config: __assign(__assign({}, res), { title: title, views: views }),
                     })];
-            case 2: return [2 /*return*/, _d.sent()];
-            case 3: return [2 /*return*/];
+            case 2: return [2, _d.sent()];
+            case 3: return [2];
         }
     });
 }); };

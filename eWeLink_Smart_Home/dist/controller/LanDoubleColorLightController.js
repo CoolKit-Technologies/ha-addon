@@ -71,7 +71,7 @@ var restApi_1 = require("../apis/restApi");
 var light_1 = require("../config/light");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanDoubleColorLightController = /** @class */ (function (_super) {
+var LanDoubleColorLightController = (function (_super) {
     __extends(LanDoubleColorLightController, _super);
     function LanDoubleColorLightController(props) {
         var _this = _super.call(this, props) || this;
@@ -91,7 +91,6 @@ LanDoubleColorLightController.prototype.parseHaData2Ck = function (params) {
             switch: 'off',
         };
     }
-    // 从关闭到打开
     if (!brightness_pct && !color_temp && !effect) {
         var tmp = lodash_1.default.get(this, ['params', 'ltype']);
         return _a = {
@@ -126,10 +125,10 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 5];
+                    if (!(this.devicekey && this.selfApikey)) return [3, 5];
                     res = void 0;
-                    if (!params.ltype) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.updateLanLight({
+                    if (!params.ltype) return [3, 2];
+                    return [4, lanDeviceApi_1.updateLanLight({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -139,8 +138,8 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
                         })];
                 case 1:
                     res = _a.sent();
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                    return [3, 4];
+                case 2: return [4, lanDeviceApi_1.setSwitch({
                         ip: this.ip || this.target,
                         port: this.port,
                         deviceid: this.deviceId,
@@ -157,7 +156,7 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
                         this.updateState(params);
                     }
                     _a.label = 5;
-                case 5: return [2 /*return*/, -1];
+                case 5: return [2, -1];
             }
         });
     });
@@ -167,7 +166,7 @@ LanDoubleColorLightController.prototype.updateState = function (params) {
         var _a, status, ltype, br, ct, tmp, state;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
             br = lodash_1.default.get(this, ['params', 'white', 'br']), ct = lodash_1.default.get(this, ['params', 'white', 'ct']);
@@ -197,7 +196,7 @@ LanDoubleColorLightController.prototype.updateState = function (params) {
                     color_temp: 255 - ct,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

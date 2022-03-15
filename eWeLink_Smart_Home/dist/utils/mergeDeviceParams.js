@@ -18,19 +18,15 @@ var lodash_1 = __importDefault(require("lodash"));
 exports.default = (function (source, params) {
     return lodash_1.default.mergeWith(source, params, function (objVal, srcVal, key) {
         var e_1, _a;
-        // RF-Bridge 通道设置
         if (key === 'rfList') {
             return srcVal;
         }
-        // MINIR3 场景设置
         if (key.includes('lightScenes')) {
             return srcVal;
         }
-        // MINIR3 互锁设置
         if (key === 'locks') {
             return srcVal;
         }
-        // Muti-Switch
         if (Array.isArray(objVal) && Array.isArray(srcVal)) {
             try {
                 for (var srcVal_1 = __values(srcVal), srcVal_1_1 = srcVal_1.next(); !srcVal_1_1.done; srcVal_1_1 = srcVal_1.next()) {

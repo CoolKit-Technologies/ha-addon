@@ -71,13 +71,7 @@ var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lodash_1 = __importDefault(require("lodash"));
 var light_1 = require("../config/light");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-/**
- *
- * @class CloudUIID104Controller
- * @extends {CloudDeviceController}
- * @description RGB五色灯
- */
-var CloudUIID104Controller = /** @class */ (function (_super) {
+var CloudUIID104Controller = (function (_super) {
     __extends(CloudUIID104Controller, _super);
     function CloudUIID104Controller(params) {
         var _this = _super.call(this, params) || this;
@@ -99,7 +93,6 @@ CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
             switch: 'off',
         };
     }
-    // 从关闭到打开
     if (!brightness_pct && !color_temp && !effect && !rgb_color) {
         var tmp = this.params.ltype;
         return _a = {
@@ -136,7 +129,7 @@ CloudUIID104Controller.prototype.updateLight = function (params) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: params,
@@ -147,20 +140,17 @@ CloudUIID104Controller.prototype.updateLight = function (params) {
                         this.params = mergeDeviceParams_1.default(this.params, params);
                         this.updateState(params);
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudUIID104Controller.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, status, ltype, br, ct, r, g, b, tmp, state;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
             br = this.params.white.br, ct = this.params.white.ct, r = this.params.color.r, g = this.params.color.g, b = this.params.color.b;
@@ -194,7 +184,7 @@ CloudUIID104Controller.prototype.updateState = function (params) {
                     rgb_color: [r, g, b],
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

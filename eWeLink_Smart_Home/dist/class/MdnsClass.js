@@ -19,11 +19,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore
 var multicast_dns_1 = __importDefault(require("multicast-dns"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
-var Mdns = /** @class */ (function () {
+var Mdns = (function () {
     function Mdns(params) {
         var onResponseCb = params.onResponseCb, queryParams = params.queryParams, queryCb = params.queryCb;
         this.mdns = new multicast_dns_1.default();
@@ -36,25 +35,12 @@ var Mdns = /** @class */ (function () {
         }
         return Mdns.instance;
     };
-    /**
-     *
-     *
-     * @param {*} params
-     * @param {Function} [callback] 发起查询后的回调
-     * @memberof Mdns
-     */
     Mdns.prototype.query = function (params, callback) {
         if (!this.mdns) {
             this.mdns = new multicast_dns_1.default();
         }
         this.mdns.query(params, callback);
     };
-    /**
-     *
-     *
-     * @param {Function} [callback] 查询到eWelink设备后的回调
-     * @memberof Mdns
-     */
     Mdns.prototype.onResponse = function (callback) {
         this.mdns.on('response', function (packet) {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j;
@@ -144,7 +130,6 @@ var Mdns = /** @class */ (function () {
                     callback && callback(dualR3);
                 }
                 else if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === ELanType_1.default.EnhancedPlug) {
-                    // console.log('Found Lan 单通道插座增强版（用电统计）');
                     console.log('Found Lan enhanced plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
@@ -155,7 +140,6 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === ELanType_1.default.THPlug) {
-                    // console.log('Found Lan 单通道温湿度控制器');
                     console.log('Found Lan TH plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
@@ -176,7 +160,6 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === ELanType_1.default.FanLight) {
-                    // console.log('Found Lan 风扇灯');
                     console.log('Found Lan fan light');
                     var device = Controller_1.default.setDevice({
                         id: key,
@@ -187,17 +170,7 @@ var Mdns = /** @class */ (function () {
                     callback && callback(device);
                 }
                 else if (((_j = tmp.txt) === null || _j === void 0 ? void 0 : _j.type) === ELanType_1.default.Light) {
-                    // console.log('Found Lan 双色灯球 or RBG五色灯');
                     console.log('Found Lan multi-color lamp');
-                    // todo 如何区分双色灯跟五色灯
-                    // * 目前发现无法通过局域网进行控制
-                    // const device = Controller.setDevice({
-                    //     id: key,
-                    //     data: tmp as TypeLanDevice,
-                    //     type: 2,
-                    //     lanType: ELanType.Light,
-                    // });
-                    // callback && callback(device);
                 }
             }
         });

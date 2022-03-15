@@ -78,7 +78,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
-var CloudRFBridgeController = /** @class */ (function (_super) {
+var CloudRFBridgeController = (function (_super) {
     __extends(CloudRFBridgeController, _super);
     function CloudRFBridgeController(params) {
         var _a;
@@ -139,9 +139,6 @@ CloudRFBridgeController.prototype.parseCkData2Ha = function (data) {
     }
     return res;
 };
-/**
- * @description 更新状态到HA
- */
 CloudRFBridgeController.prototype.updateState = function (ids) {
     return __awaiter(this, void 0, void 0, function () {
         var state, i, entity, entityId, icon, name_1;
@@ -150,7 +147,7 @@ CloudRFBridgeController.prototype.updateState = function (ids) {
             switch (_a.label) {
                 case 0:
                     if (this.disabled) {
-                        return [2 /*return*/];
+                        return [2];
                     }
                     state = 'on';
                     if (!ids) {
@@ -160,11 +157,11 @@ CloudRFBridgeController.prototype.updateState = function (ids) {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < ids.length)) return [3 /*break*/, 4];
+                    if (!(i < ids.length)) return [3, 4];
                     entity = this.entityMap.get(ids[i]);
-                    if (!entity) return [3 /*break*/, 3];
+                    if (!entity) return [3, 3];
                     entityId = entity.entityId, icon = entity.icon, name_1 = entity.name;
-                    return [4 /*yield*/, restApi_1.updateStates(entityId, {
+                    return [4, restApi_1.updateStates(entityId, {
                             entity_id: "" + entityId,
                             state: state,
                             attributes: {
@@ -179,7 +176,7 @@ CloudRFBridgeController.prototype.updateState = function (ids) {
                     _a.label = 3;
                 case 3:
                     i++;
-                    return [3 /*break*/, 1];
+                    return [3, 1];
                 case 4:
                     if (state === 'on' && ids) {
                         setTimeout(function () {
@@ -201,7 +198,7 @@ CloudRFBridgeController.prototype.updateState = function (ids) {
                             });
                         }, 1000);
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

@@ -57,7 +57,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var restApi_1 = require("../apis/restApi");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
-var LanSwitchController = /** @class */ (function (_super) {
+var LanSwitchController = (function (_super) {
     __extends(LanSwitchController, _super);
     function LanSwitchController(props) {
         var _this = _super.call(this, props) || this;
@@ -73,8 +73,8 @@ LanSwitchController.prototype.setSwitch = function (status) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.setSwitch({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -89,10 +89,10 @@ LanSwitchController.prototype.setSwitch = function (status) {
                     if ((res === null || res === void 0 ? void 0 : res.data) && res.data.error === 0) {
                         this.updateState(status);
                         this.params.switch = status;
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
@@ -104,13 +104,13 @@ LanSwitchController.prototype.updateState = function (status) {
             switch (_a.label) {
                 case 0:
                     if (this.disabled) {
-                        return [2 /*return*/];
+                        return [2];
                     }
                     state = status;
                     if (!this.online) {
                         state = 'unavailable';
                     }
-                    return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
+                    return [4, restApi_1.updateStates(this.entityId, {
                             entity_id: this.entityId,
                             state: state,
                             attributes: {
@@ -122,7 +122,7 @@ LanSwitchController.prototype.updateState = function (status) {
                         })];
                 case 1:
                     res = _a.sent();
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

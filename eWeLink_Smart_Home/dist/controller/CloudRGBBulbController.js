@@ -69,7 +69,7 @@ var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController")
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var light_1 = require("../config/light");
-var CloudRGBBulbController = /** @class */ (function (_super) {
+var CloudRGBBulbController = (function (_super) {
     __extends(CloudRGBBulbController, _super);
     function CloudRGBBulbController(params) {
         var _this = _super.call(this, params) || this;
@@ -121,9 +121,9 @@ CloudRGBBulbController.prototype.updateLight = function (params) {
             switch (_a.label) {
                 case 0:
                     if (this.disabled) {
-                        return [2 /*return*/];
+                        return [2];
                     }
-                    return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                    return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,
                             params: params,
@@ -134,21 +134,18 @@ CloudRGBBulbController.prototype.updateLight = function (params) {
                         this.params = __assign(__assign({}, this.params), params);
                         this.updateState(this.parseCkData2Ha(params));
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudRGBBulbController.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var status, state;
         return __generator(this, function (_a) {
             status = params.state;
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -159,7 +156,7 @@ CloudRGBBulbController.prototype.updateState = function (params) {
                 state: state,
                 attributes: __assign(__assign(__assign({ restored: false, supported_features: 4, friendly_name: this.deviceName, supported_color_modes: ['rgbww'], effect_list: this.effectList.slice(3) }, this.parseCkData2Ha(this.params)), params), { state: state }),
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

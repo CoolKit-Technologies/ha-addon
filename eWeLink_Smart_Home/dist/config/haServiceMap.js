@@ -7,6 +7,6 @@ var haServiceMap = new Map([
     ['close_cover', 'off'],
     ['stop_cover', 'pause'],
     ['set_cover_position', 'on'],
-    ['set_preset_mode', 'on'], // Fan
+    ['set_preset_mode', 'on'],
 ]);
 exports.default = haServiceMap;
