@@ -113,6 +113,7 @@ CloudSwitchController.prototype.updateState = function (status) {
                     supported_features: 0,
                     friendly_name: this.deviceName,
                     state: state,
+                    unique_id: this.entityId,
                 },
             });
             return [2];
