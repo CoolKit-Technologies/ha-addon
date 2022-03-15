@@ -60,7 +60,7 @@ var dataUtil_1 = require("../utils/dataUtil");
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var LanPowerDetectionSwitchController = /** @class */ (function (_super) {
+var LanPowerDetectionSwitchController = (function (_super) {
     __extends(LanPowerDetectionSwitchController, _super);
     function LanPowerDetectionSwitchController(params) {
         var _this = _super.call(this, params) || this;
@@ -76,8 +76,8 @@ LanPowerDetectionSwitchController.prototype.setSwitch = function (status) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(this.devicekey && this.selfApikey)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                    if (!(this.devicekey && this.selfApikey)) return [3, 2];
+                    return [4, lanDeviceApi_1.setSwitch({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -96,17 +96,14 @@ LanPowerDetectionSwitchController.prototype.setSwitch = function (status) {
                         this.params = mergeDeviceParams_1.default(this.params, {
                             switch: status,
                         });
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
                     _a.label = 2;
-                case 2: return [2 /*return*/, -1];
+                case 2: return [2, -1];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 LanPowerDetectionSwitchController.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var power, current, voltage, status, state, attributes, res;
@@ -114,7 +111,7 @@ LanPowerDetectionSwitchController.prototype.updateState = function (params) {
             switch (_a.label) {
                 case 0:
                     if (this.disabled || lodash_1.default.isEmpty(params)) {
-                        return [2 /*return*/];
+                        return [2];
                     }
                     power = params.power, current = params.current, voltage = params.voltage, status = params.status;
                     state = status;
@@ -129,14 +126,14 @@ LanPowerDetectionSwitchController.prototype.updateState = function (params) {
                         current: (current || lodash_1.default.get(this, ['params', 'current'], 0)) + " A",
                         voltage: (voltage || lodash_1.default.get(this, ['params', 'voltage'], 0)) + " V",
                     };
-                    return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
+                    return [4, restApi_1.updateStates(this.entityId, {
                             entity_id: this.entityId,
                             state: state || lodash_1.default.get(this, ['params', 'switch']),
                             attributes: attributes,
                         })];
                 case 1:
                     res = _a.sent();
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

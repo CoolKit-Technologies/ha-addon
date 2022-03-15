@@ -60,7 +60,7 @@ var getCoreInfoAPI = function () { return __awaiter(void 0, void 0, void 0, func
             console.log(e);
             return null;
         });
-        return [2 /*return*/, res];
+        return [2, res];
     });
 }); };
 exports.getCoreInfoAPI = getCoreInfoAPI;

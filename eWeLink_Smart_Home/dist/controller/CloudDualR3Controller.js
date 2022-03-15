@@ -59,7 +59,7 @@ var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var dataUtil_1 = require("../utils/dataUtil");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var CloudDualR3Controller = /** @class */ (function (_super) {
+var CloudDualR3Controller = (function (_super) {
     __extends(CloudDualR3Controller, _super);
     function CloudDualR3Controller(params) {
         var _a;
@@ -79,7 +79,7 @@ CloudDualR3Controller.prototype.updateSwitch = function (switches) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: {
@@ -92,21 +92,18 @@ CloudDualR3Controller.prototype.updateSwitch = function (switches) {
                         this.updateState(switches);
                         this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudDualR3Controller.prototype.updateState = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
             console.log('Jia ~ file: CloudDualR3Controller.ts ~ line 44 ~ switches', switches);
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             switches &&
                 switches.forEach(function (_a) {
@@ -127,7 +124,7 @@ CloudDualR3Controller.prototype.updateState = function (switches) {
                         },
                     });
                 });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

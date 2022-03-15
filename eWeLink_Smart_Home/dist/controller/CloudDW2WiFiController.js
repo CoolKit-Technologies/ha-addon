@@ -56,7 +56,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
-var CloudDW2WiFiController = /** @class */ (function (_super) {
+var CloudDW2WiFiController = (function (_super) {
     __extends(CloudDW2WiFiController, _super);
     function CloudDW2WiFiController(params) {
         var _this = _super.call(this, params) || this;
@@ -69,24 +69,16 @@ var CloudDW2WiFiController = /** @class */ (function (_super) {
     }
     return CloudDW2WiFiController;
 }(CloudDeviceController_1.default));
-/**
- * @description 更新状态到HA
- */
 CloudDW2WiFiController.prototype.updateState = function (_a) {
     var status = _a.switch, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var state, batteryState;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             batteryState = battery < this.lowVolAlarm ? 'on' : 'off';
-            // if (!this.online) {
-            //     state = 'unavailable';
-            //     batteryState = 'unavailable';
-            // }
-            // 更新开关
             restApi_1.updateStates(this.entityId + "_lock", {
                 entity_id: this.entityId + "_lock",
                 state: state,
@@ -97,7 +89,6 @@ CloudDW2WiFiController.prototype.updateState = function (_a) {
                     state: state,
                 },
             });
-            // 更新电量
             restApi_1.updateStates(this.entityId + "_battery", {
                 entity_id: this.entityId + "_battery",
                 state: batteryState,
@@ -108,7 +99,7 @@ CloudDW2WiFiController.prototype.updateState = function (_a) {
                     state: batteryState,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

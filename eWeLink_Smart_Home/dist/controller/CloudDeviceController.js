@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CloudDeviceController = /** @class */ (function () {
+var CloudDeviceController = (function () {
     function CloudDeviceController(data) {
         this.type = 4;
         this.apikey = data.apikey;

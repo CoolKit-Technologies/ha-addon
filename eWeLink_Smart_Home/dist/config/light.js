@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rbgLEDBulbLtypeMap = exports.rbgLEDBulbEffectList = exports.doubleColorBulbLtypeMap = exports.doubleColorBulbEffectList = exports.presetEffectMap = exports.rgbBulbEffectList = exports.fakeTempList = exports.effectList = void 0;
-// * 灯带模式映射: number --> string
 exports.effectList = [
     '',
     'Colorful',
@@ -17,10 +16,6 @@ exports.effectList = [
     'RGB Strobe',
     'Music Visualizer',
 ];
-/**
- * @description 灯带通过改变颜色来伪实现调节色温的功能
- * @description 数组从小到大 --> 色温冷到暖
- */
 exports.fakeTempList = [
     '214,225,255',
     '214,225,255',
@@ -167,9 +162,6 @@ exports.fakeTempList = [
     '255,141,11',
 ];
 exports.rgbBulbEffectList = ['', 'White', 'Color', 'Sleep', 'Reading', 'Party', 'Relax'];
-/**
- * @description 停产设备UIID 22 Sense预设值
- */
 exports.presetEffectMap = new Map([
     [
         'Sleep',

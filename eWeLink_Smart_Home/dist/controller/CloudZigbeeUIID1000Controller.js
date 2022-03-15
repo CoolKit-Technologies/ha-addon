@@ -56,13 +56,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-/**
- *
- * @class CloudZigbeeUIID1000Controller
- * @extends {CloudDeviceController}
- * @description ZigBee无线按键
- */
-var CloudZigbeeUIID1000Controller = /** @class */ (function (_super) {
+var CloudZigbeeUIID1000Controller = (function (_super) {
     __extends(CloudZigbeeUIID1000Controller, _super);
     function CloudZigbeeUIID1000Controller(props) {
         var _this = _super.call(this, props) || this;
@@ -74,9 +68,6 @@ var CloudZigbeeUIID1000Controller = /** @class */ (function (_super) {
     }
     return CloudZigbeeUIID1000Controller;
 }(CloudDeviceController_1.default));
-/**
- * @description 更新状态到HA
- */
 CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
     var key = _a.key, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
@@ -86,7 +77,7 @@ CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
             switch (_b.label) {
                 case 0:
                     if (this.disabled) {
-                        return [2 /*return*/];
+                        return [2];
                     }
                     state = "" + key;
                     if (!this.online) {
@@ -98,8 +89,8 @@ CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
                         ['2', 'Long Press'],
                         ['unavailable', 'unavailable'],
                     ]);
-                    if (!(key !== undefined)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, restApi_1.updateStates("" + this.entityId, {
+                    if (!(key !== undefined)) return [3, 2];
+                    return [4, restApi_1.updateStates("" + this.entityId, {
                             entity_id: "" + this.entityId,
                             state: keyMap.get(state),
                             attributes: {
@@ -126,7 +117,6 @@ CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
                     _b.label = 2;
                 case 2:
                     if (battery !== undefined) {
-                        // 更新电量
                         restApi_1.updateStates(this.entityId + "_battery", {
                             entity_id: this.entityId + "_battery",
                             state: battery,
@@ -139,7 +129,7 @@ CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
                             },
                         });
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

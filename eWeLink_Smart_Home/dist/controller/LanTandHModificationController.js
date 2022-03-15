@@ -58,7 +58,7 @@ var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
 var LanDeviceController_1 = __importDefault(require("./LanDeviceController"));
 var lanDeviceApi_1 = require("../apis/lanDeviceApi");
-var LanTandHModificationController = /** @class */ (function (_super) {
+var LanTandHModificationController = (function (_super) {
     __extends(LanTandHModificationController, _super);
     function LanTandHModificationController(props) {
         var _this = _super.call(this, props) || this;
@@ -70,12 +70,6 @@ var LanTandHModificationController = /** @class */ (function (_super) {
     }
     return LanTandHModificationController;
 }(LanDeviceController_1.default));
-/**
- *
- *
- * @param {on | off} status
- * @description 默认设备处于自动模式下 --> deviceType:normal
- */
 LanTandHModificationController.prototype.setSwitch = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
@@ -83,9 +77,9 @@ LanTandHModificationController.prototype.setSwitch = function (status) {
             switch (_a.label) {
                 case 0:
                     if (!this.devicekey || !this.selfApikey) {
-                        return [2 /*return*/, -1];
+                        return [2, -1];
                     }
-                    return [4 /*yield*/, lanDeviceApi_1.setSwitch({
+                    return [4, lanDeviceApi_1.setSwitch({
                             selfApikey: this.selfApikey,
                             deviceid: this.deviceId,
                             ip: this.ip || this.target,
@@ -102,9 +96,9 @@ LanTandHModificationController.prototype.setSwitch = function (status) {
                     if ((res === null || res === void 0 ? void 0 : res.data) && res.data.error === 0) {
                         this.updateState(status);
                         this.params.switch = status;
-                        return [2 /*return*/, 0];
+                        return [2, 0];
                     }
-                    return [2 /*return*/, -1];
+                    return [2, -1];
             }
         });
     });
@@ -114,7 +108,7 @@ LanTandHModificationController.prototype.updateState = function (status) {
         var state;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -130,7 +124,7 @@ LanTandHModificationController.prototype.updateState = function (status) {
                     state: state,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };
@@ -165,7 +159,7 @@ LanTandHModificationController.prototype.updateTandH = function (currentTemperat
                     },
                 });
             }
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

@@ -47,7 +47,7 @@ var syncLovelaceCard = function (req, res) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, syncDevice2Ha_1.default({
+                return [4, syncDevice2Ha_1.default({
                         syncLovelace: true,
                         sleepTime: 2000,
                     })];
@@ -58,15 +58,15 @@ var syncLovelaceCard = function (req, res) { return __awaiter(void 0, void 0, vo
                     msg: 'Sync success',
                     data: null,
                 });
-                return [3 /*break*/, 3];
+                return [3, 3];
             case 2:
                 err_1 = _a.sent();
                 res.json({
                     error: 500,
                     data: null,
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3, 3];
+            case 3: return [2];
         }
     });
 }); };

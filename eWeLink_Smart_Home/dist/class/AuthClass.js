@@ -51,7 +51,7 @@ var restApi_1 = require("../apis/restApi");
 var auth_1 = require("../config/auth");
 var config_1 = require("../config/config");
 var dataUtil_1 = require("../utils/dataUtil");
-var AuthClass = /** @class */ (function () {
+var AuthClass = (function () {
     function AuthClass() {
         this.init();
     }
@@ -69,12 +69,11 @@ var AuthClass = /** @class */ (function () {
                     case 0:
                         if (config_1.debugMode) {
                             this.curAuth = auth_1.HaToken;
-                            return [2 /*return*/];
+                            return [2];
                         }
-                        // 通过Addon方式安装自带TOKEN
                         if (config_1.isSupervisor) {
                             this.curAuth = process.env.SUPERVISOR_TOKEN;
-                            return [2 /*return*/];
+                            return [2];
                         }
                         _c.label = 1;
                     case 1:
@@ -86,12 +85,12 @@ var AuthClass = /** @class */ (function () {
                         _i = 0;
                         _c.label = 2;
                     case 2:
-                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        if (!(_i < _a.length)) return [3, 5];
                         origin_1 = _a[_i];
                         auth = JSON.parse(auths[origin_1]);
-                        if (!(auth && Date.now() < +auth.expires_time)) return [3 /*break*/, 4];
+                        if (!(auth && Date.now() < +auth.expires_time)) return [3, 4];
                         AuthClass.AuthMap.set(origin_1, auth);
-                        return [4 /*yield*/, this.refresh(origin_1)];
+                        return [4, this.refresh(origin_1)];
                     case 3:
                         tmp = _c.sent();
                         if (tmp) {
@@ -100,13 +99,13 @@ var AuthClass = /** @class */ (function () {
                         _c.label = 4;
                     case 4:
                         _i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [3 /*break*/, 7];
+                        return [3, 2];
+                    case 5: return [3, 7];
                     case 6:
                         error_1 = _c.sent();
                         console.log('Jia ~ file: AuthClass.ts ~ line 52 ~ AuthClass ~ init ~ error', error_1);
-                        return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
+                        return [3, 7];
+                    case 7: return [2];
                 }
             });
         });
@@ -137,23 +136,22 @@ var AuthClass = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         auth = AuthClass.AuthMap.get(origin);
-                        if (!auth) return [3 /*break*/, 2];
+                        if (!auth) return [3, 2];
                         cliend_id = auth.cliend_id, refresh_token = auth.refresh_token;
-                        // supervisor形式不需要刷新token,token到期了直接删除
                         if (config_1.isSupervisor) {
                             AuthClass.AuthMap.delete(origin);
-                            return [2 /*return*/];
+                            return [2];
                         }
                         console.log('refreshing...');
-                        return [4 /*yield*/, restApi_1.refreshAuth(cliend_id, refresh_token)];
+                        return [4, restApi_1.refreshAuth(cliend_id, refresh_token)];
                     case 1:
                         res = _a.sent();
                         console.log('refresh token success!');
                         if (res && res.status === 200) {
                             this.setAuth(origin, cliend_id, __assign(__assign({}, auth), res.data));
                         }
-                        return [2 /*return*/, res.data];
-                    case 2: return [2 /*return*/];
+                        return [2, res.data];
+                    case 2: return [2];
                 }
             });
         });

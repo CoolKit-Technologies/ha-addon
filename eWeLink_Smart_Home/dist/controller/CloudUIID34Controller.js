@@ -60,7 +60,7 @@ var restApi_1 = require("../apis/restApi");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var EFanPresetModes_1 = __importDefault(require("../ts/enum/EFanPresetModes"));
-var CloudUIID34Controller = /** @class */ (function (_super) {
+var CloudUIID34Controller = (function (_super) {
     __extends(CloudUIID34Controller, _super);
     function CloudUIID34Controller(params) {
         var _this = _super.call(this, params) || this;
@@ -74,7 +74,6 @@ var CloudUIID34Controller = /** @class */ (function (_super) {
 }(CloudDeviceController_1.default));
 CloudUIID34Controller.prototype.parseHaData2Ck = function (_a) {
     var entity_id = _a.entity_id, preset_mode = _a.preset_mode, state = _a.state;
-    // 控制灯
     var res = lodash_1.default.cloneDeep(this.params.switches);
     if (entity_id === this.entityId) {
         res[0].switch = state;
@@ -106,7 +105,7 @@ CloudUIID34Controller.prototype.updateSwitch = function (switches) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: {
@@ -119,20 +118,17 @@ CloudUIID34Controller.prototype.updateSwitch = function (switches) {
                         this.updateState(switches);
                         this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudUIID34Controller.prototype.updateState = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
         var lightState, fanState, presetMode;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             lightState = switches[0].switch;
             fanState = switches[1].switch;
@@ -169,7 +165,7 @@ CloudUIID34Controller.prototype.updateState = function (switches) {
                     preset_modes: Object.values(EFanPresetModes_1.default),
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

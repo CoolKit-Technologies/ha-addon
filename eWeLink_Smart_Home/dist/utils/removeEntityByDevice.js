@@ -64,7 +64,5 @@ exports.default = (function (device) {
         restApi_1.removeStates("fan." + device.deviceId);
         return;
     }
-    // todo
-    // rfBridge设备
     restApi_1.removeStates(device.entityId);
 });

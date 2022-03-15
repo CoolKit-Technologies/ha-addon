@@ -41,45 +41,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
 var coolkit_api_1 = __importDefault(require("coolkit-api"));
-/**
- * @param {string} deviceid
- * @param {string} name
- * @description 修改设备名称
- * @return {*}
- */
 var updateDeviceNameAPI = function (deviceid, name) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_api_1.default.device.updateDeviceInfo({
+            case 0: return [4, coolkit_api_1.default.device.updateDeviceInfo({
                     deviceid: deviceid,
                     name: name,
                 })];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.updateDeviceNameAPI = updateDeviceNameAPI;
-/**
- *
- *
- * @param {string} deviceid
- * @param {any} tags
- * @description 修改子通道名称
- * @return {*}
- */
 var updateChannelNameAPI = function (deviceid, tags) { return __awaiter(void 0, void 0, void 0, function () {
     var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_api_1.default.device.updateDeviceTag({
+            case 0: return [4, coolkit_api_1.default.device.updateDeviceTag({
                     deviceid: deviceid,
                     type: 'merge',
                     tags: tags,
                 })];
             case 1:
                 res = _a.sent();
-                // console.log('Jia ~ file: ckApi.ts ~ line 32 ~ updateChannelNameAPI ~ res', JSON.stringify(res, null, 2));
-                return [2 /*return*/, res];
+                return [2, res];
         }
     });
 }); };
@@ -87,10 +72,10 @@ exports.updateChannelNameAPI = updateChannelNameAPI;
 var getOTAinfoAPI = function (list) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, coolkit_api_1.default.device.getOtaInfo({
+            case 0: return [4, coolkit_api_1.default.device.getOtaInfo({
                     deviceInfoList: list,
                 })];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };

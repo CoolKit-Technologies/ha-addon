@@ -41,7 +41,6 @@ var ghostManufacturer = function (manufacturer) {
 };
 var formatDevice = function (data) {
     var _a, _b, _c, _d;
-    // index 16->support 8->online 4->cloud 2->lan 1->diy
     if (data instanceof DiyDeviceController_1.default) {
         return {
             key: data.deviceId,

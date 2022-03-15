@@ -48,7 +48,7 @@ var getLanguage = function (req, res) { return __awaiter(void 0, void 0, void 0,
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, HASocketClass_1.default.query({
+                return [4, HASocketClass_1.default.query({
                         key: 'language',
                         type: 'frontend/get_user_data',
                     })];
@@ -58,15 +58,15 @@ var getLanguage = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     error: 0,
                     data: lodash_1.default.get(data, 'value.language', 'en'),
                 });
-                return [3 /*break*/, 3];
+                return [3, 3];
             case 2:
                 err_1 = _a.sent();
                 res.json({
                     error: 500,
                     data: null,
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3, 3];
+            case 3: return [2];
         }
     });
 }); };

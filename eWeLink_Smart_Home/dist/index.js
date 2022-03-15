@@ -66,6 +66,7 @@ var user_1 = __importDefault(require("./route/user"));
 var devices_1 = __importDefault(require("./route/devices"));
 var language_1 = __importDefault(require("./route/language"));
 var stream_1 = __importDefault(require("./route/stream"));
+var ha_devices_1 = __importDefault(require("./route/ha-devices"));
 var util_1 = __importDefault(require("./route/util"));
 var initMdns_1 = __importDefault(require("./utils/initMdns"));
 var initCkWs_1 = __importDefault(require("./utils/initCkWs"));
@@ -76,6 +77,7 @@ var config_1 = require("./config/config");
 var redirectToAuth_1 = __importDefault(require("./middleware/redirectToAuth"));
 var AuthClass_1 = __importDefault(require("./class/AuthClass"));
 var eventBus_1 = __importDefault(require("./utils/eventBus"));
+var init_1 = require("./lib-ha/init");
 coolkit_api_1.default.init({
     appId: app_1.appId,
     appSecret: app_1.appSecret,
@@ -85,24 +87,27 @@ coolkit_api_1.default.init({
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                initMdns_1.default(); // 扫描局域网设备
-                return [4 /*yield*/, AuthClass_1.default.init()];
+                initMdns_1.default();
+                return [4, AuthClass_1.default.init()];
             case 1:
                 res = _a.sent();
-                if (!AuthClass_1.default.curAuth) return [3 /*break*/, 2];
+                if (!AuthClass_1.default.curAuth) return [3, 2];
                 eventBus_1.default.emit('init-ha-socket');
-                return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, initHaSocket_1.default()];
+                return [3, 4];
+            case 2: return [4, initHaSocket_1.default()];
             case 3:
-                _a.sent(); // 跟HA建立socket连接
+                _a.sent();
                 _a.label = 4;
-            case 4: return [4 /*yield*/, initCkApi_1.default()];
+            case 4: return [4, initCkApi_1.default()];
             case 5:
-                _a.sent(); // 初始化v2接口并保持登录
-                return [4 /*yield*/, initCkWs_1.default()];
+                _a.sent();
+                return [4, initCkWs_1.default()];
             case 6:
-                _a.sent(); // 跟易微联Socket建立连接
-                return [2 /*return*/];
+                _a.sent();
+                return [4, init_1.init()];
+            case 7:
+                _a.sent();
+                return [2];
         }
     });
 }); })();
@@ -121,6 +126,7 @@ app.use(apiPrefix + "/language", language_1.default);
 app.use(apiPrefix + "/devices", devices_1.default);
 app.use(apiPrefix + "/stream", stream_1.default);
 app.use(apiPrefix + "/util", util_1.default);
+app.use(apiPrefix + "/ha-devices", ha_devices_1.default);
 app.use('/', function (req, res) {
     res.type('.html');
     res.sendFile(path.join(__dirname, '/pages/index.html'));

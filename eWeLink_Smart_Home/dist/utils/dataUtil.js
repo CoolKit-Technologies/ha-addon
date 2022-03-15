@@ -39,11 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearData = exports.appendData = exports.saveData = exports.getDataSync = void 0;
+exports.setGwData = exports.getGwData = exports.initLibHaFiles = exports.clearData = exports.appendData = exports.saveData = exports.getDataSync = void 0;
 var fs_1 = __importDefault(require("fs"));
+var promises_1 = __importDefault(require("fs/promises"));
 var path_1 = __importDefault(require("path"));
 var lodash_1 = __importDefault(require("lodash"));
 var config_1 = require("../config/config");
+var const_1 = require("../lib-ha/const");
 var basePath = path_1.default.join('/data');
 if (config_1.debugMode || !config_1.isSupervisor) {
     basePath = path_1.default.join(__dirname, '../../data');
@@ -66,7 +68,7 @@ exports.getDataSync = getDataSync;
 var saveData = function (fileName, data) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         try {
-            return [2 /*return*/, new Promise(function (resolve, reject) {
+            return [2, new Promise(function (resolve, reject) {
                     fs_1.default.writeFile(path_1.default.join(basePath, "/" + fileName), data, function (err) {
                         if (err) {
                             console.log('Jia ~ file: data Util.ts ~ line 23 ~ fs.writeFile ~ err', err);
@@ -78,9 +80,9 @@ var saveData = function (fileName, data) { return __awaiter(void 0, void 0, void
         }
         catch (err) {
             console.log('saveData-> no data');
-            return [2 /*return*/, -1];
+            return [2, -1];
         }
-        return [2 /*return*/];
+        return [2];
     });
 }); };
 exports.saveData = saveData;
@@ -89,13 +91,68 @@ var appendData = function (fileName, namePath, data) { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         fileData = getDataSync(fileName) || {};
         lodash_1.default.set(fileData, namePath, data);
-        return [2 /*return*/, saveData(fileName, JSON.stringify(fileData))];
+        return [2, saveData(fileName, JSON.stringify(fileData))];
     });
 }); };
 exports.appendData = appendData;
 var clearData = function (fileName) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, saveData(fileName, '{}')];
+        return [2, saveData(fileName, '{}')];
     });
 }); };
 exports.clearData = clearData;
+function initLibHaFiles() {
+    return __awaiter(this, void 0, void 0, function () {
+        var FILEPATH, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    FILEPATH = path_1.default.join(basePath, const_1.GW_DATA_FILENAME);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 6]);
+                    return [4, promises_1.default.stat(FILEPATH)];
+                case 2:
+                    _a.sent();
+                    return [3, 6];
+                case 3:
+                    err_1 = _a.sent();
+                    if (!(err_1.code === 'ENOENT')) return [3, 5];
+                    return [4, promises_1.default.writeFile(FILEPATH, JSON.stringify([]))];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5: return [3, 6];
+                case 6: return [2];
+            }
+        });
+    });
+}
+exports.initLibHaFiles = initLibHaFiles;
+function getGwData() {
+    return __awaiter(this, void 0, void 0, function () {
+        var data;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, promises_1.default.readFile(path_1.default.join(basePath, const_1.GW_DATA_FILENAME), { encoding: 'utf-8' })];
+                case 1:
+                    data = _a.sent();
+                    return [2, JSON.parse(data)];
+            }
+        });
+    });
+}
+exports.getGwData = getGwData;
+function setGwData(data) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, promises_1.default.writeFile(path_1.default.join(basePath, const_1.GW_DATA_FILENAME), JSON.stringify(data))];
+                case 1:
+                    _a.sent();
+                    return [2];
+            }
+        });
+    });
+}
+exports.setGwData = setGwData;

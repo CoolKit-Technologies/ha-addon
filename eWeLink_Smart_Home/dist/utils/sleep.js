@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (function (millisecond) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, new Promise(function (resolve) {
+        return [2, new Promise(function (resolve) {
                 setTimeout(function () {
                     resolve(0);
                 }, millisecond);

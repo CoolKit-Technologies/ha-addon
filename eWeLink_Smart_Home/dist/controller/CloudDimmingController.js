@@ -57,7 +57,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var CloudDimmingController = /** @class */ (function (_super) {
+var CloudDimmingController = (function (_super) {
     __extends(CloudDimmingController, _super);
     function CloudDimmingController(params) {
         var _this = _super.call(this, params) || this;
@@ -75,7 +75,7 @@ CloudDimmingController.prototype.updateLight = function (params) {
             switch (_a.label) {
                 case 0:
                     console.log('Jia ~ file: CloudDimmingController.ts ~ line 30 ~ params', params);
-                    return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                    return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,
                             params: params,
@@ -83,21 +83,18 @@ CloudDimmingController.prototype.updateLight = function (params) {
                 case 1:
                     res = _a.sent();
                     console.log('Jia ~ file: CloudDimmingController.ts ~ line 35 ~ res', res);
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudDimmingController.prototype.updateState = function (_a) {
     var status = _a.status, bright = _a.bright;
     return __awaiter(this, void 0, void 0, function () {
         var state;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -114,7 +111,7 @@ CloudDimmingController.prototype.updateState = function (_a) {
                     brightness: bright * 2.55,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

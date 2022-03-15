@@ -47,18 +47,17 @@ exports.default = (function (id, params) { return __awaiter(void 0, void 0, void
     var error, device;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, dataUtil_1.appendData('diy.json', [id, 'deviceName'], params.deviceName)];
+            case 0: return [4, dataUtil_1.appendData('diy.json', [id, 'deviceName'], params.deviceName)];
             case 1:
                 error = _a.sent();
                 if (error === 0) {
                     device = Controller_1.default.getDevice(id);
                     if (device instanceof DiyDeviceController_1.default) {
                         device.deviceName = params.deviceName;
-                        // 修改DIY名字没有触发MDNS，主动触发sse
                         eventBus_1.default.emit('sse');
                     }
                 }
-                return [2 /*return*/, {
+                return [2, {
                         error: error,
                     }];
         }

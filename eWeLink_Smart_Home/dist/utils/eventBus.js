@@ -64,8 +64,8 @@ eventBus.on('device-offline', function (id) {
 eventBus.on('init-ha-socket', function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, initHaSocket_1.default(true)];
-            case 1: return [2 /*return*/, _a.sent()]; // 跟HA建立socket连接
+            case 0: return [4, initHaSocket_1.default(true)];
+            case 1: return [2, _a.sent()];
         }
     });
 }); });

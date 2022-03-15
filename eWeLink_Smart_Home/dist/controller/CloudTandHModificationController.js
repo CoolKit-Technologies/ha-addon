@@ -58,7 +58,7 @@ var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController")
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var dataUtil_1 = require("../utils/dataUtil");
-var CloudTandHModificationController = /** @class */ (function (_super) {
+var CloudTandHModificationController = (function (_super) {
     __extends(CloudTandHModificationController, _super);
     function CloudTandHModificationController(params) {
         var _this = _super.call(this, params) || this;
@@ -77,7 +77,7 @@ CloudTandHModificationController.prototype.updateSwitch = function (status) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: {
@@ -90,20 +90,17 @@ CloudTandHModificationController.prototype.updateSwitch = function (status) {
                         this.updateState(status);
                         this.params.switch = status;
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudTandHModificationController.prototype.updateState = function (status) {
     return __awaiter(this, void 0, void 0, function () {
         var state;
         return __generator(this, function (_a) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -119,7 +116,7 @@ CloudTandHModificationController.prototype.updateState = function (status) {
                     state: state,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };
@@ -154,7 +151,7 @@ CloudTandHModificationController.prototype.updateTandH = function (currentTemper
                     },
                 });
             }
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

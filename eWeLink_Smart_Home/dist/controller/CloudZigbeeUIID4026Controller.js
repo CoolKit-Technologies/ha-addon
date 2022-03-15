@@ -56,14 +56,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-/**
- *
- *
- * @class CloudZigbeeUIID4026Controller
- * @extends {CloudDeviceController}
- * @description ZigBee 水浸传感器
- */
-var CloudZigbeeUIID4026Controller = /** @class */ (function (_super) {
+var CloudZigbeeUIID4026Controller = (function (_super) {
     __extends(CloudZigbeeUIID4026Controller, _super);
     function CloudZigbeeUIID4026Controller(props) {
         var _this = _super.call(this, props) || this;
@@ -75,23 +68,19 @@ var CloudZigbeeUIID4026Controller = /** @class */ (function (_super) {
     }
     return CloudZigbeeUIID4026Controller;
 }(CloudDeviceController_1.default));
-/**
- * @description 更新状态到HA
- */
 CloudZigbeeUIID4026Controller.prototype.updateState = function (_a) {
     var water = _a.water, battery = _a.battery;
     return __awaiter(this, void 0, void 0, function () {
         var state;
         return __generator(this, function (_b) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = water === 1 ? 'on' : 'off';
             if (!this.online) {
                 state = 'unavailable';
             }
             if (water !== undefined) {
-                // 更新开关
                 restApi_1.updateStates("" + this.entityId, {
                     entity_id: "" + this.entityId,
                     state: state,
@@ -104,7 +93,6 @@ CloudZigbeeUIID4026Controller.prototype.updateState = function (_a) {
                 });
             }
             if (battery !== undefined) {
-                // 更新电量
                 restApi_1.updateStates("sensor." + this.deviceId + "_battery", {
                     entity_id: "sensor." + this.deviceId + "_battery",
                     state: battery,
@@ -117,7 +105,7 @@ CloudZigbeeUIID4026Controller.prototype.updateState = function (_a) {
                     },
                 });
             }
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

@@ -67,19 +67,18 @@ var setSwitch = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网单通道设备出错', reqData);
                                 console.log('update LAN single switch devices error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
@@ -108,27 +107,22 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网多通道设备出错', reqData);
                                 console.log('update LAN multi-switch devices error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.setSwitches = setSwitches;
-/**
- *
- * @description RF-Bridge 发送通道值
- */
 var transmitRfChlAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -153,27 +147,22 @@ var transmitRfChlAPI = function (params) { return __awaiter(void 0, void 0, void
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网RF-Bridge出错', reqData);
                                 console.log('update LAN RF-Bridge error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.transmitRfChlAPI = transmitRfChlAPI;
-/**
- *
- * @deprecated 局域网设备好像不支持该接口
- */
 var getLanDeviceParams = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -197,19 +186,15 @@ var getLanDeviceParams = function (params) { return __awaiter(void 0, void 0, vo
                 res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         console.log('get lan device params failed:', deviceid);
-                        return [2 /*return*/];
+                        return [2];
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.getLanDeviceParams = getLanDeviceParams;
-/**
- * @description 调整灯的模式及亮度、色温
- * @description 目前仅针对UIID 103
- */
 var updateLanLight = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -234,27 +219,22 @@ var updateLanLight = function (params) { return __awaiter(void 0, void 0, void 0
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网灯设备出错', reqData);
                                 console.log('update LAN lamp device error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.updateLanLight = updateLanLight;
-/**
- * @description 开灯
- * @description 目前仅针对UIID 34 风扇灯
- */
 var toggleLanLightAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -279,27 +259,22 @@ var toggleLanLightAPI = function (params) { return __awaiter(void 0, void 0, voi
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网灯设备出错', reqData);
                                 console.log('update LAN lamp device error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.toggleLanLightAPI = toggleLanLightAPI;
-/**
- * @description 调节风扇档位
- * @description 目前仅针对UIID 34 风扇灯
- */
 var setFanAPI = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -324,19 +299,18 @@ var setFanAPI = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                // console.log('控制局域网灯设备出错', reqData);
                                 console.log('update LAN lamp device error', reqData);
-                                return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                                return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
                                         params: JSON.parse(data),
                                     })];
-                            case 1: return [2 /*return*/, _a.sent()];
+                            case 1: return [2, _a.sent()];
                         }
                     });
                 }); });
-                return [4 /*yield*/, res];
-            case 1: return [2 /*return*/, _a.sent()];
+                return [4, res];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };

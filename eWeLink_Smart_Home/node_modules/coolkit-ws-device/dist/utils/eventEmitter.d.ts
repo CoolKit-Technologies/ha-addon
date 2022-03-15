@@ -1,0 +1,3 @@
+import EventEmit from 'eventemitter3';
+declare const _default: EventEmit<string | symbol, any>;
+export default _default;

@@ -36,7 +36,6 @@ exports.default = (function () {
                 console.log('found diy device');
                 var diyDevice = formatDiyDevice_1.default(device);
                 device.updateState((_a = diyDevice.data) === null || _a === void 0 ? void 0 : _a.switch);
-                // 表示该diy设备在线
                 dataUtil_1.appendData('diy.json', [diyDevice.id, 'online'], true);
             }
             else if (device instanceof LanSwitchController_1.default || device instanceof LanPowerDetectionSwitchController_1.default) {
@@ -82,7 +81,6 @@ exports.default = (function () {
                     device.params = mergeDeviceParams_1.default(device.params, switches);
                 }
             }
-            // 触发sse
             eventBus_1.default.emit('sse');
         },
     });

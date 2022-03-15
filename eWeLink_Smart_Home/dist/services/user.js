@@ -92,21 +92,15 @@ var restApi_1 = require("../apis/restApi");
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
 var config_1 = require("../config/config");
-/**
- * @param {string} lang
- * @param {string} email
- * @param {string} password
- * @param {string} countryCode
- * @param {string} phoneNumber
- */
+var init_1 = require("../lib-ha/init");
 var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, countryCode, phoneNumber, lang, password, email, result, at, apikey, region, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 5, , 6]);
+                _b.trys.push([0, 6, , 7]);
                 _a = req.body, countryCode = _a.countryCode, phoneNumber = _a.phoneNumber, lang = _a.lang, password = _a.password, email = _a.email;
-                return [4 /*yield*/, coolkit_api_1.default.user.login({
+                return [4, coolkit_api_1.default.user.login({
                         countryCode: countryCode,
                         phoneNumber: phoneNumber,
                         lang: lang,
@@ -116,12 +110,12 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
             case 1:
                 result = _b.sent();
                 console.log('Jia ~ file: user.ts ~ line 26 ~ login ~ result', result);
-                if (!(result.error === 0)) return [3 /*break*/, 4];
+                if (!(result.error === 0)) return [3, 5];
                 dataUtil_1.saveData('user.json', JSON.stringify(__assign(__assign({}, result.data), { login: __assign({}, req.body) })));
                 at = lodash_1.default.get(result, ['data', 'at']);
                 apikey = lodash_1.default.get(result, ['data', 'user', 'apikey']);
                 region = lodash_1.default.get(result, ['data', 'region']);
-                return [4 /*yield*/, coolkit_ws_1.default.init({
+                return [4, coolkit_ws_1.default.init({
                         appid: app_1.appId,
                         at: at,
                         apikey: apikey,
@@ -130,19 +124,22 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                     })];
             case 2:
                 _b.sent();
-                return [4 /*yield*/, getThings_1.default()];
+                return [4, getThings_1.default()];
             case 3:
                 _b.sent();
                 eventBus_1.default.emit('sse');
-                _b.label = 4;
+                return [4, init_1.init()];
             case 4:
-                res.json(result);
-                return [3 /*break*/, 6];
+                _b.sent();
+                _b.label = 5;
             case 5:
+                res.json(result);
+                return [3, 7];
+            case 6:
                 err_1 = _b.sent();
                 console.log(err_1);
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3, 7];
+            case 7: return [2];
         }
     });
 }); };
@@ -154,7 +151,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         switch (_e.label) {
             case 0:
                 _e.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, dataUtil_1.clearData('user.json')];
+                return [4, dataUtil_1.clearData('user.json')];
             case 1:
                 result = _e.sent();
                 console.log('Jia ~ file: user.ts ~ line 37 ~ logout ~ result', result);
@@ -183,7 +180,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     finally { if (e_1) throw e_1.error; }
                 }
                 Controller_1.default.unsupportDeviceMap.clear();
-                return [4 /*yield*/, coolkit_api_1.default.user.logout()];
+                return [4, coolkit_api_1.default.user.logout()];
             case 2:
                 ckRes = _e.sent();
                 console.log('Jia ~ file: user.ts ~ line 41 ~ logout ~ ckRes', ckRes);
@@ -192,7 +189,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     data: null,
                 });
                 eventBus_1.default.emit('sse');
-                return [3 /*break*/, 4];
+                return [3, 4];
             case 3:
                 err_2 = _e.sent();
                 console.log(err_2);
@@ -200,8 +197,8 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     error: 500,
                     data: err_2,
                 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3, 4];
+            case 4: return [2];
         }
     });
 }); };
@@ -212,7 +209,7 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, dataUtil_1.getDataSync('user.json')];
+                return [4, dataUtil_1.getDataSync('user.json')];
             case 1:
                 result = _a.sent();
                 if (result && result.at) {
@@ -220,13 +217,13 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                         error: 0,
                         data: { isLogin: true },
                     });
-                    return [2 /*return*/];
+                    return [2];
                 }
                 res.json({
                     error: 0,
                     data: { isLogin: false },
                 });
-                return [3 /*break*/, 3];
+                return [3, 3];
             case 2:
                 err_3 = _a.sent();
                 console.log(err_3);
@@ -234,8 +231,8 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                     error: 500,
                     data: err_3,
                 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3, 3];
+            case 3: return [2];
         }
     });
 }); };
@@ -246,7 +243,6 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
         switch (_b.label) {
             case 0:
                 ip = req.ip, headers = req.headers;
-                // 通过Addon安装无须HA认证
                 if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
                     res.json({
                         error: 0,
@@ -254,7 +250,7 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                             isAuth: true,
                         },
                     });
-                    return [2 /*return*/];
+                    return [2];
                 }
                 _b.label = 1;
             case 1:
@@ -264,10 +260,10 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                         error: 0,
                         data: null,
                     });
-                    return [2 /*return*/];
+                    return [2];
                 }
                 _a = req.body, code = _a.code, clientId = _a.clientId;
-                return [4 /*yield*/, restApi_1.getAuth(clientId, code)];
+                return [4, restApi_1.getAuth(clientId, code)];
             case 2:
                 result = _b.sent();
                 if (result && result.status === 200) {
@@ -285,15 +281,15 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                         data: null,
                     });
                 }
-                return [3 /*break*/, 4];
+                return [3, 4];
             case 3:
                 err_4 = _b.sent();
                 res.json({
                     error: 500,
                     data: err_4,
                 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3, 4];
+            case 4: return [2];
         }
     });
 }); };
@@ -309,7 +305,7 @@ var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     isAuth: true,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         }
         try {
             status_1 = AuthClass_1.default.isValid(ip);
@@ -327,7 +323,7 @@ var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 data: err,
             });
         }
-        return [2 /*return*/];
+        return [2];
     });
 }); };
 exports.isAuth = isAuth;

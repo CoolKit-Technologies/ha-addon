@@ -59,7 +59,7 @@ var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var lodash_1 = __importDefault(require("lodash"));
-var CloudCoverController = /** @class */ (function (_super) {
+var CloudCoverController = (function (_super) {
     __extends(CloudCoverController, _super);
     function CloudCoverController(params) {
         var _this = _super.call(this, params) || this;
@@ -83,7 +83,7 @@ CloudCoverController.prototype.setCover = function (params) {
                         };
                     }
                     console.log('Jia ~ file: CloudCoverController.ts ~ line 21 ~ params', params);
-                    return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                    return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,
                             params: reqParams,
@@ -94,21 +94,18 @@ CloudCoverController.prototype.setCover = function (params) {
                         this.updateState(params);
                         this.params = mergeDeviceParams_1.default(this.params, params);
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudCoverController.prototype.updateState = function (_a) {
     var _b = _a.switch, status = _b === void 0 ? 'on' : _b, setclose = _a.setclose;
     return __awaiter(this, void 0, void 0, function () {
         var state;
         return __generator(this, function (_c) {
             if (this.disabled) {
-                return [2 /*return*/];
+                return [2];
             }
             state = status;
             if (!this.online) {
@@ -125,7 +122,7 @@ CloudCoverController.prototype.updateState = function (_a) {
                     state: state,
                 },
             });
-            return [2 /*return*/];
+            return [2];
         });
     });
 };

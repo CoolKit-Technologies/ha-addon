@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var UnsupportDeviceController = /** @class */ (function () {
+var UnsupportDeviceController = (function () {
     function UnsupportDeviceController(params) {
         this.params = params.params;
         this.uiid = params.extra.uiid;

@@ -1,0 +1,9 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const CoolKitWs_1 = __importDefault(require("./class/CoolKitWs"));
+const coolKitWs = new CoolKitWs_1.default();
+module.exports = coolKitWs;
+exports.default = coolKitWs;

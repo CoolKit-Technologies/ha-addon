@@ -70,7 +70,7 @@ var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
+var CloudPowerDetectionSwitchController = (function (_super) {
     __extends(CloudPowerDetectionSwitchController, _super);
     function CloudPowerDetectionSwitchController(params) {
         var _this = _super.call(this, params) || this;
@@ -79,14 +79,6 @@ var CloudPowerDetectionSwitchController = /** @class */ (function (_super) {
         _this.uiid = params.extra.uiid;
         _this.rate = +dataUtil_1.getDataSync('rate.json', [_this.deviceId]) || 0;
         return _this;
-        // // 如果电流电压功率有更新就通知我
-        // setInterval(() => {
-        //     coolKitWs.updateThing({
-        //         deviceApikey: this.apikey,
-        //         deviceid: this.deviceId,
-        //         params: { uiActive: 120 },
-        //     });
-        // }, 120000);
     }
     return CloudPowerDetectionSwitchController;
 }(CloudDeviceController_1.default));
@@ -95,7 +87,7 @@ CloudPowerDetectionSwitchController.prototype.updateSwitch = function (status) {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, coolkit_ws_1.default.updateThing({
+                case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
                         params: {
@@ -108,14 +100,11 @@ CloudPowerDetectionSwitchController.prototype.updateSwitch = function (status) {
                         this.updateState({ status: status });
                         this.params.switch = status;
                     }
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });
 };
-/**
- * @description 更新状态到HA
- */
 CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
     var power = _a.power, current = _a.current, voltage = _a.voltage, status = _a.status;
     return __awaiter(this, void 0, void 0, function () {
@@ -124,7 +113,7 @@ CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
             switch (_b.label) {
                 case 0:
                     if (this.disabled) {
-                        return [2 /*return*/];
+                        return [2];
                     }
                     state = status;
                     if (!this.online) {
@@ -140,14 +129,14 @@ CloudPowerDetectionSwitchController.prototype.updateState = function (_a) {
                     if (this.uiid === 32) {
                         attributes = __assign(__assign({}, attributes), { current: (current || lodash_1.default.get(this, ['params', 'current'], 0)) + " A", voltage: (voltage || lodash_1.default.get(this, ['params', 'voltage'], 0)) + " V" });
                     }
-                    return [4 /*yield*/, restApi_1.updateStates(this.entityId, {
+                    return [4, restApi_1.updateStates(this.entityId, {
                             entity_id: this.entityId,
                             state: state || lodash_1.default.get(this, ['params', 'switch']),
                             attributes: attributes,
                         })];
                 case 1:
                     res = _b.sent();
-                    return [2 /*return*/];
+                    return [2];
             }
         });
     });

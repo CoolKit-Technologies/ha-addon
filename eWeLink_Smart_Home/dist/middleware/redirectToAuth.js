@@ -57,18 +57,17 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
         ip = req.ip, headers = req.headers;
         if (config_1.debugMode) {
             next();
-            return [2 /*return*/];
+            return [2];
         }
         if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
             next();
-            return [2 /*return*/];
+            return [2];
         }
         if (AuthClass_1.default.isValid(ip)) {
             next();
-            return [2 /*return*/];
+            return [2];
         }
         if (config_1.isSupervisor) {
-            // todo
             res.json({
                 error: 302,
                 data: 'http://homeassistant:8123',
@@ -80,6 +79,6 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
                 data: url_1.HaRestURL,
             });
         }
-        return [2 /*return*/];
+        return [2];
     });
 }); });

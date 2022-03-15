@@ -1,0 +1,6 @@
+import CoolKitWs from "./class/CoolKitWs";
+
+const coolKitWs = new CoolKitWs();
+
+module.exports = coolKitWs;
+export default coolKitWs;
