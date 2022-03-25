@@ -24,6 +24,7 @@ docker run -d \
     --restart=always \
     --network host \
     -e HA_URL=yourHomeAssistantUrl \
+    -e SUPERVISOR_TOKEN=yourHomeAssitantLongLivedAccessToken \
     ewelink_smart_home
 ```
 
@@ -34,6 +35,7 @@ docker run -d \
   --restart=always \
   --network host \
   -e HA_URL=http://192.168.1.100:8123 \
+  -e SUPERVISOR_TOKEN=eyJ~iJ9.eyJ~jF9.CkQ~Lho
   ewelink_smart_home
 ```
 
