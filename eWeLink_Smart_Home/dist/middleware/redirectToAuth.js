@@ -70,7 +70,7 @@ exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, 
         if (config_1.isSupervisor) {
             res.json({
                 error: 302,
-                data: 'http://homeassistant:8123',
+                data: 'http://[URL]:8123',
             });
         }
         else {
