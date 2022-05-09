@@ -83,6 +83,7 @@ var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBr
 var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44Controller"));
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
+var logger_1 = require("../utils/logger");
 var mdns = initMdns_1.default();
 var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var type, refresh, data, err_1;
@@ -115,7 +116,7 @@ var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [3, 4];
             case 3:
                 err_1 = _a.sent();
-                console.log('Jia ~ file: devices.ts ~ line 22 ~ getDevices ~ err', err_1);
+                logger_1.logger.error("getDevices error: " + err_1);
                 res.json({
                     error: 500,
                     data: null,
@@ -144,7 +145,7 @@ var getDeviceById = function (req, res) { return __awaiter(void 0, void 0, void 
             });
         }
         catch (err) {
-            console.log('Jia ~ file: devices.ts ~ line 22 ~ getDevices ~ err', err);
+            logger_1.logger.error("getDeviceById error: " + err);
             res.json({
                 error: 500,
                 data: null,
@@ -200,7 +201,7 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 return [3, 5];
             case 4:
                 err_2 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 71 ~ disableDevice ~ err', err_2);
+                logger_1.logger.error("disableDevice error: " + err_2);
                 res.json({
                     error: 500,
                     data: null,
@@ -232,7 +233,7 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
                     eventBus_1.default.emit('sse');
                 }
                 else {
-                    console.log('update device name error, deviceid:', id, '\nerror:', error);
+                    logger_1.logger.warn("updateDeviceName error, deviceid: " + id + ", error: " + error);
                     res.json({
                         error: error,
                         data: null,
@@ -248,7 +249,7 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
             case 3: return [3, 5];
             case 4:
                 err_3 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 159 ~ updateDeviceName ~ err', err_3);
+                logger_1.logger.error("updateDeviceName error: " + err_3);
                 res.json({
                     error: 500,
                     data: null,
@@ -323,7 +324,7 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
                 return [3, 6];
             case 5:
                 err_4 = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 225 ~ updateChannelName ~ err', err_4);
+                logger_1.logger.error("updateChannelName error: " + err_4);
                 res.json({
                     error: 500,
                     data: null,
@@ -341,7 +342,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 _a = req.body, apikey = _a.apikey, id = _a.id, params = _a.params;
-                console.log('Jia ~ file: devices.ts ~ line 259 ~ proxy2ws ~ params', params);
+                logger_1.logger.verbose("proxy2ws params: " + JSON.stringify(params));
                 return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: apikey,
                         deviceid: id,
@@ -349,7 +350,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     })];
             case 1:
                 result = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 222 ~ proxy2ws ~ result', result);
+                logger_1.logger.verbose("proxy2ws result: " + JSON.stringify(result));
                 error = result.error;
                 if (error === 0) {
                     res.json({
@@ -412,7 +413,7 @@ var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 list = req.body.list;
-                console.log('Jia ~ file: devices.ts ~ line 246 ~ getOTAinfo ~ list', list);
+                logger_1.logger.verbose("getOTAinfo list: " + JSON.stringify(list));
                 return [4, ckApi_1.getOTAinfoAPI(list)];
             case 1:
                 _a = _b.sent(), error = _a.error, data = _a.data;
@@ -455,7 +456,7 @@ var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                     })];
             case 1:
                 result = _b.sent();
-                console.log('Jia ~ file: devices.ts ~ line 275 ~ upgradeDevice ~ result', result);
+                logger_1.logger.verbose("upgradeDevice result: " + JSON.stringify(result));
                 error = result.error;
                 if (error === 0) {
                     res.json({
@@ -495,7 +496,7 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 if (!(device instanceof DiyDeviceController_1.default)) return [3, 12];
                 result = void 0;
                 reqParams = __assign({ deviceid: id, ip: device.ip, port: device.port }, params);
-                console.log('Jia ~ file: devices.ts ~ line 366 ~ updateDiyDevice ~ reqParams', reqParams);
+                logger_1.logger.verbose("updateDiyDevice reqParams: " + JSON.stringify(reqParams));
                 if (!(type === 'switch')) return [3, 3];
                 return [4, diyDeviceApi_1.updateDiySwitchAPI(reqParams)];
             case 2:
@@ -526,7 +527,7 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 result = _b.sent();
                 _b.label = 11;
             case 11:
-                console.log('Jia ~ file: devices.ts ~ line 381 ~ updateDiyDevice ~ result', result);
+                logger_1.logger.verbose("updateDiyDevice result: " + JSON.stringify(result));
                 if (result && result.error === 0) {
                     res.json({
                         error: 0,

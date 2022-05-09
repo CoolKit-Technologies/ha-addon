@@ -46,6 +46,7 @@ var path_1 = __importDefault(require("path"));
 var lodash_1 = __importDefault(require("lodash"));
 var config_1 = require("../config/config");
 var const_1 = require("../lib-ha/const");
+var logger_1 = require("./logger");
 var basePath = path_1.default.join('/data');
 if (config_1.debugMode || !config_1.isSupervisor) {
     basePath = path_1.default.join(__dirname, '../../data');
@@ -60,7 +61,7 @@ var getDataSync = function (fileName, namePath) {
         return namePath.reduce(function (cur, path) { return cur[path]; }, JSON.parse(data));
     }
     catch (err) {
-        console.log("getDataSync: " + fileName + " -> " + namePath + " no data");
+        logger_1.logger.error("getDataSync: " + fileName + " -> " + namePath + " no data");
         return null;
     }
 };
@@ -71,7 +72,7 @@ var saveData = function (fileName, data) { return __awaiter(void 0, void 0, void
             return [2, new Promise(function (resolve, reject) {
                     fs_1.default.writeFile(path_1.default.join(basePath, "/" + fileName), data, function (err) {
                         if (err) {
-                            console.log('Jia ~ file: data Util.ts ~ line 23 ~ fs.writeFile ~ err', err);
+                            logger_1.logger.error("fs.writeFile error: " + err);
                             resolve(-1);
                         }
                         resolve(0);
@@ -79,7 +80,7 @@ var saveData = function (fileName, data) { return __awaiter(void 0, void 0, void
                 })];
         }
         catch (err) {
-            console.log('saveData-> no data');
+            logger_1.logger.error("saveData -> no data");
             return [2, -1];
         }
         return [2];

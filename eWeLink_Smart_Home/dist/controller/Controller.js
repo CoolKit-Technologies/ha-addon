@@ -50,6 +50,8 @@ var CloudUIID44Controller_1 = __importDefault(require("./CloudUIID44Controller")
 var CloudUIID34Controller_1 = __importDefault(require("./CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("./LanUIID34Controller"));
 var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
+var CloudNSPanelController_1 = __importDefault(require("./CloudNSPanelController"));
+var logger_1 = require("../utils/logger");
 var Controller = (function () {
     function Controller() {
     }
@@ -89,7 +91,7 @@ var Controller = (function () {
         if (type === 2) {
             var params_1 = formatLanDevice_1.default(data);
             if (!params_1 || (!params_1.ip && !params_1.target)) {
-                console.log('the device is not lan support', params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId);
+                logger_1.logger.info("This device is not LAN support, deviceId: " + (params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId));
                 return;
             }
             var old = Controller.getDevice(id);
@@ -465,6 +467,23 @@ var Controller = (function () {
                     extra: tmp.extra,
                     index: _index,
                     disabled: disabled,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 133) {
+                var tmp = data;
+                var device = new CloudNSPanelController_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    tags: tmp.tags,
+                    disabled: disabled
                 });
                 Controller.deviceMap.set(id, device);
                 return device;

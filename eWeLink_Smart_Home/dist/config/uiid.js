@@ -25,6 +25,7 @@ var multiChannelSwitchUiidSet = new Set([
     139,
     140,
     141,
+    133,
 ]);
 exports.multiChannelSwitchUiidSet = multiChannelSwitchUiidSet;
 var unsupportedLanModeUiidSet = new Set([

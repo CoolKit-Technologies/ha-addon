@@ -51,6 +51,7 @@ var restApi_1 = require("../apis/restApi");
 var auth_1 = require("../config/auth");
 var config_1 = require("../config/config");
 var dataUtil_1 = require("../utils/dataUtil");
+var logger_1 = require("../utils/logger");
 var AuthClass = (function () {
     function AuthClass() {
         this.init();
@@ -103,7 +104,7 @@ var AuthClass = (function () {
                     case 5: return [3, 7];
                     case 6:
                         error_1 = _c.sent();
-                        console.log('Jia ~ file: AuthClass.ts ~ line 52 ~ AuthClass ~ init ~ error', error_1);
+                        logger_1.logger.warn("AuthClass init error: " + error_1);
                         return [3, 7];
                     case 7: return [2];
                 }
@@ -126,7 +127,6 @@ var AuthClass = (function () {
         dataUtil_1.appendData('auth.json', [origin], JSON.stringify(data));
         setTimeout(function () {
             _this.refresh(origin);
-            console.log("it's time to refresh token");
         }, (auth.expires_in - 300) * 1000);
     };
     AuthClass.prototype.refresh = function (origin) {
@@ -142,11 +142,11 @@ var AuthClass = (function () {
                             AuthClass.AuthMap.delete(origin);
                             return [2];
                         }
-                        console.log('refreshing...');
+                        logger_1.logger.info('Start refresh the HA token');
                         return [4, restApi_1.refreshAuth(cliend_id, refresh_token)];
                     case 1:
                         res = _a.sent();
-                        console.log('refresh token success!');
+                        logger_1.logger.info('Refresh HA token success!');
                         if (res && res.status === 200) {
                             this.setAuth(origin, cliend_id, __assign(__assign({}, auth), res.data));
                         }

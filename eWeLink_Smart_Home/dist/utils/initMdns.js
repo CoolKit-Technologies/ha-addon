@@ -17,6 +17,7 @@ var LanTandHModificationController_1 = __importDefault(require("../controller/La
 var LanDoubleColorLightController_1 = __importDefault(require("../controller/LanDoubleColorLightController"));
 var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
+var logger_1 = require("./logger");
 exports.default = (function () {
     return MdnsClass_1.default.createInstance({
         queryParams: {
@@ -28,12 +29,12 @@ exports.default = (function () {
             ],
         },
         queryCb: function () {
-            console.log('finding local eWelink devices');
+            logger_1.logger.info('Finding local eWeLink devices...');
         },
         onResponseCb: function (device) {
             var _a;
             if (device instanceof DiyDeviceController_1.default) {
-                console.log('found diy device');
+                logger_1.logger.info('found diy device');
                 var diyDevice = formatDiyDevice_1.default(device);
                 device.updateState((_a = diyDevice.data) === null || _a === void 0 ? void 0 : _a.switch);
                 dataUtil_1.appendData('diy.json', [diyDevice.id, 'online'], true);

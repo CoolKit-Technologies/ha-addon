@@ -90,6 +90,8 @@ var uiid_1 = require("../config/uiid");
 var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44Controller"));
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
+var CloudNSPanelController_1 = __importDefault(require("../controller/CloudNSPanelController"));
+var logger_1 = require("./logger");
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var userData, lang, loginParams, _a, error, data, thingList, _loop_1, i;
     return __generator(this, function (_b) {
@@ -108,6 +110,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 _a = _b.sent(), error = _a.error, data = _a.data;
                 if (error === 0) {
                     thingList = data.thingList;
+                    logger_1.logger.verbose("getThing: thingList: " + JSON.stringify(thingList));
                     _loop_1 = function (i) {
                         var item = thingList[i];
                         var deviceIndex = item.index;
@@ -277,6 +280,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             }
                             if (device instanceof CloudUIID34Controller_1.default) {
                                 !device.disabled && device.updateState(params.switches);
+                            }
+                            if (device instanceof CloudNSPanelController_1.default) {
                             }
                         }
                     };

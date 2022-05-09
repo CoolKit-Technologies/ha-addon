@@ -53,20 +53,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var coolkit_api_1 = __importDefault(require("coolkit-api"));
 var dataUtil_1 = require("./dataUtil");
 var getThings_1 = __importDefault(require("./getThings"));
+var logger_1 = require("./logger");
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var loginParams, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 loginParams = dataUtil_1.getDataSync('user.json', ['login']);
-                console.log('Jia ~ file: initCkApi.ts ~ line 9 ~ loginParams', loginParams);
+                logger_1.logger.info("initCkApi loginParams: " + JSON.stringify(loginParams));
                 if (!loginParams) return [3, 4];
                 return [4, coolkit_api_1.default.user.login(loginParams)];
             case 1:
                 result = _a.sent();
-                console.log('Jia ~ file: initCkApi.ts ~ line 10 ~ result', result);
+                logger_1.logger.info("initCkApi result: " + JSON.stringify(result));
                 if (!(result.error === 0)) return [3, 4];
-                console.log('relogin success');
+                logger_1.logger.info('relogin success');
                 return [4, dataUtil_1.saveData('user.json', JSON.stringify(__assign(__assign({}, result.data), { login: loginParams })))];
             case 2:
                 _a.sent();

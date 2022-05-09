@@ -78,7 +78,10 @@ var redirectToAuth_1 = __importDefault(require("./middleware/redirectToAuth"));
 var AuthClass_1 = __importDefault(require("./class/AuthClass"));
 var eventBus_1 = __importDefault(require("./utils/eventBus"));
 var init_1 = require("./lib-ha/init");
+var process_1 = __importDefault(require("process"));
+var logger_1 = require("./utils/logger");
 coolkit_api_1.default.init({
+    useTestEnv: process_1.default.env.CK_API_ENV === 'test',
     appId: app_1.appId,
     appSecret: app_1.appSecret,
 });
@@ -132,5 +135,5 @@ app.use('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/pages/index.html'));
 });
 app.listen(port, function () {
-    console.log("server is running at " + port);
+    logger_1.logger.info("server is running at " + port);
 });

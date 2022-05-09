@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getHaBrightness = exports.getCkBrightness = exports.getHaColorTemp = exports.getCkColorTemp = exports.getCkDeviceModelIdByUiid = exports.getHaDeviceUiid = void 0;
 var const_1 = require("./const");
 var WebSocket2Ha_1 = require("./WebSocket2Ha");
+var process_1 = __importDefault(require("process"));
 function getHaDeviceUiid(data) {
     var entityNum = data.entities.length;
     if (entityNum > 4) {
@@ -53,30 +57,33 @@ function getHaDeviceUiid(data) {
     }
 }
 exports.getHaDeviceUiid = getHaDeviceUiid;
+function isCkApiTest() {
+    return process_1.default.env.CK_API_ENV === 'test';
+}
 function getCkDeviceModelIdByUiid(uiid) {
     if (uiid === const_1.CK_UIID_20001) {
-        return '620c592e8d85576e68376d34';
+        return isCkApiTest() ? '620a2e3a2ce380e4ddb648af' : '620c592e8d85576e68376d34';
     }
     else if (uiid === const_1.CK_UIID_20002) {
-        return '620c59478d85576e68376d35';
+        return isCkApiTest() ? '620a2e4f2ce380e4ddb648b0' : '620c59478d85576e68376d35';
     }
     else if (uiid === const_1.CK_UIID_20003) {
-        return '620c59d58d85576e68376d36';
+        return isCkApiTest() ? '620a2e672ce380e4ddb648b1' : '620c59d58d85576e68376d36';
     }
     else if (uiid === const_1.CK_UIID_20004) {
-        return '620c59ea8d85576e68376d37';
+        return isCkApiTest() ? '620a2e922ce380e4ddb648b2' : '620c59ea8d85576e68376d37';
     }
     else if (uiid === const_1.CK_UIID_20005) {
-        return '620c59fd8d85576e68376d38';
+        return isCkApiTest() ? '620a2ea82ce380e4ddb648b3' : '620c59fd8d85576e68376d38';
     }
     else if (uiid === const_1.CK_UIID_20006) {
-        return '620c5a148d85576e68376d39';
+        return isCkApiTest() ? '620a2ed42ce380e4ddb648b4' : '620c5a148d85576e68376d39';
     }
     else if (uiid === const_1.CK_UIID_20007) {
-        return '620c5a598d85576e68376d3a';
+        return isCkApiTest() ? '620a2ee72ce380e4ddb648b5' : '620c5a598d85576e68376d3a';
     }
     else if (uiid === const_1.CK_UIID_20008) {
-        return '620c5a748d85576e68376d3b';
+        return isCkApiTest() ? '620a2efa2ce380e4ddb648b6' : '620c5a748d85576e68376d3b';
     }
     else {
         return 'n/a';

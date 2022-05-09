@@ -43,6 +43,7 @@ exports.refreshAuth = exports.getAuth = exports.removeStates = exports.updateSta
 var axios_1 = __importDefault(require("axios"));
 var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var url_1 = require("../config/url");
+var logger_1 = require("../utils/logger");
 var restRequest = axios_1.default.create({
     baseURL: url_1.HaRestURL,
     timeout: 5000,
@@ -62,7 +63,7 @@ var getStateByEntityId = function (entityId) { return __awaiter(void 0, void 0, 
                 method: 'GET',
                 url: "/api/states/" + entityId,
             }).catch(function (e) {
-                console.log('get HA entity error:', entityId);
+                logger_1.logger.warn("Get HA entity error, entityId: " + entityId);
             })];
     });
 }); };
@@ -74,7 +75,7 @@ var updateStates = function (entityId, data) { return __awaiter(void 0, void 0, 
                 url: "/api/states/" + entityId,
                 data: data,
             }).catch(function (e) {
-                console.log('update device state to HA error:', entityId, '\ndata: ', data);
+                logger_1.logger.warn("Update device state to HA error, entityId: " + entityId + ", data: " + JSON.stringify(data));
             })];
     });
 }); };
@@ -85,7 +86,7 @@ var removeStates = function (entityId) { return __awaiter(void 0, void 0, void 0
                 method: 'DELETE',
                 url: "/api/states/" + entityId,
             }).catch(function (e) {
-                console.log('remove HA entity error:', entityId);
+                logger_1.logger.warn("Remove HA entity error, entityId: " + entityId);
             })];
     });
 }); };
@@ -102,7 +103,7 @@ var getAuth = function (clientId, code) { return __awaiter(void 0, void 0, void 
                     data: "grant_type=authorization_code&client_id=" + clientId + "&code=" + code,
                 });
                 res.catch(function (e) {
-                    console.log('get Auth error: \n client_id:', clientId, '\ncode:' + code);
+                    logger_1.logger.warn("Get HA auth error, client_id: " + clientId + ", code: " + code);
                 });
                 return [4, res];
             case 1: return [2, _a.sent()];
@@ -122,7 +123,7 @@ var refreshAuth = function (clientId, refreshToken) { return __awaiter(void 0, v
                     data: "grant_type=refresh_token&client_id=" + clientId + "&refresh_token=" + refreshToken,
                 });
                 res.catch(function (e) {
-                    console.log('refresh Auth error:', clientId, '\n', e);
+                    logger_1.logger.warn("Refresh HA auth error, clientId: " + clientId + ", error: " + e);
                 });
                 return [4, res];
             case 1: return [2, _a.sent()];

@@ -103,6 +103,7 @@ var CloudCoverController_1 = __importDefault(require("../controller/CloudCoverCo
 var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44Controller"));
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
+var logger_1 = require("./logger");
 var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) { return __awaiter(void 0, void 0, void 0, function () {
     var device, _a, id, outlet, params, _b, _c, brightness_pct, _d, id, outlet, params, brightness_pct, switches;
     return __generator(this, function (_e) {
@@ -284,7 +285,7 @@ exports.default = (function (reconnect) {
                             return __generator(this, function (_e) {
                                 switch (_e.label) {
                                     case 0:
-                                        console.log('HA emit call_service event', res);
+                                        logger_1.logger.info("HA emit call_service event: " + JSON.stringify(res));
                                         entity_id = res.service_data.entity_id, service = res.service;
                                         state = haServiceMap_1.default.get(service);
                                         if (!Array.isArray(entity_id)) return [3, 8];
@@ -354,7 +355,7 @@ exports.default = (function (reconnect) {
                     return [3, 3];
                 case 2:
                     err_1 = _a.sent();
-                    console.log('Jia ~ file: initHaSocket.ts ~ line 28 ~ err', err_1);
+                    logger_1.logger.error("initHaSocket error: " + err_1);
                     return [3, 3];
                 case 3: return [2];
             }

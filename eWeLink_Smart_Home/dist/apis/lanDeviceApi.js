@@ -43,6 +43,7 @@ exports.setFanAPI = exports.toggleLanLightAPI = exports.transmitRfChlAPI = expor
 var axios_1 = __importDefault(require("axios"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var lanControlAuthenticationUtils_1 = __importDefault(require("../utils/lanControlAuthenticationUtils"));
+var logger_1 = require("../utils/logger");
 var setSwitch = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, port, deviceid, devicekey, data, selfApikey, iv, reqData, res;
     return __generator(this, function (_a) {
@@ -67,7 +68,7 @@ var setSwitch = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN single switch devices error', reqData);
+                                logger_1.logger.warn("Update LAN single channel switch device error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -107,7 +108,7 @@ var setSwitches = function (params) { return __awaiter(void 0, void 0, void 0, f
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN multi-switch devices error', reqData);
+                                logger_1.logger.warn("Update LAN multi-switch device error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -147,7 +148,7 @@ var transmitRfChlAPI = function (params) { return __awaiter(void 0, void 0, void
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN RF-Bridge error', reqData);
+                                logger_1.logger.warn("Update LAN RF-Bridge error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -185,7 +186,7 @@ var getLanDeviceParams = function (params) { return __awaiter(void 0, void 0, vo
                 res = axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/info", reqData);
                 res.catch(function (e) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        console.log('get lan device params failed:', deviceid);
+                        logger_1.logger.warn("Get LAN device params failed, deviceid " + deviceid);
                         return [2];
                     });
                 }); });
@@ -219,7 +220,7 @@ var updateLanLight = function (params) { return __awaiter(void 0, void 0, void 0
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN lamp device error', reqData);
+                                logger_1.logger.warn("Update LAN Lamp device error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -259,7 +260,7 @@ var toggleLanLightAPI = function (params) { return __awaiter(void 0, void 0, voi
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN lamp device error', reqData);
+                                logger_1.logger.warn("Update LAN Lamp device error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,
@@ -299,7 +300,7 @@ var setFanAPI = function (params) { return __awaiter(void 0, void 0, void 0, fun
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                console.log('update LAN lamp device error', reqData);
+                                logger_1.logger.warn("Update LAN Lamp device error, " + JSON.stringify(reqData));
                                 return [4, coolkit_ws_1.default.updateThing({
                                         deviceid: deviceid,
                                         ownerApikey: selfApikey,

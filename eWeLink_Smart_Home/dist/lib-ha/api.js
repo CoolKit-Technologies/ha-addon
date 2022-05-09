@@ -49,6 +49,8 @@ var dataUtil_1 = require("../utils/dataUtil");
 var utils_1 = require("./utils");
 var protocols_1 = require("./protocols");
 var coolkit_ws_device_1 = __importDefault(require("coolkit-ws-device"));
+var process_1 = __importDefault(require("process"));
+var logger_1 = require("../utils/logger");
 function addHaGateway(uniqueID) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -82,6 +84,7 @@ function regHaGateway() {
                         appSecret: app_1.appSecret,
                         deviceid: deviceid,
                         region: region,
+                        useTestEnv: process_1.default.env.CK_API_ENV === 'test'
                     });
                     init_1.curUserGwData.gwInList = true;
                     init_1.curUserGwData.gwApikey = apikey;
@@ -96,7 +99,7 @@ function regHaGateway() {
                     _a.sent();
                     return [3, 5];
                 case 4:
-                    console.error('regHaGateway error: addHaGateway failed');
+                    logger_1.logger.warn("regHaGateway error: addHaGateway failed");
                     return [2, -1];
                 case 5: return [2];
             }
@@ -180,7 +183,7 @@ function getHaDeviceList() {
                 case 4: return [3, 6];
                 case 5:
                     err_1 = _a.sent();
-                    console.error(err_1);
+                    logger_1.logger.error("getHaDeviceList error: " + err_1);
                     return [2, -1];
                 case 6: return [2];
             }
@@ -279,7 +282,7 @@ function syncHaDevice2Ck(states) {
                 case 11: return [2, states];
                 case 12:
                     err_2 = _a.sent();
-                    console.error(err_2);
+                    logger_1.logger.error("syncHaDevice2Ck error: " + err_2);
                     return [2, -1];
                 case 13: return [2];
             }

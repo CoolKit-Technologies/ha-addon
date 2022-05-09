@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var multicast_dns_1 = __importDefault(require("multicast-dns"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
+var logger_1 = require("../utils/logger");
 var Mdns = (function () {
     function Mdns(params) {
         var onResponseCb = params.onResponseCb, queryParams = params.queryParams, queryCb = params.queryCb;
@@ -91,7 +92,7 @@ var Mdns = (function () {
                     return;
                 }
                 if (((_a = tmp.txt) === null || _a === void 0 ? void 0 : _a.type) === 'diy_plug') {
-                    console.log('Found Diy Switch ');
+                    logger_1.logger.info('Found DIY switch');
                     var diyDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -100,7 +101,7 @@ var Mdns = (function () {
                     callback && callback(diyDevice);
                 }
                 else if (((_b = tmp.txt) === null || _b === void 0 ? void 0 : _b.type) === ELanType_1.default.Plug) {
-                    console.log('Found Lan Switch');
+                    logger_1.logger.info('Found LAN switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -110,7 +111,7 @@ var Mdns = (function () {
                     callback && callback(lanDevice);
                 }
                 else if (((_c = tmp.txt) === null || _c === void 0 ? void 0 : _c.type) === ELanType_1.default.Strip) {
-                    console.log('Found Lan Multi-Switch');
+                    logger_1.logger.info('Found LAN multi-channel switch');
                     var lanDevice = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -120,7 +121,7 @@ var Mdns = (function () {
                     callback && callback(lanDevice);
                 }
                 else if (((_d = tmp.txt) === null || _d === void 0 ? void 0 : _d.type) === ELanType_1.default.MultifunSwitch) {
-                    console.log('Found Lan DualR3');
+                    logger_1.logger.info('Found LAN DualR3');
                     var dualR3 = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -130,7 +131,7 @@ var Mdns = (function () {
                     callback && callback(dualR3);
                 }
                 else if (((_e = tmp.txt) === null || _e === void 0 ? void 0 : _e.type) === ELanType_1.default.EnhancedPlug) {
-                    console.log('Found Lan enhanced plug');
+                    logger_1.logger.info('Found LAN enhanced plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -140,7 +141,7 @@ var Mdns = (function () {
                     callback && callback(device);
                 }
                 else if (((_f = tmp.txt) === null || _f === void 0 ? void 0 : _f.type) === ELanType_1.default.THPlug) {
-                    console.log('Found Lan TH plug');
+                    logger_1.logger.info('Found LAN TH plug');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -150,7 +151,7 @@ var Mdns = (function () {
                     callback && callback(device);
                 }
                 else if (((_g = tmp.txt) === null || _g === void 0 ? void 0 : _g.type) === ELanType_1.default.RF) {
-                    console.log('Found Lan RF-Bridge');
+                    logger_1.logger.info('Found LAN RF-Bridge');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -160,7 +161,7 @@ var Mdns = (function () {
                     callback && callback(device);
                 }
                 else if (((_h = tmp.txt) === null || _h === void 0 ? void 0 : _h.type) === ELanType_1.default.FanLight) {
-                    console.log('Found Lan fan light');
+                    logger_1.logger.info('Found LAN fan light');
                     var device = Controller_1.default.setDevice({
                         id: key,
                         data: tmp,
@@ -170,7 +171,7 @@ var Mdns = (function () {
                     callback && callback(device);
                 }
                 else if (((_j = tmp.txt) === null || _j === void 0 ? void 0 : _j.type) === ELanType_1.default.Light) {
-                    console.log('Found Lan multi-color lamp');
+                    logger_1.logger.info('Found LAN multi-color lamp');
                 }
             }
         });

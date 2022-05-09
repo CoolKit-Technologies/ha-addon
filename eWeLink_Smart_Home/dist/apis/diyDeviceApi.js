@@ -105,7 +105,7 @@ var updateDiySledOnlineAPI = function (params) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zero conf/sledonline", {
+                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/sledonline", {
                         deviceid: deviceid,
                         data: {
                             sledOnline: state,
