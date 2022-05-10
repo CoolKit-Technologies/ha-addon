@@ -57,6 +57,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var logger_1 = require("../utils/logger");
 var CloudDimmingController = (function (_super) {
     __extends(CloudDimmingController, _super);
     function CloudDimmingController(params) {
@@ -74,7 +75,7 @@ CloudDimmingController.prototype.updateLight = function (params) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('Jia ~ file: CloudDimmingController.ts ~ line 30 ~ params', params);
+                    logger_1.logger.info("CloudDimmingController params: " + JSON.stringify(params));
                     return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,
@@ -82,7 +83,7 @@ CloudDimmingController.prototype.updateLight = function (params) {
                         })];
                 case 1:
                     res = _a.sent();
-                    console.log('Jia ~ file: CloudDimmingController.ts ~ line 35 ~ res', res);
+                    logger_1.logger.info("CloudDimmingController res: " + JSON.stringify(res));
                     return [2];
             }
         });

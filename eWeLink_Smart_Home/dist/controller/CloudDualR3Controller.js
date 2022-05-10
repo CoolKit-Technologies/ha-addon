@@ -59,6 +59,7 @@ var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var dataUtil_1 = require("../utils/dataUtil");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var logger_1 = require("../utils/logger");
 var CloudDualR3Controller = (function (_super) {
     __extends(CloudDualR3Controller, _super);
     function CloudDualR3Controller(params) {
@@ -101,7 +102,7 @@ CloudDualR3Controller.prototype.updateState = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            console.log('Jia ~ file: CloudDualR3Controller.ts ~ line 44 ~ switches', switches);
+            logger_1.logger.info("CloudDualR3Controller switches: " + JSON.stringify(switches));
             if (this.disabled) {
                 return [2];
             }

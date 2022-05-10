@@ -9,6 +9,7 @@ var lodash_1 = __importDefault(require("lodash"));
 var init_1 = require("./init");
 var coolkit_ws_device_1 = __importDefault(require("coolkit-ws-device"));
 var utils_1 = require("./utils");
+var logger_1 = require("../utils/logger");
 function initDeviceParams(data) {
     var uiid = data.deviceUiid;
     var haDeviceData = data.haDeviceData;
@@ -134,6 +135,7 @@ function initDeviceParams(data) {
             };
         }
     }
+    logger_1.logger.verbose("initDeviceParams: " + JSON.stringify(params));
     return params;
 }
 exports.initDeviceParams = initDeviceParams;
@@ -360,6 +362,7 @@ function sendWsUpdateMsg2Ha(deviceData, updateParams) {
 }
 exports.sendWsUpdateMsg2Ha = sendWsUpdateMsg2Ha;
 function handleCkWsUpdateMessage(msg) {
+    logger_1.logger.verbose("Get CK-WS update message: " + JSON.stringify(msg));
     if (msg.apikey !== init_1.curUserGwData.userApiKey) {
         return -1;
     }

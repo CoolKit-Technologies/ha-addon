@@ -59,6 +59,7 @@ var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var lodash_1 = __importDefault(require("lodash"));
+var logger_1 = require("../utils/logger");
 var CloudCoverController = (function (_super) {
     __extends(CloudCoverController, _super);
     function CloudCoverController(params) {
@@ -82,7 +83,7 @@ CloudCoverController.prototype.setCover = function (params) {
                             setclose: 100 - params.setclose,
                         };
                     }
-                    console.log('Jia ~ file: CloudCoverController.ts ~ line 21 ~ params', params);
+                    logger_1.logger.info("CloudCoverController params: " + JSON.stringify(params));
                     return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,

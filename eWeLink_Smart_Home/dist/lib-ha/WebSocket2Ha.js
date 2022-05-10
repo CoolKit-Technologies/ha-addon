@@ -58,6 +58,7 @@ var protocols_1 = require("./protocols");
 var coolkit_api_device_1 = __importDefault(require("coolkit-api-device"));
 var coolkit_ws_device_1 = __importDefault(require("coolkit-ws-device"));
 var process_1 = __importDefault(require("process"));
+var logger_1 = require("../utils/logger");
 var ENTITY_TYPE_ALLOW_LIST = ['switch', 'light'];
 function allowedEntityType(entityType) {
     return ENTITY_TYPE_ALLOW_LIST.includes(entityType);
@@ -117,10 +118,10 @@ var WebSocket2Ha = (function () {
         ws.on('message', this.handleMessage.bind(this));
     };
     WebSocket2Ha.prototype.handleOpen = function () {
-        console.log('WebSocket2Ha connecting...');
+        logger_1.logger.info('WebSocket2Ha connecting...');
     };
     WebSocket2Ha.prototype.handleClose = function () {
-        console.log('WebSocket2Ha will close');
+        logger_1.logger.info('WebSocket2Ha will close');
         this.ws.removeEventListener('open');
         this.ws.removeEventListener('close');
         this.ws.removeEventListener('error');
@@ -128,7 +129,7 @@ var WebSocket2Ha = (function () {
         clearInterval(this.msgQueueTimerId);
     };
     WebSocket2Ha.prototype.handleError = function (err) {
-        console.error('WebSocket2Ha error:', err);
+        logger_1.logger.error("WebSocket2Ha error: " + err);
     };
     WebSocket2Ha.prototype.handleMessage = function (msg) {
         try {
@@ -143,7 +144,7 @@ var WebSocket2Ha = (function () {
                     break;
                 case 'auth_ok':
                     this.connected = true;
-                    console.log('WebSocket2Ha connect success');
+                    logger_1.logger.info('WebSocket2Ha connect success');
                     this.subscribeEvents('state_changed');
                     this.heartBeat();
                     break;
@@ -164,7 +165,7 @@ var WebSocket2Ha = (function () {
             }
         }
         catch (err) {
-            console.error('WebSocket2Ha error:', err);
+            logger_1.logger.error("WebSocket2Ha error: " + err);
         }
     };
     WebSocket2Ha.prototype.heartBeat = function () {
@@ -211,7 +212,18 @@ var WebSocket2Ha = (function () {
                             return [2, -1];
                         }
                         newState = e.event.data.new_state;
+                        if (newState.state === 'unavailable') {
+                            logger_1.logger.info("HA device unavailable, new state: " + JSON.stringify(newState));
+                            init_1.setCkDeviceOnlineState({
+                                uiid: deviceData.deviceUiid,
+                                subDevId: deviceData.haDeviceData.deviceId,
+                                online: false,
+                                deviceid: deviceData.ckDeviceData.deviceid
+                            });
+                            return [2];
+                        }
                         params = protocols_1.getDeviceUpdateParams(deviceData, oldState, newState);
+                        logger_1.logger.verbose("Send message to CK, params: " + JSON.stringify(params));
                         if (!params) {
                             return [2, -1];
                         }
@@ -231,6 +243,7 @@ var WebSocket2Ha = (function () {
         });
     };
     WebSocket2Ha.prototype.sendMessage = function (data) {
+        logger_1.logger.verbose("Send message to HA Core, data: " + JSON.stringify(data));
         this.ws.send(JSON.stringify(__assign({ id: this.cmdId++ }, data)));
     };
     WebSocket2Ha.prototype.subscribeEvents = function (eventType) {
@@ -326,6 +339,7 @@ var WebSocket2Ha = (function () {
                             return [2, result];
                         }
                         entityStateList = entityStateFilter(entityStatesRes);
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStateList: " + JSON.stringify(entityStateList));
                         return [4, this.getConfigDeviceRegistryList()];
                     case 2:
                         deviceRes = _a.sent();
@@ -333,6 +347,7 @@ var WebSocket2Ha = (function () {
                             return [2, result];
                         }
                         deviceList = deviceRes;
+                        logger_1.logger.verbose("getHaDeviceEntityMap: deviceList: " + JSON.stringify(deviceList));
                         return [4, this.getConfigEntityRegistryList()];
                     case 3:
                         entityRes = _a.sent();
@@ -340,6 +355,7 @@ var WebSocket2Ha = (function () {
                             return [2, result];
                         }
                         entityList = entityFilter(entityRes, entityStateList);
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityList: " + JSON.stringify(entityList));
                         for (i = 0; i < entityList.length; i++) {
                             device = lodash_1.default.find(deviceList, { id: entityList[i]['device_id'] });
                             deviceId = device['id'];
@@ -357,6 +373,7 @@ var WebSocket2Ha = (function () {
                                 result[index].entities.push({ entityId: entityId, entityData: entityList[i], entityState: entityState });
                             }
                         }
+                        logger_1.logger.verbose("getHaDeviceEntityMap: result: " + JSON.stringify(result));
                         return [2, result];
                 }
             });

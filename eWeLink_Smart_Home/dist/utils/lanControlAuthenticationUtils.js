@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var crypto_js_1 = __importDefault(require("crypto-js"));
+var logger_1 = require("./logger");
 var LanControlAuthenticationUtils = (function () {
     function LanControlAuthenticationUtils() {
     }
@@ -19,7 +20,7 @@ var LanControlAuthenticationUtils = (function () {
             return base64Cipher;
         }
         catch (e) {
-            console.error(e);
+            logger_1.logger.error("encryptionData error: " + e);
         }
     };
     LanControlAuthenticationUtils.decryptionData = function (_a) {

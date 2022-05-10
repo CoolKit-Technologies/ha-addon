@@ -93,6 +93,8 @@ var AuthClass_1 = __importDefault(require("../class/AuthClass"));
 var removeEntityByDevice_1 = __importDefault(require("../utils/removeEntityByDevice"));
 var config_1 = require("../config/config");
 var init_1 = require("../lib-ha/init");
+var process_1 = __importDefault(require("process"));
+var logger_1 = require("../utils/logger");
 var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, countryCode, phoneNumber, lang, password, email, result, at, apikey, region, err_1;
     return __generator(this, function (_b) {
@@ -109,7 +111,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                     })];
             case 1:
                 result = _b.sent();
-                console.log('Jia ~ file: user.ts ~ line 26 ~ login ~ result', result);
+                logger_1.logger.verbose("user login result: " + JSON.stringify(result));
                 if (!(result.error === 0)) return [3, 5];
                 dataUtil_1.saveData('user.json', JSON.stringify(__assign(__assign({}, result.data), { login: __assign({}, req.body) })));
                 at = lodash_1.default.get(result, ['data', 'at']);
@@ -121,6 +123,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                         apikey: apikey,
                         region: region,
                         userAgent: 'app',
+                        useTestEnv: process_1.default.env.CK_API_ENV === 'test'
                     })];
             case 2:
                 _b.sent();
@@ -137,7 +140,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 return [3, 7];
             case 6:
                 err_1 = _b.sent();
-                console.log(err_1);
+                logger_1.logger.error("user login error: " + err_1);
                 return [3, 7];
             case 7: return [2];
         }
@@ -154,7 +157,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4, dataUtil_1.clearData('user.json')];
             case 1:
                 result = _e.sent();
-                console.log('Jia ~ file: user.ts ~ line 37 ~ logout ~ result', result);
+                logger_1.logger.verbose("user logout result: " + JSON.stringify(result));
                 dataUtil_1.clearData('disabled.json');
                 try {
                     for (_a = __values(Controller_1.default.deviceMap.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
@@ -183,7 +186,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4, coolkit_api_1.default.user.logout()];
             case 2:
                 ckRes = _e.sent();
-                console.log('Jia ~ file: user.ts ~ line 41 ~ logout ~ ckRes', ckRes);
+                logger_1.logger.verbose("user logout ckRes: " + JSON.stringify(ckRes));
                 res.json({
                     error: 0,
                     data: null,
@@ -192,7 +195,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [3, 4];
             case 3:
                 err_2 = _e.sent();
-                console.log(err_2);
+                logger_1.logger.error("user logout error: " + err_2);
                 res.json({
                     error: 500,
                     data: err_2,
@@ -226,7 +229,7 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 return [3, 3];
             case 2:
                 err_3 = _a.sent();
-                console.log(err_3);
+                logger_1.logger.error("user isLogin error: " + err_3);
                 res.json({
                     error: 500,
                     data: err_3,
@@ -269,7 +272,7 @@ var auth = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 if (result && result.status === 200) {
                     AuthClass_1.default.setAuth(req.ip, clientId, result.data);
                     eventBus_1.default.emit('init-ha-socket');
-                    console.log('Jia ~ file: redirectToAuth.ts ~ line 44 ~ result.data', result.data);
+                    logger_1.logger.info("redirectToAuth result data: " + JSON.stringify(result.data));
                     res.json({
                         error: 0,
                         data: null,
@@ -317,7 +320,7 @@ var isAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             });
         }
         catch (err) {
-            console.log('Jia ~ file: user.ts ~ line 170 ~ isAuth ~ err', err);
+            logger_1.logger.error("user isAuth error: " + err);
             res.json({
                 error: 500,
                 data: err,

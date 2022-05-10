@@ -55,6 +55,7 @@ var url_1 = require("../config/url");
 var AuthClass_1 = __importDefault(require("./AuthClass"));
 var initHaSocket_1 = __importDefault(require("../utils/initHaSocket"));
 var syncDevice2Ha_1 = __importDefault(require("../utils/syncDevice2Ha"));
+var logger_1 = require("../utils/logger");
 var HaSocket = (function () {
     function HaSocket() {
         this.count = 1;
@@ -65,11 +66,11 @@ var HaSocket = (function () {
         try {
             this.client = new ws_1.default(url_1.HaSocketURL);
             this.client.on('error', function () {
-                console.log('Please check HA running state');
+                logger_1.logger.warn('Please check HA running state');
             });
         }
         catch (error) {
-            console.log('init HA-WS error', error);
+            logger_1.logger.warn("init HA-WS error: " + error);
         }
     };
     HaSocket.createInstance = function () {
@@ -112,7 +113,7 @@ var HaSocket = (function () {
                                 }
                             }
                             catch (error) {
-                                console.log('Jia ~ file: HaSocketClass.ts ~ line 42 ~ HaSocket ~ init ~ error', error);
+                                logger_1.logger.warn("HaSocket init error: " + error);
                                 resolve(-1);
                             }
                         }));
@@ -131,7 +132,7 @@ var HaSocket = (function () {
                         })];
                     case 1:
                         res = _a.sent();
-                        console.log('HA-WS heartBeat:', res);
+                        logger_1.logger.info("HA-WS heart beat result: " + JSON.stringify(res));
                         if (res === -1) {
                             initHaSocket_1.default(true);
                         }
@@ -157,7 +158,7 @@ var HaSocket = (function () {
                 }
             }
             catch (err) {
-                console.log('Jia ~ file: HaSocketClass.ts ~ line 65 ~ HaSocket ~ handleEvent ~ err', err);
+                logger_1.logger.warn("HaSocket handleEvent error: " + err);
             }
         });
     };
@@ -167,7 +168,7 @@ var HaSocket = (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 if (this.client.readyState !== 1) {
-                    console.log('Could not connect to HA-WS, please restart addon');
+                    logger_1.logger.warn('Could not connect to HA-WS, please restart addon');
                     return [2, -1];
                 }
                 cur = this.count++;
@@ -189,7 +190,7 @@ var HaSocket = (function () {
                                 }
                             }
                             catch (error) {
-                                console.log('Jia ~ file: HASocketClass.ts ~ line 92 ~ HaSocket ~ query ~ error', error);
+                                logger_1.logger.warn("HaSocket query error: " + error);
                                 resolve(-1);
                                 _this.client.removeEventListener('message', handler);
                             }

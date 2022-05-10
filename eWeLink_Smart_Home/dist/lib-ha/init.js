@@ -49,6 +49,8 @@ var app_1 = require("../config/app");
 var coolkit_ws_device_1 = __importDefault(require("coolkit-ws-device"));
 var protocols_1 = require("./protocols");
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
+var process_1 = __importDefault(require("process"));
+var logger_1 = require("../utils/logger");
 var uuid4 = require('uuid').v4;
 var WS_ONLINE = 2;
 var WS_OFFLINE = 3;
@@ -107,12 +109,14 @@ function initWs2Ck(_a) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    console.log('init websocket to CK...');
+                    logger_1.logger.info('Init websocket to CK...');
                     return [4, coolkit_ws_device_1.default.init({
                             userAgent: 'device',
                             apikey: apikey,
                             region: region,
                             deviceid: deviceid,
+                            useTestEnv: process_1.default.env.CK_API_ENV === 'test',
+                            debug: process_1.default.env.CK_API_ENV === 'test'
                         })];
                 case 1:
                     exports.ws2ckRes = ws2ckRes = _b.sent();
@@ -141,7 +145,7 @@ function init() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('start init lib-ha...');
+                    logger_1.logger.info('Start init lib-ha...');
                     if (!lodash_1.default.get(ws2ha, 'connected')) {
                         exports.ws2ha = ws2ha = new WebSocket2Ha_1.WebSocket2Ha();
                     }
@@ -194,6 +198,7 @@ function init() {
                                 appSecret: app_1.appSecret,
                                 deviceid: deviceid,
                                 region: region,
+                                useTestEnv: process_1.default.env.CK_API_ENV === 'test'
                             });
                             newGwData[index].gwInList = true;
                             break;

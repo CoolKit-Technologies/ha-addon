@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
 var formatDevice_1 = require("../utils/formatDevice");
+var logger_1 = require("../utils/logger");
 var sse = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var handler, handleUpdateHaDevice;
     return __generator(this, function (_a) {
@@ -64,7 +65,7 @@ var sse = function (req, res) { return __awaiter(void 0, void 0, void 0, functio
             eventBus_1.default.removeListener('sse', handler);
             eventBus_1.default.removeListener('sse-update-ha-device', handleUpdateHaDevice);
             res.end();
-            console.log('SSE closed');
+            logger_1.logger.info('SSE closed');
         });
         return [2];
     });

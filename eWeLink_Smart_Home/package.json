@@ -22,7 +22,8 @@
         "websocket": "^1.0.33",
         "ws": "^7.4.4",
         "multicast-dns": "^7.2.2",
-        "uuid": "8.3.2"
+        "uuid": "8.3.2",
+        "winston": "3.7.2"
     },
     "devDependencies": {
         "@types/color-convert": "^2.0.0",

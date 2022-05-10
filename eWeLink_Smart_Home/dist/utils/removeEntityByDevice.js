@@ -18,8 +18,9 @@ var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Cont
 var LanMultiChannelSwitchController_1 = __importDefault(require("../controller/LanMultiChannelSwitchController"));
 var LanTandHModificationController_1 = __importDefault(require("../controller/LanTandHModificationController"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
+var logger_1 = require("./logger");
 exports.default = (function (device) {
-    console.log('try to remove entity from Ha', device.entityId);
+    logger_1.logger.info("try to remove entity from Ha: " + device.entityId);
     if (device instanceof DiyDeviceController_1.default) {
         return;
     }

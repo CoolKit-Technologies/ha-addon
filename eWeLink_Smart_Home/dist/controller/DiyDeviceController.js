@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var restApi_1 = require("../apis/restApi");
 var dataUtil_1 = require("../utils/dataUtil");
+var logger_1 = require("../utils/logger");
 var DiyDeviceController = (function () {
     function DiyDeviceController(_a) {
         var deviceId = _a.deviceId, ip = _a.ip, _b = _a.port, port = _b === void 0 ? 8081 : _b, disabled = _a.disabled, txt = _a.txt;
@@ -70,7 +71,7 @@ DiyDeviceController.prototype.setSwitch = function (status) {
                 },
             })
                 .catch(function (e) {
-                console.log('update DIY device state error, deviceid:', _this.deviceId);
+                logger_1.logger.warn("Update DIY device state error, deviceId: " + _this.deviceId);
             });
             return [2];
         });
@@ -93,7 +94,7 @@ DiyDeviceController.prototype.updateState = function (status) {
                     state: status,
                 },
             }).catch(function (e) {
-                console.log('update DIY device state to HA error, deviceid:', _this.deviceId);
+                logger_1.logger.warn("Update DIY device state to HA error, deviceId: " + _this.deviceId);
             });
             return [2];
         });
