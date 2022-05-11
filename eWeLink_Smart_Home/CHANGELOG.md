@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.6
+
+-   Fix login button style bug
+
 ## v1.2.5
 
 -   Support NS Panel
