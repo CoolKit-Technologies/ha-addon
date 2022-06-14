@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.7
+
+-   Fix device online status bug
+
 ## v1.2.6
 
 -   Fix login button style bug

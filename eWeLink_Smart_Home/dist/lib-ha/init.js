@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -51,6 +62,7 @@ var protocols_1 = require("./protocols");
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
 var process_1 = __importDefault(require("process"));
 var logger_1 = require("../utils/logger");
+var api_1 = require("./api");
 var uuid4 = require('uuid').v4;
 var WS_ONLINE = 2;
 var WS_OFFLINE = 3;
@@ -116,7 +128,7 @@ function initWs2Ck(_a) {
                             region: region,
                             deviceid: deviceid,
                             useTestEnv: process_1.default.env.CK_API_ENV === 'test',
-                            debug: process_1.default.env.CK_API_ENV === 'test'
+                            debug: true
                         })];
                 case 1:
                     exports.ws2ckRes = ws2ckRes = _b.sent();
@@ -141,9 +153,10 @@ function initWs2Ck(_a) {
 exports.initWs2Ck = initWs2Ck;
 function init() {
     return __awaiter(this, void 0, void 0, function () {
-        var userData, userApiKey, gwData, gwuuid, found, data, deviceListRes, deviceList, newGwData, index, i, userGwuuid, apikey, deviceid, region;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var userData, userApiKey, gwData, gwuuid, found, data, deviceListRes, deviceList, newGwData, index, i, userGwuuid, apikey, deviceid, region, devList, devList_1, devList_1_1, dev, entities, online, params;
+        var e_1, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     logger_1.logger.info('Start init lib-ha...');
                     if (!lodash_1.default.get(ws2ha, 'connected')) {
@@ -151,7 +164,7 @@ function init() {
                     }
                     return [4, dataUtil_1.initLibHaFiles()];
                 case 1:
-                    _a.sent();
+                    _b.sent();
                     userData = dataUtil_1.getDataSync('user.json', ['user']);
                     if (!userData) {
                         return [2];
@@ -159,7 +172,7 @@ function init() {
                     userApiKey = userData.apikey;
                     return [4, dataUtil_1.getGwData()];
                 case 2:
-                    gwData = _a.sent();
+                    gwData = _b.sent();
                     gwuuid = uuid4();
                     if (!!(found = lodash_1.default.find(gwData, { userApiKey: userApiKey }))) return [3, 4];
                     data = {
@@ -171,21 +184,21 @@ function init() {
                     exports.curUserGwData = curUserGwData = data;
                     return [4, dataUtil_1.setGwData(gwData)];
                 case 3:
-                    _a.sent();
+                    _b.sent();
                     return [3, 5];
                 case 4:
                     exports.curUserGwData = curUserGwData = found;
-                    _a.label = 5;
+                    _b.label = 5;
                 case 5: return [4, coolkit_api_1.default.device.getThingList()];
                 case 6:
-                    deviceListRes = _a.sent();
+                    deviceListRes = _b.sent();
                     if (deviceListRes.error !== 0) {
                         return [2];
                     }
                     deviceList = deviceListRes.data.thingList;
                     return [4, dataUtil_1.getGwData()];
                 case 7:
-                    newGwData = _a.sent();
+                    newGwData = _b.sent();
                     index = lodash_1.default.findIndex(newGwData, { userApiKey: userApiKey });
                     for (i = 0; i < deviceList.length; i++) {
                         userGwuuid = lodash_1.default.get(deviceList[i].itemData, 'params.partnerDevice.ezVedioSerial');
@@ -211,17 +224,55 @@ function init() {
                     exports.curUserGwData = curUserGwData = newGwData[index];
                     return [4, dataUtil_1.setGwData(newGwData)];
                 case 8:
-                    _a.sent();
-                    if (!(curUserGwData.gwInList && lodash_1.default.get(ws2ckRes, 'error') !== 0)) return [3, 10];
+                    _b.sent();
+                    if (!(curUserGwData.gwInList && lodash_1.default.get(ws2ckRes, 'error') !== 0)) return [3, 11];
                     return [4, initWs2Ck({
                             apikey: curUserGwData.gwApikey,
                             region: dataUtil_1.getDataSync('user.json', ['region']),
                             deviceid: curUserGwData.gwDeviceid
                         })];
                 case 9:
-                    _a.sent();
-                    _a.label = 10;
-                case 10: return [2];
+                    _b.sent();
+                    return [4, api_1.getHaDeviceList()];
+                case 10:
+                    devList = _b.sent();
+                    if (devList !== -1) {
+                        try {
+                            for (devList_1 = __values(devList), devList_1_1 = devList_1.next(); !devList_1_1.done; devList_1_1 = devList_1.next()) {
+                                dev = devList_1_1.value;
+                                if (dev.ckDeviceData) {
+                                    entities = dev.haDeviceData.entities;
+                                    online = true;
+                                    if (entities.some(function (entity) { return entity.entityState.state === 'unavailable'; })) {
+                                        online = false;
+                                    }
+                                    setCkDeviceOnlineState({
+                                        subDevId: dev.haDeviceData.deviceId,
+                                        uiid: dev.deviceUiid,
+                                        deviceid: dev.ckDeviceData.deviceid,
+                                        online: online
+                                    });
+                                    params = protocols_1.initDeviceParams(dev);
+                                    coolkit_ws_device_1.default.sendMessage(JSON.stringify({
+                                        action: 'update',
+                                        apikey: curUserGwData.userApiKey,
+                                        deviceid: dev.ckDeviceData.deviceid,
+                                        userAgent: 'device',
+                                        params: params
+                                    }));
+                                }
+                            }
+                        }
+                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                        finally {
+                            try {
+                                if (devList_1_1 && !devList_1_1.done && (_a = devList_1.return)) _a.call(devList_1);
+                            }
+                            finally { if (e_1) throw e_1.error; }
+                        }
+                    }
+                    _b.label = 11;
+                case 11: return [2];
             }
         });
     });

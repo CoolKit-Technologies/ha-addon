@@ -83,7 +83,7 @@ function entityFilter(list, states) {
         var entityType = getEntityTypeById(list[i]['entity_id']);
         var deviceId = list[i]['device_id'];
         var entityState = lodash_1.default.find(states, { 'entity_id': list[i]['entity_id'] });
-        if (allowedEntityType(entityType) && deviceId && entityState.state !== 'unavailable') {
+        if (allowedEntityType(entityType) && deviceId) {
             result.push(list[i]);
         }
     }
@@ -179,7 +179,7 @@ var WebSocket2Ha = (function () {
     };
     WebSocket2Ha.prototype.handleHaStateChangedEvent = function (e) {
         return __awaiter(this, void 0, void 0, function () {
-            var entityId, gwInList, syncDeviceData, deviceList, deviceData, subDeviceListRes, subDeviceList, oldState, i, newState, params;
+            var entityId, gwInList, syncDeviceData, deviceList, deviceData, subDeviceListRes, subDeviceList, oldState, i, newState, haOldState, params;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -222,12 +222,19 @@ var WebSocket2Ha = (function () {
                             });
                             return [2];
                         }
-                        params = protocols_1.getDeviceUpdateParams(deviceData, oldState, newState);
+                        haOldState = e.event.data.old_state;
+                        params = protocols_1.getDeviceUpdateParams(deviceData, oldState, newState, haOldState);
                         logger_1.logger.verbose("Send message to CK, params: " + JSON.stringify(params));
                         if (!params) {
                             return [2, -1];
                         }
                         if (lodash_1.default.get(init_1.ws2ckRes, 'error') === 0) {
+                            init_1.setCkDeviceOnlineState({
+                                uiid: deviceData.deviceUiid,
+                                subDevId: deviceData.haDeviceData.deviceId,
+                                online: true,
+                                deviceid: deviceData.ckDeviceData.deviceid
+                            });
                             coolkit_ws_device_1.default.sendMessage(JSON.stringify({
                                 action: 'update',
                                 apikey: init_1.curUserGwData.userApiKey,

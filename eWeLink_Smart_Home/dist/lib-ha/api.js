@@ -193,7 +193,7 @@ function getHaDeviceList() {
 exports.getHaDeviceList = getHaDeviceList;
 function syncHaDevice2Ck(states) {
     return __awaiter(this, void 0, void 0, function () {
-        var res, i, found, modelId, res, params, err_2;
+        var res, i, found, modelId, res, entities, online, params, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -243,11 +243,16 @@ function syncHaDevice2Ck(states) {
                         states[i].state = false;
                     }
                     else {
+                        entities = found.haDeviceData.entities;
+                        online = true;
+                        if (entities.some(function (entity) { return entity.entityState.state === 'unavailable'; })) {
+                            online = false;
+                        }
                         init_1.setCkDeviceOnlineState({
                             subDevId: found.haDeviceData.deviceId,
                             uiid: found.deviceUiid,
                             deviceid: res.data.thingList[0].itemData.deviceid,
-                            online: true
+                            online: online
                         });
                         params = protocols_1.initDeviceParams(found);
                         coolkit_ws_device_1.default.sendMessage(JSON.stringify({

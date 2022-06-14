@@ -52,6 +52,8 @@ var LanUIID34Controller_1 = __importDefault(require("./LanUIID34Controller"));
 var ELanType_1 = __importDefault(require("../ts/enum/ELanType"));
 var CloudNSPanelController_1 = __importDefault(require("./CloudNSPanelController"));
 var logger_1 = require("../utils/logger");
+var CloudUIID181Controller_1 = __importDefault(require("./CloudUIID181Controller"));
+var CloudUIID190Controller_1 = __importDefault(require("./CloudUIID190Controller"));
 var Controller = (function () {
     function Controller() {
     }
@@ -474,6 +476,40 @@ var Controller = (function () {
             if (data.extra.uiid === 133) {
                 var tmp = data;
                 var device = new CloudNSPanelController_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    tags: tmp.tags,
+                    disabled: disabled
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 181) {
+                var tmp = data;
+                var device = new CloudUIID181Controller_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    tags: tmp.tags,
+                    disabled: disabled
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 190) {
+                var tmp = data;
+                var device = new CloudUIID190Controller_1.default({
                     devicekey: tmp.devicekey,
                     deviceId: tmp.deviceid,
                     deviceName: tmp.name,
