@@ -10,24 +10,27 @@ var init_1 = require("./init");
 var coolkit_ws_device_1 = __importDefault(require("coolkit-ws-device"));
 var utils_1 = require("./utils");
 var logger_1 = require("../utils/logger");
+function checkUnavailableState(state) {
+    return state === 'unavailable' ? 'off' : state;
+}
 function initDeviceParams(data) {
     var uiid = data.deviceUiid;
     var haDeviceData = data.haDeviceData;
     var params = null;
     if (uiid === const_1.CK_UIID_20001) {
         params = {
-            switch: haDeviceData.entities[0].entityState.state
+            switch: checkUnavailableState(haDeviceData.entities[0].entityState.state)
         };
     }
     else if (uiid === const_1.CK_UIID_20002) {
         params = {
             switches: [
                 {
-                    switch: haDeviceData.entities[0].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[0].entityState.state),
                     outlet: 0
                 },
                 {
-                    switch: haDeviceData.entities[1].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[1].entityState.state),
                     outlet: 1
                 }
             ]
@@ -37,15 +40,15 @@ function initDeviceParams(data) {
         params = {
             switches: [
                 {
-                    switch: haDeviceData.entities[0].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[0].entityState.state),
                     outlet: 0
                 },
                 {
-                    switch: haDeviceData.entities[1].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[1].entityState.state),
                     outlet: 1
                 },
                 {
-                    switch: haDeviceData.entities[2].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[2].entityState.state),
                     outlet: 2
                 }
             ]
@@ -55,19 +58,19 @@ function initDeviceParams(data) {
         params = {
             switches: [
                 {
-                    switch: haDeviceData.entities[0].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[0].entityState.state),
                     outlet: 0
                 },
                 {
-                    switch: haDeviceData.entities[1].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[1].entityState.state),
                     outlet: 1
                 },
                 {
-                    switch: haDeviceData.entities[2].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[2].entityState.state),
                     outlet: 2
                 },
                 {
-                    switch: haDeviceData.entities[3].entityState.state,
+                    switch: checkUnavailableState(haDeviceData.entities[3].entityState.state),
                     outlet: 3
                 }
             ]
@@ -76,7 +79,7 @@ function initDeviceParams(data) {
     else if (uiid === const_1.CK_UIID_20005) {
         var entityState = haDeviceData.entities[0].entityState;
         params = {
-            switch: entityState.state
+            switch: checkUnavailableState(entityState.state)
         };
     }
     else if (uiid === const_1.CK_UIID_20006) {
@@ -84,7 +87,7 @@ function initDeviceParams(data) {
         if (entityState.state === 'on') {
             var brightness = entityState.attributes.brightness;
             params = {
-                switch: entityState.state,
+                switch: checkUnavailableState(entityState.state),
                 brightness: utils_1.getCkBrightness(brightness)
             };
         }
@@ -99,7 +102,7 @@ function initDeviceParams(data) {
         if (entityState.state === 'on') {
             var _a = entityState.attributes, brightness = _a.brightness, min_mireds = _a.min_mireds, max_mireds = _a.max_mireds, color_temp = _a.color_temp;
             params = {
-                switch: entityState.state,
+                switch: checkUnavailableState(entityState.state),
                 brightness: utils_1.getCkBrightness(brightness),
                 colorTemp: utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp),
             };
@@ -115,7 +118,7 @@ function initDeviceParams(data) {
         if (entityState.state === 'on') {
             var _b = entityState.attributes, color_mode = _b.color_mode, brightness = _b.brightness, min_mireds = _b.min_mireds, max_mireds = _b.max_mireds, color_temp = _b.color_temp, hs_color = _b.hs_color;
             params = {
-                switch: entityState.state
+                switch: checkUnavailableState(entityState.state)
             };
             if (color_mode === const_1.HA_COLOR_MODE_XY) {
                 lodash_1.default.set(params, 'colorMode', const_1.CK_COLOR_MODE_RGB);
@@ -139,7 +142,7 @@ function initDeviceParams(data) {
     return params;
 }
 exports.initDeviceParams = initDeviceParams;
-function getDeviceUpdateParams(deviceData, oldState, newState) {
+function getDeviceUpdateParams(deviceData, oldState, newState, haOldState) {
     var uiid = deviceData.deviceUiid;
     var entityId = newState.entity_id;
     var params = null;
@@ -170,10 +173,14 @@ function getDeviceUpdateParams(deviceData, oldState, newState) {
         var _a = newState.attributes, brightness = _a.brightness, min_mireds = _a.min_mireds, max_mireds = _a.max_mireds, color_temp = _a.color_temp;
         if (newState.state === 'on') {
             params = {
-                switch: newState.state,
-                brightness: utils_1.getCkBrightness(brightness),
-                colorTemp: utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp)
+                switch: newState.state
             };
+            if (newState.attributes.brightness === haOldState.attributes.brightness) {
+                params.colorTemp = utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp);
+            }
+            else {
+                params.brightness = utils_1.getCkBrightness(brightness);
+            }
         }
         else {
             params = {

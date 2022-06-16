@@ -39,8 +39,16 @@ var ghostManufacturer = function (manufacturer) {
     }
     return 'eWeLink';
 };
+var handleLanType = function (uiid) {
+    if (uiid === 181 || uiid === 190) {
+        return 4;
+    }
+    else {
+        return 2;
+    }
+};
 var formatDevice = function (data) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     if (data instanceof DiyDeviceController_1.default) {
         return {
             key: data.deviceId,
@@ -85,10 +93,10 @@ var formatDevice = function (data) {
             ip: data.ip,
             uiid: (_b = data.extra) === null || _b === void 0 ? void 0 : _b.uiid,
             port: data.port,
-            type: data.type,
-            manufacturer: ghostManufacturer((_c = data.extra) === null || _c === void 0 ? void 0 : _c.manufacturer),
+            type: handleLanType((_c = data.extra) === null || _c === void 0 ? void 0 : _c.uiid),
+            manufacturer: ghostManufacturer((_d = data.extra) === null || _d === void 0 ? void 0 : _d.manufacturer),
             deviceName: data.deviceName,
-            model: (_d = data.extra) === null || _d === void 0 ? void 0 : _d.model,
+            model: (_e = data.extra) === null || _e === void 0 ? void 0 : _e.model,
             apikey: data.selfApikey,
             params: data.params,
             online: data.online,

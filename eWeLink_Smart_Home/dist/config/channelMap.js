@@ -19,6 +19,7 @@ var channelMap = new Map([
     [140, 3],
     [141, 4],
     [133, 2],
+    [181, 1],
 ]);
 var getMaxChannelByUiid = function (uiid) {
     return channelMap.get(uiid) || 0;

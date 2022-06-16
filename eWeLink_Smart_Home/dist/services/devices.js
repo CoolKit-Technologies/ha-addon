@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateLanDevice = exports.setRate = exports.changeUnit = exports.removeDiyDevice = exports.updateDiyDevice = exports.upgradeDevice = exports.getOTAinfo = exports.proxy2ws = exports.updateChannelName = exports.updateDeviceName = exports.disableDevice = exports.getDeviceById = exports.getDevices = void 0;
+exports.getDevTempHumHistory = exports.updateLanDevice = exports.setRate = exports.changeUnit = exports.removeDiyDevice = exports.updateDiyDevice = exports.upgradeDevice = exports.getOTAinfo = exports.proxy2ws = exports.updateChannelName = exports.updateDeviceName = exports.disableDevice = exports.getDeviceById = exports.getDevices = void 0;
 var lodash_1 = __importDefault(require("lodash"));
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var eventBus_1 = __importDefault(require("../utils/eventBus"));
@@ -85,8 +85,38 @@ var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 var logger_1 = require("../utils/logger");
 var mdns = initMdns_1.default();
+var getDevTempHumHistory = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, deviceid, last, format, data, err_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, deviceid = _a.deviceid, last = _a.last, format = _a.format;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
+                return [4, ckApi_1.getTempHumHistory(deviceid, last, format)];
+            case 2:
+                data = _b.sent();
+                res.json({
+                    error: 0,
+                    data: data.data
+                });
+                return [3, 4];
+            case 3:
+                err_1 = _b.sent();
+                logger_1.logger.error("getDevTempHumHistory error", err_1);
+                res.json({
+                    error: 500,
+                    data: null
+                });
+                return [3, 4];
+            case 4: return [2];
+        }
+    });
+}); };
+exports.getDevTempHumHistory = getDevTempHumHistory;
 var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var type, refresh, data, err_1;
+    var type, refresh, data, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -115,8 +145,8 @@ var getDevices = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 });
                 return [3, 4];
             case 3:
-                err_1 = _a.sent();
-                logger_1.logger.error("getDevices error: " + err_1);
+                err_2 = _a.sent();
+                logger_1.logger.error("getDevices error: " + err_2);
                 res.json({
                     error: 500,
                     data: null,
@@ -156,7 +186,7 @@ var getDeviceById = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.getDeviceById = getDeviceById;
 var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, disabled, id, device, error, err_2;
+    var _a, disabled, id, device, error, err_3;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -200,8 +230,8 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 }
                 return [3, 5];
             case 4:
-                err_2 = _b.sent();
-                logger_1.logger.error("disableDevice error: " + err_2);
+                err_3 = _b.sent();
+                logger_1.logger.error("disableDevice error: " + err_3);
                 res.json({
                     error: 500,
                     data: null,
@@ -213,7 +243,7 @@ var disableDevice = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.disableDevice = disableDevice;
 var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, newName, id, device, error, err_3;
+    var _a, newName, id, device, error, err_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -248,8 +278,8 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
                 _b.label = 3;
             case 3: return [3, 5];
             case 4:
-                err_3 = _b.sent();
-                logger_1.logger.error("updateDeviceName error: " + err_3);
+                err_4 = _b.sent();
+                logger_1.logger.error("updateDeviceName error: " + err_4);
                 res.json({
                     error: 500,
                     data: null,
@@ -261,7 +291,7 @@ var updateDeviceName = function (req, res) { return __awaiter(void 0, void 0, vo
 }); };
 exports.updateDeviceName = updateDeviceName;
 var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, tags, id, ck_channel_name, device, error, error, err_4;
+    var _a, tags, id, ck_channel_name, device, error, error, err_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -323,8 +353,8 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
                 });
                 return [3, 6];
             case 5:
-                err_4 = _b.sent();
-                logger_1.logger.error("updateChannelName error: " + err_4);
+                err_5 = _b.sent();
+                logger_1.logger.error("updateChannelName error: " + err_5);
                 res.json({
                     error: 500,
                     data: null,
@@ -336,7 +366,7 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
 }); };
 exports.updateChannelName = updateChannelName;
 var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, apikey, id, params, result, error, device, err_5;
+    var _a, apikey, id, params, result, error, device, err_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -395,7 +425,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 }
                 return [3, 3];
             case 2:
-                err_5 = _b.sent();
+                err_6 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -407,7 +437,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.proxy2ws = proxy2ws;
 var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var list, _a, error, data, err_6;
+    var list, _a, error, data, err_7;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -431,7 +461,7 @@ var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 }
                 return [3, 3];
             case 2:
-                err_6 = _b.sent();
+                err_7 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -443,7 +473,7 @@ var getOTAinfo = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.getOTAinfo = getOTAinfo;
 var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, apikey, id, params, result, error, err_7;
+    var _a, apikey, id, params, result, error, err_8;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -472,7 +502,7 @@ var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 
                 }
                 return [3, 3];
             case 2:
-                err_7 = _b.sent();
+                err_8 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -484,7 +514,7 @@ var upgradeDevice = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.upgradeDevice = upgradeDevice;
 var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, type, id, params, device, result, reqParams, err_8;
+    var _a, type, id, params, device, result, reqParams, err_9;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -543,7 +573,7 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 _b.label = 12;
             case 12: return [3, 14];
             case 13:
-                err_8 = _b.sent();
+                err_9 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -555,7 +585,7 @@ var updateDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
 }); };
 exports.updateDiyDevice = updateDiyDevice;
 var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, params, device, result, _b, _c, err_9;
+    var _a, id, params, device, result, _b, _c, err_10;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
@@ -637,7 +667,7 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 _d.label = 18;
             case 18: return [3, 20];
             case 19:
-                err_9 = _d.sent();
+                err_10 = _d.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -649,7 +679,7 @@ var updateLanDevice = function (req, res) { return __awaiter(void 0, void 0, voi
 }); };
 exports.updateLanDevice = updateLanDevice;
 var removeDiyDevice = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, diyDevices, code, err_10;
+    var id, diyDevices, code, err_11;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -673,7 +703,7 @@ var removeDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
                 }
                 return [3, 3];
             case 2:
-                err_10 = _a.sent();
+                err_11 = _a.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -685,7 +715,7 @@ var removeDiyDevice = function (req, res) { return __awaiter(void 0, void 0, voi
 }); };
 exports.removeDiyDevice = removeDiyDevice;
 var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, unit, device, code, err_11;
+    var _a, id, unit, device, code, err_12;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -720,7 +750,7 @@ var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 _b.label = 3;
             case 3: return [3, 5];
             case 4:
-                err_11 = _b.sent();
+                err_12 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,
@@ -732,7 +762,7 @@ var changeUnit = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.changeUnit = changeUnit;
 var setRate = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, rate, device, code, err_12;
+    var _a, id, rate, device, code, err_13;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -770,7 +800,7 @@ var setRate = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 _b.label = 3;
             case 3: return [3, 5];
             case 4:
-                err_12 = _b.sent();
+                err_13 = _b.sent();
                 res.json({
                     error: 500,
                     data: null,

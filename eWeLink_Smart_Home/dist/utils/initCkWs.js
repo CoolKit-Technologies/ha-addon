@@ -110,8 +110,8 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             case 0:
                                 _d.trys.push([0, 4, , 5]);
                                 type = ws.type, data = ws.data;
-                                logger_1.logger.info("receive CK-WS msg: type: " + type);
-                                logger_1.logger.info("receive CK-WS msg: data: " + JSON.stringify(data));
+                                logger_1.logger.debug("receive CK-WS msg: type: " + type);
+                                logger_1.logger.debug("receive CK-WS msg: data: " + JSON.stringify(data));
                                 if (!(type === 'message' && data !== 'pong')) return [3, 3];
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {

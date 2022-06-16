@@ -39,8 +39,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
+exports.getTempHumHistory = exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
 var coolkit_api_1 = __importDefault(require("coolkit-api"));
+var getTempHumHistory = function (deviceid, last, format) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4, coolkit_api_1.default.device.getTempHumHistory({
+                    deviceid: deviceid,
+                    last: last || new Date().toISOString(),
+                    format: format || 'statistics',
+                })];
+            case 1: return [2, _a.sent()];
+        }
+    });
+}); };
+exports.getTempHumHistory = getTempHumHistory;
 var updateDeviceNameAPI = function (deviceid, name) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
