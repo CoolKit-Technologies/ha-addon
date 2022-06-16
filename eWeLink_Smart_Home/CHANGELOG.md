@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.8
+
+-   Support some new devices
+
 ## v1.2.7
 
 -   Fix device online status bug
