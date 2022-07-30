@@ -107,6 +107,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 }
                 return [4, coolkit_api_1.default.device.getThingList({
                         lang: lang,
+                        num: 0
                     })];
             case 1:
                 _a = _b.sent(), error = _a.error, data = _a.data;

@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.2.9
+
+-   Fix get wrong number device bug
+
 ## v1.2.8
 
 -   Support some new devices
