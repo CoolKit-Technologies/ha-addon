@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.3.0
+
+-   Update WebSocket message handler
+
 ## v1.2.9
 
 -   Fix get wrong number device bug

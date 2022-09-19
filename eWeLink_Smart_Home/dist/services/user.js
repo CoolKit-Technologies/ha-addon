@@ -123,7 +123,9 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                         apikey: apikey,
                         region: region,
                         userAgent: 'app',
-                        useTestEnv: process_1.default.env.CK_API_ENV === 'test'
+                        useTestEnv: process_1.default.env.CK_API_ENV === 'test',
+                        maxRetry: 10000,
+                        reqTimeout: 5000
                     })];
             case 2:
                 _b.sent();

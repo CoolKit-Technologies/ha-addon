@@ -99,6 +99,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         userAgent: 'app',
                         reqTimeout: 30000,
                         useTestEnv: process_1.default.env.CK_API_ENV === 'test',
+                        maxRetry: 10000,
                     })];
             case 1:
                 _a.sent();
