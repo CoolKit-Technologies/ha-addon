@@ -164,7 +164,9 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 try {
                     for (_a = __values(Controller_1.default.deviceMap.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
                         _c = __read(_b.value, 2), id = _c[0], device = _c[1];
-                        removeEntityByDevice_1.default(device);
+                        if (req.body.removeEntity) {
+                            removeEntityByDevice_1.default(device);
+                        }
                         if (device instanceof LanDeviceController_1.default) {
                             device.selfApikey = undefined;
                             device.devicekey = undefined;
@@ -209,7 +211,7 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); };
 exports.logout = logout;
 var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, err_3;
+    var result, username, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -218,15 +220,22 @@ var isLogin = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
             case 1:
                 result = _a.sent();
                 if (result && result.at) {
+                    username = result.user.phoneNumber || result.user.email;
                     res.json({
                         error: 0,
-                        data: { isLogin: true },
+                        data: {
+                            isLogin: true,
+                            username: username
+                        },
                     });
                     return [2];
                 }
                 res.json({
                     error: 0,
-                    data: { isLogin: false },
+                    data: {
+                        isLogin: false,
+                        username: ''
+                    },
                 });
                 return [3, 3];
             case 2:
