@@ -72,7 +72,9 @@ function regHaGateway() {
         var res, apikey, deviceid, region, gwData, index;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4, addHaGateway(init_1.curUserGwData.gwuuid)];
+                case 0:
+                    logger_1.logger.info('start regHaGateway()');
+                    return [4, addHaGateway(init_1.curUserGwData.gwuuid)];
                 case 1:
                     res = _a.sent();
                     if (!(res.error === 0)) return [3, 4];
@@ -101,7 +103,9 @@ function regHaGateway() {
                 case 4:
                     logger_1.logger.warn("regHaGateway error: addHaGateway failed");
                     return [2, -1];
-                case 5: return [2];
+                case 5:
+                    logger_1.logger.info('end regHaGateway()');
+                    return [2];
             }
         });
     });
@@ -112,13 +116,16 @@ function getHaDeviceList() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    return [4, init_1.ws2ha.getHaDeviceEntityMap()];
+                    logger_1.logger.info('start getHaDeviceList()');
+                    _a.label = 1;
                 case 1:
-                    haDeviceList = _a.sent();
-                    if (!init_1.curUserGwData.gwInList) return [3, 3];
-                    return [4, coolkit_api_device_1.default.getGateWayAndSubDevice()];
+                    _a.trys.push([1, 6, , 7]);
+                    return [4, init_1.ws2ha.getHaDeviceEntityMap()];
                 case 2:
+                    haDeviceList = _a.sent();
+                    if (!init_1.curUserGwData.gwInList) return [3, 4];
+                    return [4, coolkit_api_device_1.default.getGateWayAndSubDevice()];
+                case 3:
                     subDeviceListRes = _a.sent();
                     if (subDeviceListRes.error !== 0) {
                         return [2, -1];
@@ -157,7 +164,7 @@ function getHaDeviceList() {
                         init_1.curUserGwData.syncDeviceData = result;
                     }
                     return [2, result];
-                case 3:
+                case 4:
                     result = [];
                     for (i = 0; i < haDeviceList.length; i++) {
                         uiid = utils_1.getHaDeviceUiid(haDeviceList[i]);
@@ -179,13 +186,14 @@ function getHaDeviceList() {
                     if (result.length !== 0) {
                         init_1.curUserGwData.syncDeviceData = result;
                     }
+                    logger_1.logger.info('end getHaDeviceList()');
                     return [2, result];
-                case 4: return [3, 6];
-                case 5:
+                case 5: return [3, 7];
+                case 6:
                     err_1 = _a.sent();
                     logger_1.logger.error("getHaDeviceList error: " + err_1);
                     return [2, -1];
-                case 6: return [2];
+                case 7: return [2];
             }
         });
     });
@@ -197,34 +205,37 @@ function syncHaDevice2Ck(states) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 12, , 13]);
-                    if (!!init_1.curUserGwData.gwInList) return [3, 2];
-                    return [4, regHaGateway()];
+                    logger_1.logger.info('start syncHaDevice2Ck()');
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 13, , 14]);
+                    if (!!init_1.curUserGwData.gwInList) return [3, 3];
+                    return [4, regHaGateway()];
+                case 2:
                     res = _a.sent();
                     if (res === -1) {
                         return [2, res];
                     }
-                    _a.label = 2;
-                case 2:
-                    if (!(lodash_1.default.get(init_1.ws2ckRes, 'error') !== 0)) return [3, 4];
+                    _a.label = 3;
+                case 3:
+                    if (!(lodash_1.default.get(init_1.ws2ckRes, 'error') !== 0)) return [3, 5];
                     return [4, init_1.initWs2Ck({
                             apikey: init_1.curUserGwData.gwApikey,
                             region: dataUtil_1.getDataSync('user.json', ['region']),
                             deviceid: init_1.curUserGwData.gwDeviceid
                         })];
-                case 3:
-                    _a.sent();
-                    _a.label = 4;
                 case 4:
-                    i = 0;
+                    _a.sent();
                     _a.label = 5;
                 case 5:
-                    if (!(i < states.length)) return [3, 11];
+                    i = 0;
+                    _a.label = 6;
+                case 6:
+                    if (!(i < states.length)) return [3, 12];
                     found = lodash_1.default.find(init_1.curUserGwData.syncDeviceData, { haDeviceId: states[i].haDeviceId });
                     modelId = utils_1.getCkDeviceModelIdByUiid(states[i].deviceUiid);
-                    if (!states[i].state) return [3, 9];
-                    if (!!found.ckDeviceData) return [3, 7];
+                    if (!states[i].state) return [3, 10];
+                    if (!!found.ckDeviceData) return [3, 8];
                     return [4, coolkit_api_device_1.default.addSubDevice({
                             type: 2,
                             subDevices: [
@@ -237,7 +248,7 @@ function syncHaDevice2Ck(states) {
                                 }
                             ]
                         })];
-                case 6:
+                case 7:
                     res = _a.sent();
                     if (res.error !== 0) {
                         states[i].state = false;
@@ -263,33 +274,35 @@ function syncHaDevice2Ck(states) {
                             params: params
                         }));
                     }
-                    return [3, 8];
-                case 7:
+                    return [3, 9];
+                case 8:
                     init_1.setCkDeviceOnlineState({
                         subDevId: found.haDeviceData.deviceId,
                         uiid: found.deviceUiid,
                         deviceid: found.ckDeviceData.deviceid,
                         online: true
                     });
-                    _a.label = 8;
-                case 8: return [3, 10];
-                case 9:
+                    _a.label = 9;
+                case 9: return [3, 11];
+                case 10:
                     init_1.setCkDeviceOnlineState({
                         subDevId: found.haDeviceData.deviceId,
                         uiid: found.deviceUiid,
                         deviceid: found.ckDeviceData.deviceid,
                         online: false
                     });
-                    _a.label = 10;
-                case 10:
+                    _a.label = 11;
+                case 11:
                     i++;
-                    return [3, 5];
-                case 11: return [2, states];
+                    return [3, 6];
                 case 12:
+                    logger_1.logger.info('end syncHaDevice2Ck()');
+                    return [2, states];
+                case 13:
                     err_2 = _a.sent();
                     logger_1.logger.error("syncHaDevice2Ck error: " + err_2);
                     return [2, -1];
-                case 13: return [2];
+                case 14: return [2];
             }
         });
     });

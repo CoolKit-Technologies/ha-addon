@@ -104,10 +104,8 @@ var WebSocket2Ha = (function () {
         this.wsUrl = '';
         this.connected = false;
         this.cmdId = 1;
-        this.msgQueue = [];
         this.wsUrl = 'http://supervisor/core/websocket';
         this.connect();
-        this.msgQueueTimerId = setInterval(this.shrinkQueue.bind(this), 10000);
     }
     WebSocket2Ha.prototype.connect = function () {
         var ws = new ws_1.default(this.wsUrl);
@@ -126,7 +124,6 @@ var WebSocket2Ha = (function () {
         this.ws.removeEventListener('close');
         this.ws.removeEventListener('error');
         this.ws.removeEventListener('message');
-        clearInterval(this.msgQueueTimerId);
     };
     WebSocket2Ha.prototype.handleError = function (err) {
         logger_1.logger.error("WebSocket2Ha error: " + err);
@@ -149,11 +146,7 @@ var WebSocket2Ha = (function () {
                     this.heartBeat();
                     break;
                 case 'result':
-                    var success = data.success, result = data.result, id = data.id;
-                    var found = lodash_1.default.find(this.msgQueue, { id: id });
-                    if (success && found) {
-                        this.pushResult(id, result);
-                    }
+                    logger_1.logger.verbose('HA WebSocket get result message');
                     break;
                 case 'event':
                     if (data.event.event_type === 'state_changed') {
@@ -261,45 +254,26 @@ var WebSocket2Ha = (function () {
         };
         this.ws.send(JSON.stringify(msg));
     };
-    WebSocket2Ha.prototype.enMsgQueue = function (id, type) {
-        this.msgQueue.push({
-            id: id,
-            type: type,
-            createdTime: Date.now(),
-            done: false
-        });
-    };
-    WebSocket2Ha.prototype.pushResult = function (id, result) {
-        var i = lodash_1.default.findIndex(this.msgQueue, { id: id });
-        if (i !== -1) {
-            this.msgQueue[i].result = result;
-            this.msgQueue[i].done = true;
-        }
-    };
-    WebSocket2Ha.prototype.shrinkQueue = function () {
-        this.msgQueue = this.msgQueue.filter(function (msg) { return msg.done && (Date.now() > msg.createdTime + 10000); });
-    };
     WebSocket2Ha.prototype.getHaData = function (type) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var id = _this.cmdId++;
-            _this.enMsgQueue(id, type);
-            _this.ws.send(JSON.stringify({ id: id, type: type }));
-            var retryTimes = 40;
-            var timerId = setInterval(function () {
-                if (retryTimes > 0) {
-                    retryTimes--;
-                    var found = lodash_1.default.find(_this.msgQueue, { id: id });
-                    if (found === null || found === void 0 ? void 0 : found.result) {
-                        clearInterval(timerId);
-                        resolve(found.result);
-                    }
+            var handler = function (data) {
+                _this.ws.removeEventListener('message', handler);
+                var msg = JSON.parse(data);
+                if (msg.success) {
+                    resolve(msg.result);
                 }
                 else {
-                    clearInterval(timerId);
                     resolve(-1);
                 }
-            }, 500);
+            };
+            _this.ws.send(JSON.stringify({ id: id, type: type }));
+            _this.ws.on('message', handler);
+            setTimeout(function () {
+                _this.ws.removeEventListener('message', handler);
+                resolve(-1);
+            }, 5000);
         });
     };
     WebSocket2Ha.prototype.getEntityStates = function () {
@@ -342,6 +316,7 @@ var WebSocket2Ha = (function () {
                         return [4, this.getEntityStates()];
                     case 1:
                         entityStatesRes = _a.sent();
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStatesRes: " + JSON.stringify(entityStatesRes));
                         if (entityStatesRes === -1) {
                             return [2, result];
                         }

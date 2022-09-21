@@ -370,7 +370,10 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
+                logger_1.logger.info('start proxy2ws()');
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
                 _a = req.body, apikey = _a.apikey, id = _a.id, params = _a.params;
                 logger_1.logger.verbose("proxy2ws params: " + JSON.stringify(params));
                 return [4, coolkit_ws_1.default.updateThing({
@@ -378,7 +381,7 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         deviceid: id,
                         params: params,
                     })];
-            case 1:
+            case 2:
                 result = _b.sent();
                 logger_1.logger.verbose("proxy2ws result: " + JSON.stringify(result));
                 error = result.error;
@@ -418,20 +421,22 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     }
                 }
                 else {
+                    logger_1.logger.warn("call proxy2ws failed, error: " + error);
                     res.json({
                         error: error,
                         data: result,
                     });
                 }
-                return [3, 3];
-            case 2:
+                return [3, 4];
+            case 3:
                 err_6 = _b.sent();
+                logger_1.logger.error('call proxy2ws() error', err_6);
                 res.json({
                     error: 500,
                     data: null,
                 });
-                return [3, 3];
-            case 3: return [2];
+                return [3, 4];
+            case 4: return [2];
         }
     });
 }); };

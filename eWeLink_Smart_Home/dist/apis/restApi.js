@@ -86,7 +86,7 @@ var removeStates = function (entityId) { return __awaiter(void 0, void 0, void 0
                 method: 'DELETE',
                 url: "/api/states/" + entityId,
             }).catch(function (e) {
-                logger_1.logger.warn("Remove HA entity error, entityId: " + entityId);
+                logger_1.logger.warn("Remove HA entity error, entityId: " + entityId, e);
             })];
     });
 }); };

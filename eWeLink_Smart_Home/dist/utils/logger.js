@@ -8,5 +8,5 @@ exports.logger = winston_1.createLogger({
         var timestamp = _a.timestamp, level = _a.level, message = _a.message;
         return timestamp + " [" + level.toUpperCase() + "] " + message;
     })),
-    transports: [new winston_1.transports.Console()]
+    transports: [new winston_1.transports.Console(), new winston_1.transports.File({ filename: 'total.log' })]
 });
