@@ -8,6 +8,7 @@ var const_1 = require("./const");
 var WebSocket2Ha_1 = require("./WebSocket2Ha");
 var process_1 = __importDefault(require("process"));
 function getHaDeviceUiid(data) {
+    try {
     var entityNum = data.entities.length;
     if (entityNum > 4) {
         return -1;
@@ -53,6 +54,11 @@ function getHaDeviceUiid(data) {
         }
     }
     else {
+        return -1;
+    }
+    } catch (err) {
+        console.error('get ha device uiid error:', err);
+        console.error('ha device data:', JSON.stringify(data);
         return -1;
     }
 }
