@@ -58,7 +58,7 @@ function getHaDeviceUiid(data) {
     }
     } catch (err) {
         console.error('get ha device uiid error:', err);
-        console.error('ha device data:', JSON.stringify(data);
+        console.error('ha device data:', JSON.stringify(data));
         return -1;
     }
 }
