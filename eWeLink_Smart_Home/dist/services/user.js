@@ -196,6 +196,8 @@ var logout = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                     data: null,
                 });
                 eventBus_1.default.emit('sse');
+                coolkit_ws_1.default.close();
+                init_1.closeWs2Ck();
                 return [3, 4];
             case 3:
                 err_2 = _e.sent();

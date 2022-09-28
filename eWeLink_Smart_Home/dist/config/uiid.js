@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unsupportedLanModeModelSet = exports.unsupportedLanModeUiidSet = exports.multiChannelSwitchUiidSet = exports.switchUiidSet = void 0;
+exports.unsupportedLanModeModelSet = exports.unsupportedLanModeUiidSet = exports.zigbeeMultiSwitchSet = exports.multiChannelSwitchUiidSet = exports.switchUiidSet = void 0;
 var switchUiidSet = new Set([
     1,
     6,
@@ -28,6 +28,12 @@ var multiChannelSwitchUiidSet = new Set([
     133,
 ]);
 exports.multiChannelSwitchUiidSet = multiChannelSwitchUiidSet;
+var zigbeeMultiSwitchSet = new Set([
+    2256,
+    3256,
+    4256
+]);
+exports.zigbeeMultiSwitchSet = zigbeeMultiSwitchSet;
 var unsupportedLanModeUiidSet = new Set([
     138,
     139,

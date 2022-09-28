@@ -54,6 +54,9 @@ var CloudNSPanelController_1 = __importDefault(require("./CloudNSPanelController
 var logger_1 = require("../utils/logger");
 var CloudUIID181Controller_1 = __importDefault(require("./CloudUIID181Controller"));
 var CloudUIID190Controller_1 = __importDefault(require("./CloudUIID190Controller"));
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("./CloudZigbeeMultiSwitchController"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("./CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("./CloudZigbeeFiveColorBulbController"));
 var Controller = (function () {
     function Controller() {
     }
@@ -185,6 +188,23 @@ var Controller = (function () {
             if (uiid_1.multiChannelSwitchUiidSet.has(data.extra.uiid)) {
                 var tmp = data;
                 var device = new CloudMultiChannelSwitchController_1.default({
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    tags: tmp.tags,
+                    online: tmp.online,
+                    devicekey: tmp.devicekey,
+                    disabled: disabled,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (uiid_1.zigbeeMultiSwitchSet.has(data.extra.uiid)) {
+                var tmp = data;
+                var device = new CloudZigbeeMultiSwitchController_1.default({
                     deviceId: tmp.deviceid,
                     deviceName: tmp.name,
                     apikey: tmp.apikey,
@@ -520,6 +540,38 @@ var Controller = (function () {
                     index: _index,
                     tags: tmp.tags,
                     disabled: disabled
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 1258) {
+                var tmp = data;
+                var device = new CloudZigbeeDoubleColorBulbController_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    disabled: disabled,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 3258) {
+                var tmp = data;
+                var device = new CloudZigbeeFiveColorBulbController_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    params: tmp.params,
+                    apikey: tmp.apikey,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    disabled: disabled,
                 });
                 Controller.deviceMap.set(id, device);
                 return device;

@@ -55,26 +55,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var restApi_1 = require("../apis/restApi");
-var channelMap_1 = require("../config/channelMap");
-var lodash_1 = __importDefault(require("lodash"));
-var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var CloudUIID190Controller = (function (_super) {
-    __extends(CloudUIID190Controller, _super);
-    function CloudUIID190Controller(props) {
-        var _a;
-        var _this = _super.call(this, props) || this;
-        _this.entityId = "switch." + props.deviceId;
-        _this.uiid = props.extra.uiid;
-        _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
-        _this.maxChannel = channelMap_1.getMaxChannelByUiid(props.extra.uiid);
-        _this.params = props.params;
+var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var mergeDeviceParams_1 = require("../utils/mergeDeviceParams");
+var CloudZigbeeDoubleColorBulbController = (function (_super) {
+    __extends(CloudZigbeeDoubleColorBulbController, _super);
+    function CloudZigbeeDoubleColorBulbController(params) {
+        var _this = _super.call(this, params) || this;
+        _this.uiid = 1258;
+        _this.type = 8;
+        _this.entityId = "light." + params.deviceId;
+        _this.params = params.params;
         return _this;
     }
-    return CloudUIID190Controller;
+    return CloudZigbeeDoubleColorBulbController;
 }(CloudDeviceController_1.default));
-CloudUIID190Controller.prototype.updateSwitch = function (switches) {
+CloudZigbeeDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
+    var state = params.state, brightness_pct = params.brightness_pct, color_temp = params.color_temp;
+    var res = { switch: 'on' };
+    if (state === 'off') {
+        return {
+            switch: 'off',
+        };
+    }
+    if (!brightness_pct && !color_temp) {
+        return {
+            switch: 'on',
+        };
+    }
+    if (brightness_pct) {
+        res.brightness = brightness_pct;
+    }
+    if (color_temp) {
+        res.colorTemp = 100 - color_temp;
+    }
+    return res;
+};
+CloudZigbeeDoubleColorBulbController.prototype.updateLight = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
@@ -82,51 +99,48 @@ CloudUIID190Controller.prototype.updateSwitch = function (switches) {
                 case 0: return [4, coolkit_ws_1.default.updateThing({
                         ownerApikey: this.apikey,
                         deviceid: this.deviceId,
-                        params: {
-                            switches: switches,
-                        },
+                        params: params,
                     })];
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.updateState(params);
                     }
                     return [2];
             }
         });
     });
 };
-CloudUIID190Controller.prototype.updateState = function (switches) {
+CloudZigbeeDoubleColorBulbController.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
-        var i, _a, outlet, status_1, name_1, state;
-        return __generator(this, function (_b) {
+        var tempParams, _a, status, _b, brightness, _c, colorTemp, state;
+        return __generator(this, function (_d) {
+            tempParams = mergeDeviceParams_1.assignDeviceParams(this.params, params);
             if (this.disabled) {
                 return [2];
             }
-            for (i = 0; i < this.maxChannel; i++) {
-                _a = switches[i] || { outlet: 0, switch: 'on' }, outlet = _a.outlet, status_1 = _a.switch;
-                if (!lodash_1.default.isNumber(outlet) || status_1 === undefined) {
-                    return [2];
-                }
-                name_1 = lodash_1.default.get(this, ['channelName', outlet], outlet + 1);
-                state = status_1;
-                if (!this.online) {
-                    state = 'unavailable';
-                }
-                restApi_1.updateStates(this.entityId + "_" + (outlet + 1), {
-                    entity_id: this.entityId + "_" + (outlet + 1),
-                    state: state,
-                    attributes: {
-                        restored: false,
-                        supported_features: 0,
-                        friendly_name: this.deviceName + "-" + name_1,
-                        state: state,
-                    },
-                });
+            _a = tempParams.switch, status = _a === void 0 ? 'on' : _a, _b = tempParams.brightness, brightness = _b === void 0 ? 1 : _b, _c = tempParams.colorTemp, colorTemp = _c === void 0 ? 1 : _c;
+            state = status;
+            if (!this.online) {
+                state = 'unavailable';
             }
+            restApi_1.updateStates(this.entityId, {
+                entity_id: this.entityId,
+                state: state,
+                attributes: {
+                    restored: false,
+                    supported_features: 4,
+                    friendly_name: this.deviceName,
+                    supported_color_modes: ['color_temp'],
+                    state: state,
+                    min_mireds: 1,
+                    max_mireds: 100,
+                    brightness: brightness * 2.55 >> 0,
+                    color_temp: 100 - colorTemp,
+                },
+            });
             return [2];
         });
     });
 };
-exports.default = CloudUIID190Controller;
+exports.default = CloudZigbeeDoubleColorBulbController;
