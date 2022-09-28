@@ -7,7 +7,11 @@ var restApi_1 = require("../apis/restApi");
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
 var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
 var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
 var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
@@ -30,7 +34,7 @@ exports.default = (function (device) {
         restApi_1.removeStates("sensor." + device.deviceId + "_t");
         return;
     }
-    else if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default) {
+    else if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default || device instanceof CloudZigbeeMultiSwitchController_1.default || device instanceof CloudUIID190Controller_1.default) {
         for (var i = 0; i < device.maxChannel; i++) {
             restApi_1.removeStates(device.entityId + "_" + (i + 1));
         }
@@ -63,6 +67,10 @@ exports.default = (function (device) {
     else if (device instanceof CloudUIID34Controller_1.default || device instanceof LanUIID34Controller_1.default) {
         restApi_1.removeStates(device.entityId);
         restApi_1.removeStates("fan." + device.deviceId);
+        return;
+    }
+    else if (device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default) {
+        restApi_1.removeStates("light." + device.deviceId);
         return;
     }
     restApi_1.removeStates(device.entityId);

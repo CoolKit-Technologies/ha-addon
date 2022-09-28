@@ -32,6 +32,7 @@ var LanPowerDetectionSwitchController_1 = __importDefault(require("../controller
 var CloudDW2WiFiController_1 = __importDefault(require("../controller/CloudDW2WiFiController"));
 var CloudRFBridgeController_1 = __importDefault(require("../controller/CloudRFBridgeController"));
 var LanRFBridgeController_1 = __importDefault(require("../controller/LanRFBridgeController"));
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
 var ghostManufacturer = function (manufacturer) {
     if (manufacturer === void 0) { manufacturer = 'eWeLink'; }
     if (~manufacturer.indexOf('松诺') || ~manufacturer.toLocaleUpperCase().indexOf('SONOFF')) {
@@ -109,7 +110,7 @@ var formatDevice = function (data) {
     if (data instanceof CloudDeviceController_1.default) {
         var tags = void 0, unit = void 0, rate = void 0, lowVolAlarm = void 0;
         var index = 20;
-        if (data instanceof CloudMultiChannelSwitchController_1.default) {
+        if (data instanceof CloudMultiChannelSwitchController_1.default || data instanceof CloudZigbeeMultiSwitchController_1.default) {
             tags = data.channelName;
         }
         else if (data instanceof CloudRFBridgeController_1.default) {

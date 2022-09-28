@@ -84,6 +84,11 @@ var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 var logger_1 = require("../utils/logger");
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
+var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
+var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
 var mdns = initMdns_1.default();
 var getDevTempHumHistory = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, deviceid, last, format, data, err_1;
@@ -302,7 +307,8 @@ var updateChannelName = function (req, res) { return __awaiter(void 0, void 0, v
                 if (!(device instanceof LanMultiChannelSwitchController_1.default ||
                     device instanceof CloudMultiChannelSwitchController_1.default ||
                     device instanceof CloudDualR3Controller_1.default ||
-                    device instanceof LanDualR3Controller_1.default)) return [3, 2];
+                    device instanceof LanDualR3Controller_1.default ||
+                    device instanceof CloudZigbeeMultiSwitchController_1.default)) return [3, 2];
                 ck_channel_name = __assign(__assign({}, device.channelName), ck_channel_name);
                 return [4, ckApi_1.updateChannelNameAPI(id, {
                         ck_channel_name: ck_channel_name,
@@ -410,7 +416,8 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     else if (device instanceof CloudMultiChannelSwitchController_1.default ||
                         device instanceof LanMultiChannelSwitchController_1.default ||
                         device instanceof CloudDualR3Controller_1.default ||
-                        device instanceof LanDualR3Controller_1.default) {
+                        device instanceof LanDualR3Controller_1.default ||
+                        device instanceof CloudZigbeeMultiSwitchController_1.default) {
                         device.updateState(device.params.switches);
                     }
                     else if (device instanceof CloudUIID34Controller_1.default) {
@@ -418,6 +425,15 @@ var proxy2ws = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     }
                     else if (device instanceof CloudUIID44Controller_1.default) {
                         device.updateState(device.params);
+                    }
+                    else if (device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default) {
+                        device.updateState(device.params);
+                    }
+                    else if (device instanceof CloudUIID181Controller_1.default) {
+                        device.updateState(device.params.switch);
+                    }
+                    else if (device instanceof CloudUIID190Controller_1.default) {
+                        device.updateState(device.params.switches);
                     }
                 }
                 else {

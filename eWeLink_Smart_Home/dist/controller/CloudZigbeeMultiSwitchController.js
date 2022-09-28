@@ -54,17 +54,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
-var restApi_1 = require("../apis/restApi");
-var channelMap_1 = require("../config/channelMap");
 var lodash_1 = __importDefault(require("lodash"));
+var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
+var restApi_1 = require("../apis/restApi");
+var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var channelMap_1 = require("../config/channelMap");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var CloudUIID190Controller = (function (_super) {
-    __extends(CloudUIID190Controller, _super);
-    function CloudUIID190Controller(props) {
+var CloudZigbeeMultiSwitchController = (function (_super) {
+    __extends(CloudZigbeeMultiSwitchController, _super);
+    function CloudZigbeeMultiSwitchController(props) {
         var _a;
         var _this = _super.call(this, props) || this;
+        _this.type = 8;
         _this.entityId = "switch." + props.deviceId;
         _this.uiid = props.extra.uiid;
         _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
@@ -72,9 +73,9 @@ var CloudUIID190Controller = (function (_super) {
         _this.params = props.params;
         return _this;
     }
-    return CloudUIID190Controller;
+    return CloudZigbeeMultiSwitchController;
 }(CloudDeviceController_1.default));
-CloudUIID190Controller.prototype.updateSwitch = function (switches) {
+CloudZigbeeMultiSwitchController.prototype.updateSwitch = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
@@ -97,7 +98,7 @@ CloudUIID190Controller.prototype.updateSwitch = function (switches) {
         });
     });
 };
-CloudUIID190Controller.prototype.updateState = function (switches) {
+CloudZigbeeMultiSwitchController.prototype.updateState = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
         var i, _a, outlet, status_1, name_1, state;
         return __generator(this, function (_b) {
@@ -105,7 +106,7 @@ CloudUIID190Controller.prototype.updateState = function (switches) {
                 return [2];
             }
             for (i = 0; i < this.maxChannel; i++) {
-                _a = switches[i] || { outlet: 0, switch: 'on' }, outlet = _a.outlet, status_1 = _a.switch;
+                _a = switches[i] || {}, outlet = _a.outlet, status_1 = _a.switch;
                 if (!lodash_1.default.isNumber(outlet) || status_1 === undefined) {
                     return [2];
                 }
@@ -129,4 +130,4 @@ CloudUIID190Controller.prototype.updateState = function (switches) {
         });
     });
 };
-exports.default = CloudUIID190Controller;
+exports.default = CloudZigbeeMultiSwitchController;

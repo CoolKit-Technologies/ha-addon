@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setCkDeviceOnlineState = exports.initWs2Ck = exports.ws2ckRes = exports.curUserGwData = exports.ws2ha = exports.init = void 0;
+exports.setCkDeviceOnlineState = exports.initWs2Ck = exports.ws2ckRes = exports.curUserGwData = exports.ws2ha = exports.init = exports.closeWs2Ck = void 0;
 var WebSocket2Ha_1 = require("./WebSocket2Ha");
 var dataUtil_1 = require("../utils/dataUtil");
 var coolkit_api_1 = __importDefault(require("coolkit-api"));
@@ -106,6 +106,7 @@ function handleDeleteGateway() {
                     return [4, dataUtil_1.setGwData([])];
                 case 1:
                     _a.sent();
+                    closeWs2Ck();
                     init();
                     setTimeout(function () {
                         eventBus_1.default.emit('sse-update-ha-device');
@@ -122,6 +123,7 @@ function initWs2Ck(_a) {
             switch (_b.label) {
                 case 0:
                     logger_1.logger.info('Init websocket to CK...');
+                    logger_1.logger.verbose("apikey: " + apikey);
                     return [4, coolkit_ws_device_1.default.init({
                             userAgent: 'device',
                             apikey: apikey,
@@ -151,6 +153,13 @@ function initWs2Ck(_a) {
     });
 }
 exports.initWs2Ck = initWs2Ck;
+function closeWs2Ck() {
+    if (coolkit_ws_device_1.default.isWsExist()) {
+        coolkit_ws_device_1.default.close();
+        ws2ckRes.error = -1;
+    }
+}
+exports.closeWs2Ck = closeWs2Ck;
 function init() {
     return __awaiter(this, void 0, void 0, function () {
         var userData, userApiKey, gwData, gwuuid, found, data, deviceListRes, deviceList, newGwData, index, i, userGwuuid, apikey, deviceid, region, devList, devList_1, devList_1_1, dev, entities, online, params;

@@ -94,6 +94,9 @@ var CloudNSPanelController_1 = __importDefault(require("../controller/CloudNSPan
 var logger_1 = require("./logger");
 var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
 var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var userData, lang, loginParams, _a, error, data, thingList, _loop_1, i;
     return __generator(this, function (_b) {
@@ -239,7 +242,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         current: current,
                                     });
                             }
-                            if (device instanceof CloudMultiChannelSwitchController_1.default) {
+                            if (device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudZigbeeMultiSwitchController_1.default) {
                                 !device.disabled && device.updateState(params.switches);
                             }
                             if (device instanceof CloudRGBLightStripController_1.default) {
@@ -287,8 +290,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                             if (device instanceof CloudNSPanelController_1.default) {
                             }
                             if (device instanceof CloudUIID181Controller_1.default) {
+                                !device.disabled && device.updateState(params.switch);
                             }
                             if (device instanceof CloudUIID190Controller_1.default) {
+                                !device.disabled && device.updateState(params.switches);
+                            }
+                            if (device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default) {
+                                !device.disabled && device.updateState(params);
                             }
                         }
                     };

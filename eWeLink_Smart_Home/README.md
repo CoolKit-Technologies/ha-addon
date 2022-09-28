@@ -40,4 +40,13 @@ fan:
           service: fan.turn_off
         set_preset_mode:
           service: fan.set_preset_mode
+
+light:
+  - platform: template
+    lights:
+      ewelink_virtual_light:
+        turn_on:
+          service: light.turn_on
+        turn_off:
+          service: light.turn_off
 ```

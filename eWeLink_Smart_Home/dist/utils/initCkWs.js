@@ -80,6 +80,11 @@ var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var process_1 = __importDefault(require("process"));
 var logger_1 = require("./logger");
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
+var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
+var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
 var apikey = dataUtil_1.getDataSync('user.json', ['user', 'apikey']);
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var at, region;
@@ -105,7 +110,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 _a.sent();
                 logger_1.logger.info("initCkWs at: " + at);
                 coolkit_ws_1.default.on('message', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, ids, online, res, error_1;
+                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, switches, ids, switches, online, res, error_1;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
                             case 0:
@@ -153,6 +158,12 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         });
                                     }
                                     else if (device instanceof CloudMultiChannelSwitchController_1.default) {
+                                        switches = tmp.params.switches;
+                                        if (Array.isArray(switches)) {
+                                            device.updateState(switches);
+                                        }
+                                    }
+                                    else if (device instanceof CloudZigbeeMultiSwitchController_1.default) {
                                         switches = tmp.params.switches;
                                         if (Array.isArray(switches)) {
                                             device.updateState(switches);
@@ -230,6 +241,20 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     else if (device instanceof CloudUIID44Controller_1.default) {
                                         logger_1.logger.info("Get UIID 44 message, params: " + tmp.params);
                                         device.updateState(tmp.params);
+                                    }
+                                    else if (device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default) {
+                                        logger_1.logger.info("Get UIID 1258 message, params: " + JSON.stringify(tmp.params));
+                                        device.updateState(tmp.params);
+                                    }
+                                    else if (device instanceof CloudUIID181Controller_1.default) {
+                                        device.updateState(tmp.params.switch);
+                                    }
+                                    else if (device instanceof CloudUIID190Controller_1.default) {
+                                        logger_1.logger.info("Get UIID 190 message, params: " + JSON.stringify(tmp.params));
+                                        switches = tmp.params.switches;
+                                        if (Array.isArray(switches)) {
+                                            device.updateState(switches);
+                                        }
                                     }
                                     eventBus_1.default.emit('update-controller', data);
                                 }

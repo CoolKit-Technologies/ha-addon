@@ -128,6 +128,7 @@ function getHaDeviceList() {
                 case 3:
                     subDeviceListRes = _a.sent();
                     if (subDeviceListRes.error !== 0) {
+                        logger_1.logger.error('getGatewayAndSubDevice failed');
                         return [2, -1];
                     }
                     subDeviceList = subDeviceListRes.data.subDevicesInfo;
@@ -151,9 +152,7 @@ function getHaDeviceList() {
                                 if (subDeviceList[j].itemData.params.uniqueID === haDeviceList[i].deviceId) {
                                     data.deviceNameCk = subDeviceList[j].itemData.name;
                                     data.ckDeviceData = subDeviceList[j].itemData;
-                                    if (subDeviceList[j].itemData.online) {
-                                        data.syncState = true;
-                                    }
+                                    data.syncState = true;
                                     break;
                                 }
                             }
@@ -234,7 +233,7 @@ function syncHaDevice2Ck(states) {
                     if (!(i < states.length)) return [3, 12];
                     found = lodash_1.default.find(init_1.curUserGwData.syncDeviceData, { haDeviceId: states[i].haDeviceId });
                     modelId = utils_1.getCkDeviceModelIdByUiid(states[i].deviceUiid);
-                    if (!states[i].state) return [3, 10];
+                    if (!states[i].state) return [3, 9];
                     if (!!found.ckDeviceData) return [3, 8];
                     return [4, coolkit_api_device_1.default.addSubDevice({
                             type: 2,
@@ -274,23 +273,11 @@ function syncHaDevice2Ck(states) {
                             params: params
                         }));
                     }
-                    return [3, 9];
-                case 8:
-                    init_1.setCkDeviceOnlineState({
-                        subDevId: found.haDeviceData.deviceId,
-                        uiid: found.deviceUiid,
-                        deviceid: found.ckDeviceData.deviceid,
-                        online: true
-                    });
-                    _a.label = 9;
-                case 9: return [3, 11];
+                    return [3, 8];
+                case 8: return [3, 11];
+                case 9: return [4, coolkit_api_device_1.default.deleteSubDevice(found.ckDeviceData.deviceid)];
                 case 10:
-                    init_1.setCkDeviceOnlineState({
-                        subDevId: found.haDeviceData.deviceId,
-                        uiid: found.deviceUiid,
-                        deviceid: found.ckDeviceData.deviceid,
-                        online: false
-                    });
+                    _a.sent();
                     _a.label = 11;
                 case 11:
                     i++;

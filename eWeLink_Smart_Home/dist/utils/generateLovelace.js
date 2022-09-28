@@ -68,6 +68,7 @@ var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
@@ -122,7 +123,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                     if (device instanceof CloudMultiChannelSwitchController_1.default ||
                         device instanceof LanMultiChannelSwitchController_1.default ||
                         device instanceof CloudDualR3Controller_1.default ||
-                        device instanceof LanDualR3Controller_1.default) {
+                        device instanceof LanDualR3Controller_1.default ||
+                        device instanceof CloudZigbeeMultiSwitchController_1.default) {
                         if (device.maxChannel === 1 && device.deviceName) {
                             singalSwitchCard.entities.push(device.entityId + "_1");
                             return "continue";

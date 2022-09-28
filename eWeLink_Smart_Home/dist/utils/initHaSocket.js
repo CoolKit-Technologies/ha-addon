@@ -104,29 +104,34 @@ var CloudUIID44Controller_1 = __importDefault(require("../controller/CloudUIID44
 var CloudUIID34Controller_1 = __importDefault(require("../controller/CloudUIID34Controller"));
 var LanUIID34Controller_1 = __importDefault(require("../controller/LanUIID34Controller"));
 var logger_1 = require("./logger");
+var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
+var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
+var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
 var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) { return __awaiter(void 0, void 0, void 0, function () {
-    var device, _a, id, outlet, params, _b, _c, brightness_pct, _d, id, outlet, params, brightness_pct, switches;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
+    var device, _a, id, outlet, params, _b, _c, brightness_pct, _d, id, outlet, params, brightness_pct, switches, _e, id, outlet;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0:
                 device = Controller_1.default.getDevice(entity_id.replace(/_\d+$/, ''));
                 if (!(device instanceof DiyDeviceController_1.default)) return [3, 2];
                 return [4, device.setSwitch(state)];
             case 1:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 2:
                 if (!(device instanceof LanSwitchController_1.default)) return [3, 4];
                 return [4, device.setSwitch(state)];
             case 3:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 4:
                 if (!(device instanceof LanMultiChannelSwitchController_1.default || device instanceof LanDualR3Controller_1.default)) return [3, 9];
                 if (!mutiSwitchState) return [3, 6];
                 return [4, device.setSwitch(mutiSwitchState)];
             case 5:
-                _e.sent();
+                _f.sent();
                 return [3, 8];
             case 6:
                 _a = __read(entity_id.split('_'), 2), id = _a[0], outlet = _a[1];
@@ -137,21 +142,21 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                         },
                     ])];
             case 7:
-                _e.sent();
-                _e.label = 8;
-            case 8: return [3, 43];
+                _f.sent();
+                _f.label = 8;
+            case 8: return [3, 51];
             case 9:
                 if (!(device instanceof LanTandHModificationController_1.default)) return [3, 10];
                 device.setSwitch(state);
-                return [3, 43];
+                return [3, 51];
             case 10:
                 if (!(device instanceof LanPowerDetectionSwitchController_1.default)) return [3, 11];
                 device.setSwitch(state);
-                return [3, 43];
+                return [3, 51];
             case 11:
                 if (!(device instanceof LanDoubleColorLightController_1.default)) return [3, 12];
                 device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)));
-                return [3, 43];
+                return [3, 51];
             case 12:
                 if (!(device instanceof LanUIID34Controller_1.default)) return [3, 17];
                 params = device.parseHaData2Lan(__assign({ state: state }, res.service_data));
@@ -159,31 +164,31 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                 if (!_b) return [3, 14];
                 return [4, device.setFan(params)];
             case 13:
-                _b = (_e.sent());
-                _e.label = 14;
+                _b = (_f.sent());
+                _f.label = 14;
             case 14:
                 _b;
                 _c = params.light;
                 if (!_c) return [3, 16];
                 return [4, device.toggleLight(params)];
             case 15:
-                _c = (_e.sent());
-                _e.label = 16;
+                _c = (_f.sent());
+                _f.label = 16;
             case 16:
                 _c;
-                return [3, 43];
+                return [3, 51];
             case 17:
                 if (!(device instanceof CloudSwitchController_1.default)) return [3, 19];
                 return [4, device.updateSwitch(state)];
             case 18:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 19:
                 if (!(device instanceof CloudRGBBulbController_1.default)) return [3, 21];
                 return [4, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 20:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 21:
                 if (!(device instanceof CloudDimmingController_1.default)) return [3, 23];
                 brightness_pct = res.service_data.brightness_pct;
@@ -192,26 +197,26 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                         bright: brightness_pct,
                     })];
             case 22:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 23:
                 if (!(device instanceof CloudPowerDetectionSwitchController_1.default)) return [3, 25];
                 return [4, device.updateSwitch(state)];
             case 24:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 25:
                 if (!(device instanceof CloudTandHModificationController_1.default)) return [3, 27];
                 return [4, device.updateSwitch(state)];
             case 26:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 27:
-                if (!(device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default)) return [3, 32];
+                if (!(device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default || device instanceof CloudZigbeeMultiSwitchController_1.default)) return [3, 32];
                 if (!mutiSwitchState) return [3, 29];
                 return [4, device.updateSwitch(mutiSwitchState)];
             case 28:
-                _e.sent();
+                _f.sent();
                 return [3, 31];
             case 29:
                 _d = __read(entity_id.split('_'), 2), id = _d[0], outlet = _d[1];
@@ -222,47 +227,77 @@ var handleDeviceByEntityId = function (entity_id, state, res, mutiSwitchState) {
                         },
                     ])];
             case 30:
-                _e.sent();
-                _e.label = 31;
-            case 31: return [3, 43];
+                _f.sent();
+                _f.label = 31;
+            case 31: return [3, 51];
             case 32:
                 if (!(device instanceof CloudRGBLightStripController_1.default)) return [3, 33];
                 params = device.parseHaData2Ck(__assign({ state: state }, res.service_data));
                 device.updateLight(params);
-                return [3, 43];
+                return [3, 51];
             case 33:
                 if (!(device instanceof CloudDoubleColorBulbController_1.default)) return [3, 35];
                 return [4, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 34:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 35:
                 if (!(device instanceof CloudUIID104Controller_1.default)) return [3, 37];
                 return [4, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
             case 36:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 37:
                 if (!(device instanceof CloudCoverController_1.default)) return [3, 39];
                 return [4, device.setCover({ switch: state, setclose: lodash_1.default.get(res, 'service_data.position') })];
             case 38:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 39:
                 if (!(device instanceof CloudUIID44Controller_1.default)) return [3, 41];
                 brightness_pct = res.service_data.brightness_pct;
                 return [4, device.updateLight({ switch: state, brightness: brightness_pct })];
             case 40:
-                _e.sent();
-                return [3, 43];
+                _f.sent();
+                return [3, 51];
             case 41:
                 if (!(device instanceof CloudUIID34Controller_1.default)) return [3, 43];
                 switches = device.parseHaData2Ck(__assign({ state: state }, res.service_data));
                 return [4, device.updateSwitch(switches)];
             case 42:
-                _e.sent();
-                _e.label = 43;
-            case 43: return [2];
+                _f.sent();
+                return [3, 51];
+            case 43:
+                if (!(device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default)) return [3, 45];
+                return [4, device.updateLight(device.parseHaData2Ck(__assign({ state: state }, res.service_data)))];
+            case 44:
+                _f.sent();
+                return [3, 51];
+            case 45:
+                if (!(device instanceof CloudUIID181Controller_1.default)) return [3, 47];
+                return [4, device.updateSwitch(state)];
+            case 46:
+                _f.sent();
+                return [3, 51];
+            case 47:
+                if (!(device instanceof CloudUIID190Controller_1.default)) return [3, 51];
+                if (!mutiSwitchState) return [3, 49];
+                return [4, device.updateSwitch(mutiSwitchState)];
+            case 48:
+                _f.sent();
+                return [3, 51];
+            case 49:
+                _e = __read(entity_id.split('_'), 2), id = _e[0], outlet = _e[1];
+                return [4, device.updateSwitch([
+                        {
+                            outlet: +outlet - 1,
+                            switch: state,
+                        },
+                    ])];
+            case 50:
+                _f.sent();
+                _f.label = 51;
+            case 51: return [2];
         }
     });
 }); };
@@ -293,7 +328,7 @@ exports.default = (function (reconnect) {
                                         entity_id.forEach(function (item) {
                                             var _a = __read(item.split('_'), 2), deviceid = _a[0], outlet = _a[1];
                                             var device = Controller_1.default.getDevice(deviceid);
-                                            if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default) {
+                                            if (device instanceof LanMultiChannelSwitchController_1.default || device instanceof CloudMultiChannelSwitchController_1.default || device instanceof CloudDualR3Controller_1.default || device instanceof CloudZigbeeMultiSwitchController_1.default) {
                                                 if (tmpMap_1.has(deviceid)) {
                                                     tmpMap_1.get(deviceid).push({
                                                         outlet: outlet - 1,
