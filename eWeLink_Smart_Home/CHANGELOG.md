@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.3.3
+
+-   Update sync lovelace settings
+
+-   Update some device protocols
+
 ## v1.3.2
 
 -   Update sync device table

@@ -89,8 +89,7 @@ var CloudZigbeeFiveColorBulbController = (function (_super) {
 }(CloudDeviceController_1.default));
 CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) {
     var _a;
-    console.log("🚀 ~ 格式化 HA overview 控制的参数", params);
-    var state = params.state, brightness_pct = params.brightness_pct, effect = params.effect, color_temp = params.color_temp, _b = params.rgb_color, rgb_color = _b === void 0 ? [] : _b;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp, _b = params.rgb_color, rgb_color = _b === void 0 ? [] : _b;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
@@ -99,7 +98,7 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
     }
     var _c = this.params, _d = _c.colorMode, colorMode = _d === void 0 ? 'cct' : _d, _e = _c.cctBrightness, cctBrightness = _e === void 0 ? 1 : _e, _f = _c.rgbBrightness, rgbBrightness = _f === void 0 ? 1 : _f, _g = _c.colorTemp, colorTemp = _g === void 0 ? 1 : _g, _h = _c.hue, hue = _h === void 0 ? 1 : _h, _j = _c.saturation, saturation = _j === void 0 ? 1 : _j;
     var ltype = colorMode + "Brightness";
-    if (typeof brightness_pct !== 'number' && typeof color_temp !== 'number' && rgb_color.length === 0) {
+    if (typeof brightness_pct !== 'number' && typeof brightness !== 'number' && typeof color_temp !== 'number' && rgb_color.length === 0) {
         var tempParams = (_a = {
                 switch: 'on',
                 colorMode: colorMode
@@ -114,17 +113,25 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
         res[ltype] = brightness_pct;
         colorMode === 'cct' ? res.colorTemp = colorTemp : (res.hue = hue, res.saturation = saturation);
     }
-    if (color_temp) {
+    if (brightness) {
         res.colorMode = colorMode;
-        res.cctBrightness = cctBrightness;
+        res[ltype] = (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0;
+        colorMode === 'cct' ? res.colorTemp = colorTemp : (res.hue = hue, res.saturation = saturation);
+    }
+    if (color_temp) {
+        res.colorMode = 'cct';
+        res.cctBrightness = typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : cctBrightness;
         res.colorTemp = 100 - color_temp;
     }
     if (rgb_color.length !== 0) {
         var _k = __read(colorConvertUtils_1.rgbToHue(rgb_color), 3), _l = _k[0], h = _l === void 0 ? 1 : _l, _m = _k[1], s = _m === void 0 ? 1 : _m, v = _k[2];
-        res.colorMode = colorMode;
-        res.rgbBrightness = rgbBrightness;
-        res.hue = h;
-        res.saturation = s;
+        return {
+            switch: 'on',
+            colorMode: 'rgb',
+            rgbBrightness: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : rgbBrightness,
+            hue: h,
+            saturation: s
+        };
     }
     return res;
 };
@@ -171,9 +178,11 @@ CloudZigbeeFiveColorBulbController.prototype.updateState = function (params) {
             }
             if (colorMode && typeof colorTemp === 'number') {
                 ct = 100 - colorTemp;
+                currentColorMode = 'cct';
             }
             if (hue && saturation) {
                 rgb_color = colorConvertUtils_1.hueToRgb(hue, saturation);
+                currentColorMode = 'rgb';
             }
             restApi_1.updateStates(this.entityId, {
                 entity_id: this.entityId,
@@ -183,12 +192,13 @@ CloudZigbeeFiveColorBulbController.prototype.updateState = function (params) {
                     supported_features: 4,
                     friendly_name: this.deviceName,
                     supported_color_modes: ['color_temp', 'rgb'],
+                    color_mode: currentColorMode === 'cct' ? 'color_temp' : 'rgb',
                     state: state,
-                    min_mireds: 1,
+                    min_mireds: 0,
                     max_mireds: 100,
                     brightness: (br * 2.55) >> 0,
                     color_temp: ct,
-                    rgb_color: rgb_color
+                    rgb_color: rgb_color,
                 },
             });
             return [2];

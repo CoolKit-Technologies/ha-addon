@@ -61,6 +61,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -85,14 +96,14 @@ var CloudDoubleColorBulbController = (function (_super) {
 }(CloudDeviceController_1.default));
 CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
     var _a;
-    var state = params.state, brightness_pct = params.brightness_pct, effect = params.effect, color_temp = params.color_temp;
-    var res = {};
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp;
+    var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !color_temp && !effect) {
+    if (!brightness_pct && !brightness && !color_temp && !effect) {
         var tmp = this.params.ltype;
         return _a = {
                 switch: 'on',
@@ -108,15 +119,23 @@ CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
             ct: lodash_1.default.get(this, ['params', 'white', 'ct']),
         };
     }
+    if (brightness) {
+        res.ltype = 'white';
+        res.white = {
+            br: (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0,
+            ct: lodash_1.default.get(this, ['params', 'white', 'ct']),
+        };
+    }
     if (color_temp) {
         res.ltype = 'white';
         res.white = {
-            br: lodash_1.default.get(this, ['params', 'white', 'br']),
+            br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: 255 - color_temp,
         };
     }
-    if (effect) {
-        res = __assign(__assign({}, res), light_1.doubleColorBulbLtypeMap.get(effect));
+    if (effect && light_1.doubleColorBulbLtypeMap.get(effect)) {
+        var switch_state = res.switch, rest = __rest(res, ["switch"]);
+        res = __assign(__assign({}, rest), light_1.doubleColorBulbLtypeMap.get(effect));
     }
     return res;
 };
@@ -149,8 +168,11 @@ CloudDoubleColorBulbController.prototype.updateState = function (params) {
                 return [2];
             }
             _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
+            if (!ltype) {
+                ltype = this.params.ltype;
+            }
             br = this.params.white.br, ct = this.params.white.ct;
-            tmp = params[ltype];
+            tmp = this.params[ltype];
             if (tmp) {
                 br = tmp.br;
                 ct = tmp.ct;
@@ -167,6 +189,7 @@ CloudDoubleColorBulbController.prototype.updateState = function (params) {
                     supported_features: 4,
                     friendly_name: this.deviceName,
                     supported_color_modes: ['color_temp'],
+                    color_mode: ltype === 'white' ? 'color_temp' : 'brightness',
                     effect_list: this.effectList,
                     state: state,
                     min_mireds: 1,
