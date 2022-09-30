@@ -85,15 +85,16 @@ var CloudUIID104Controller = (function (_super) {
     return CloudUIID104Controller;
 }(CloudDeviceController_1.default));
 CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
-    var _a, _b;
-    var state = params.state, brightness_pct = params.brightness_pct, effect = params.effect, color_temp = params.color_temp, rgb_color = params.rgb_color;
-    var res = {};
+    var _a, _b, _c;
+    var _d;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp, rgb_color = params.rgb_color;
+    var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !color_temp && !effect && !rgb_color) {
+    if (!brightness_pct && !brightness && !color_temp && !effect && !rgb_color) {
         var tmp = this.params.ltype;
         return _a = {
                 switch: 'on',
@@ -104,22 +105,34 @@ CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
     }
     if (brightness_pct) {
         var tmp = this.params.ltype;
+        if (tmp !== 'white' && tmp !== 'color') {
+            tmp = 'white';
+        }
         res = __assign(__assign({}, res), (_b = { ltype: tmp }, _b[tmp] = __assign(__assign({}, lodash_1.default.get(this, ['params', tmp], {})), { br: brightness_pct }), _b));
     }
-    if (rgb_color) {
+    if (brightness) {
         var tmp = this.params.ltype;
+        var br = (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0;
+        if (tmp !== 'white' && tmp !== 'color') {
+            tmp = 'white';
+        }
+        res = __assign(__assign({}, res), (_c = { ltype: tmp }, _c[tmp] = __assign(__assign({}, lodash_1.default.get(this, ['params', tmp], {})), { br: br }), _c));
+    }
+    if (rgb_color) {
+        var tmp = 'color';
         res = __assign(__assign({}, res), { ltype: 'color', color: __assign(__assign({}, lodash_1.default.get(this, ['params', tmp], {
                 br: 100,
             })), { r: rgb_color[0], g: rgb_color[1], b: rgb_color[2] }) });
+        brightness && Object.assign((_d = res.color) !== null && _d !== void 0 ? _d : {}, { br: (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 });
     }
     if (color_temp) {
         res.ltype = 'white';
         res.white = {
-            br: lodash_1.default.get(this, ['params', 'white', 'br']),
+            br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: 255 - color_temp,
         };
     }
-    if (effect) {
+    if (effect && light_1.rbgLEDBulbLtypeMap.get(effect)) {
         res = __assign(__assign({}, res), light_1.rbgLEDBulbLtypeMap.get(effect));
     }
     return res;
@@ -153,7 +166,7 @@ CloudUIID104Controller.prototype.updateState = function (params) {
                 return [2];
             }
             _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
-            br = this.params.white.br, ct = this.params.white.ct, r = this.params.color.r, g = this.params.color.g, b = this.params.color.b;
+            br = this.params.white ? this.params.white.br : 1, ct = this.params.white ? this.params.white.ct : 0, r = this.params.color ? this.params.color.r : 255, g = this.params.color ? this.params.color.g : 0, b = this.params.color ? this.params.color.b : 0;
             tmp = params[ltype];
             if (tmp) {
                 tmp.br && (br = tmp.br);
@@ -174,6 +187,7 @@ CloudUIID104Controller.prototype.updateState = function (params) {
                     supported_features: 4,
                     friendly_name: this.deviceName,
                     supported_color_modes: ['color_temp', 'rgb'],
+                    color_mode: ltype === 'white' ? 'color_temp' : ltype === 'color' ? 'rgb' : '',
                     effect_list: this.effectList,
                     state: state,
                     min_mireds: 1,

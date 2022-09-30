@@ -71,17 +71,20 @@ var CloudZigbeeDoubleColorBulbController = (function (_super) {
     return CloudZigbeeDoubleColorBulbController;
 }(CloudDeviceController_1.default));
 CloudZigbeeDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
-    var state = params.state, brightness_pct = params.brightness_pct, color_temp = params.color_temp;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !color_temp) {
+    if (!brightness_pct && !brightness && !color_temp) {
         return {
             switch: 'on',
         };
+    }
+    if (brightness) {
+        res.brightness = (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0;
     }
     if (brightness_pct) {
         res.brightness = brightness_pct;

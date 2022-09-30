@@ -212,7 +212,7 @@ exports.presetEffectMap = new Map([
         },
     ],
 ]);
-exports.doubleColorBulbEffectList = ['bright', 'read', 'computer', 'party'];
+exports.doubleColorBulbEffectList = ['bright', 'read', 'computer', 'nightLight'];
 exports.doubleColorBulbLtypeMap = new Map([
     [
         'bright',

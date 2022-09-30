@@ -63,12 +63,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
 var HASocketClass_1 = __importDefault(require("../class/HASocketClass"));
+var CloudDoubleColorBulbController_1 = __importDefault(require("../controller/CloudDoubleColorBulbController"));
 var CloudDualR3Controller_1 = __importDefault(require("../controller/CloudDualR3Controller"));
+var CloudDW2WiFiController_1 = __importDefault(require("../controller/CloudDW2WiFiController"));
 var CloudMultiChannelSwitchController_1 = __importDefault(require("../controller/CloudMultiChannelSwitchController"));
 var CloudPowerDetectionSwitchController_1 = __importDefault(require("../controller/CloudPowerDetectionSwitchController"));
+var CloudRGBBulbController_1 = __importDefault(require("../controller/CloudRGBBulbController"));
+var CloudRGBLightStripController_1 = __importDefault(require("../controller/CloudRGBLightStripController"));
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
+var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
+var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
+var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
+var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
+var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
 var CloudZigbeeMultiSwitchController_1 = __importDefault(require("../controller/CloudZigbeeMultiSwitchController"));
+var CloudZigbeeUIID1000Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1000Controller"));
+var CloudZigbeeUIID1770Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID1770Controller"));
+var CloudZigbeeUIID2026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID2026Controller"));
+var CloudZigbeeUIID3026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID3026Controller"));
+var CloudZigbeeUIID4026Controller_1 = __importDefault(require("../controller/CloudZigbeeUIID4026Controller"));
 var Controller_1 = __importDefault(require("../controller/Controller"));
 var DiyDeviceController_1 = __importDefault(require("../controller/DiyDeviceController"));
 var LanDualR3Controller_1 = __importDefault(require("../controller/LanDualR3Controller"));
@@ -160,6 +174,277 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                             title: device.deviceName,
                             state_color: true,
                             show_header_toggle: false,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeUIID1000Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "sensor." + device.deviceId,
+                                "sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeUIID1770Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "sensor." + device.deviceId + "_humidity",
+                                "sensor." + device.deviceId + "_temperature",
+                                "sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeUIID2026Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "binary_sensor." + device.deviceId,
+                                "sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "binary_sensor." + device.deviceId,
+                                "sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeUIID4026Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "binary_sensor." + device.deviceId,
+                                "sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudRGBBulbController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudRGBLightStripController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudDW2WiFiController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "binary_sensor." + device.deviceId + "_lock",
+                                "binary_sensor." + device.deviceId + "_battery"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudDoubleColorBulbController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudUIID104Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudUIID181Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "switch." + device.deviceId
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudUIID190Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'entities',
+                            entities: [
+                                "switch." + device.deviceId + "_1"
+                            ],
+                            title: device.deviceName,
+                            state_color: true,
+                            show_header_toggle: false
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeDoubleColorBulbController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudZigbeeFiveColorBulbController_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light." + device.deviceId,
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
