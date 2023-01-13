@@ -8,7 +8,7 @@ var process_1 = __importDefault(require("process"));
 var config_1 = require("./config");
 var url = 'http://homeassistant:8123';
 if (!config_1.debugMode && config_1.isSupervisor) {
-    url = 'http://supervisor/core';
+    url = process_1.default.env.HA_URL ? process_1.default.env.HA_URL : 'http://supervisor/core';
 }
 if (!config_1.debugMode && !config_1.isSupervisor) {
     url = process_1.default.env.HA_URL;

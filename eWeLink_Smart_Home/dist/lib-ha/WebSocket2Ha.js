@@ -104,7 +104,7 @@ var WebSocket2Ha = (function () {
         this.wsUrl = '';
         this.connected = false;
         this.cmdId = 1;
-        this.wsUrl = process_1.default.env.DEBUG_MODE ? process_1.default.env.HASS_WS_URL : 'http://supervisor/core/websocket';
+        this.wsUrl = process_1.default.env.DEBUG_MODE ? process_1.default.env.HASS_WS_URL : process_1.default.env.HA_URL ? process_1.default.env.HA_URL + '/api/websocket'  : 'http://supervisor/core/websocket';
         this.connect();
     }
     WebSocket2Ha.prototype.connect = function () {
