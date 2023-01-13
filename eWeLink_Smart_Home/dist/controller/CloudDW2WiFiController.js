@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -61,7 +61,7 @@ var CloudDW2WiFiController = (function (_super) {
     function CloudDW2WiFiController(params) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 102;
-        _this.entityId = "binary_sensor." + params.deviceId;
+        _this.entityId = "binary_sensor.".concat(params.deviceId);
         _this.params = params.params;
         _this.online = true;
         _this.lowVolAlarm = params.devConfig.lowVolAlarm;
@@ -79,22 +79,22 @@ CloudDW2WiFiController.prototype.updateState = function (_a) {
             }
             state = status;
             batteryState = battery < this.lowVolAlarm ? 'on' : 'off';
-            restApi_1.updateStates(this.entityId + "_lock", {
-                entity_id: this.entityId + "_lock",
+            (0, restApi_1.updateStates)("".concat(this.entityId, "_lock"), {
+                entity_id: "".concat(this.entityId, "_lock"),
                 state: state,
                 attributes: {
                     restored: false,
-                    friendly_name: this.deviceName + "-Lock",
+                    friendly_name: "".concat(this.deviceName, "-Lock"),
                     device_class: 'lock',
                     state: state,
                 },
             });
-            restApi_1.updateStates(this.entityId + "_battery", {
-                entity_id: this.entityId + "_battery",
+            (0, restApi_1.updateStates)("".concat(this.entityId, "_battery"), {
+                entity_id: "".concat(this.entityId, "_battery"),
                 state: batteryState,
                 attributes: {
                     restored: false,
-                    friendly_name: this.deviceName + "-Battery",
+                    friendly_name: "".concat(this.deviceName, "-Battery"),
                     device_class: 'battery',
                     state: batteryState,
                 },

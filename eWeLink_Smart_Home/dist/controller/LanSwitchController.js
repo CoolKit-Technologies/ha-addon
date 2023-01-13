@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -62,7 +62,7 @@ var LanSwitchController = (function (_super) {
     function LanSwitchController(props) {
         var _this = _super.call(this, props) || this;
         var deviceId = props.deviceId;
-        _this.entityId = "switch." + deviceId;
+        _this.entityId = "switch.".concat(deviceId);
         return _this;
     }
     return LanSwitchController;
@@ -74,7 +74,7 @@ LanSwitchController.prototype.setSwitch = function (status) {
             switch (_a.label) {
                 case 0:
                     if (!(this.devicekey && this.selfApikey)) return [3, 2];
-                    return [4, lanDeviceApi_1.setSwitch({
+                    return [4, (0, lanDeviceApi_1.setSwitch)({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -110,7 +110,7 @@ LanSwitchController.prototype.updateState = function (status) {
                     if (!this.online) {
                         state = 'unavailable';
                     }
-                    return [4, restApi_1.updateStates(this.entityId, {
+                    return [4, (0, restApi_1.updateStates)(this.entityId, {
                             entity_id: this.entityId,
                             state: state,
                             attributes: {

@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -81,7 +81,7 @@ var CloudZigbeeFiveColorBulbController = (function (_super) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 3258;
         _this.type = 8;
-        _this.entityId = "light." + params.deviceId;
+        _this.entityId = "light.".concat(params.deviceId);
         _this.params = params.params;
         return _this;
     }
@@ -97,7 +97,7 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
         };
     }
     var _c = this.params, _d = _c.colorMode, colorMode = _d === void 0 ? 'cct' : _d, _e = _c.cctBrightness, cctBrightness = _e === void 0 ? 1 : _e, _f = _c.rgbBrightness, rgbBrightness = _f === void 0 ? 1 : _f, _g = _c.colorTemp, colorTemp = _g === void 0 ? 1 : _g, _h = _c.hue, hue = _h === void 0 ? 1 : _h, _j = _c.saturation, saturation = _j === void 0 ? 1 : _j;
-    var ltype = colorMode + "Brightness";
+    var ltype = "".concat(colorMode, "Brightness");
     if (typeof brightness_pct !== 'number' && typeof brightness !== 'number' && typeof color_temp !== 'number' && rgb_color.length === 0) {
         var tempParams = (_a = {
                 switch: 'on',
@@ -124,7 +124,7 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
         res.colorTemp = 100 - color_temp;
     }
     if (rgb_color.length !== 0) {
-        var _k = __read(colorConvertUtils_1.rgbToHue(rgb_color), 3), _l = _k[0], h = _l === void 0 ? 1 : _l, _m = _k[1], s = _m === void 0 ? 1 : _m, v = _k[2];
+        var _k = __read((0, colorConvertUtils_1.rgbToHue)(rgb_color), 3), _l = _k[0], h = _l === void 0 ? 1 : _l, _m = _k[1], s = _m === void 0 ? 1 : _m, v = _k[2];
         return {
             switch: 'on',
             colorMode: 'rgb',
@@ -148,7 +148,7 @@ CloudZigbeeFiveColorBulbController.prototype.updateLight = function (params) {
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        this.params = mergeDeviceParams_1.default(this.params, params);
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, params);
                         this.updateState(params);
                     }
                     return [2];
@@ -165,11 +165,11 @@ CloudZigbeeFiveColorBulbController.prototype.updateState = function (params) {
                 return [2];
             }
             _f = params.switch, status = _f === void 0 ? 'on' : _f, _g = params.colorMode, colorMode = _g === void 0 ? 'cct' : _g, colorTemp = params.colorTemp, cctBrightness = params.cctBrightness, hue = params.hue, saturation = params.saturation, rgbBrightness = params.rgbBrightness;
-            currentColorMode = (_a = this.params.colorMode) !== null && _a !== void 0 ? _a : 'cct', currentBrightness = (_b = this.params[currentColorMode + "Brightness"]) !== null && _b !== void 0 ? _b : 1, currentColorTemp = (_c = this.params.colorTemp) !== null && _c !== void 0 ? _c : 1, currentHue = (_d = this.params.hue) !== null && _d !== void 0 ? _d : 1, currentSaturation = (_e = this.params.saturation) !== null && _e !== void 0 ? _e : 1;
+            currentColorMode = (_a = this.params.colorMode) !== null && _a !== void 0 ? _a : 'cct', currentBrightness = (_b = this.params["".concat(currentColorMode, "Brightness")]) !== null && _b !== void 0 ? _b : 1, currentColorTemp = (_c = this.params.colorTemp) !== null && _c !== void 0 ? _c : 1, currentHue = (_d = this.params.hue) !== null && _d !== void 0 ? _d : 1, currentSaturation = (_e = this.params.saturation) !== null && _e !== void 0 ? _e : 1;
             state = status, rgb_color = [], br = 1, ct = 1;
             br = currentBrightness;
             ct = currentColorTemp;
-            rgb_color = colorConvertUtils_1.hueToRgb(currentHue, currentSaturation);
+            rgb_color = (0, colorConvertUtils_1.hueToRgb)(currentHue, currentSaturation);
             if (!this.online) {
                 state = 'unavailable';
             }
@@ -181,10 +181,10 @@ CloudZigbeeFiveColorBulbController.prototype.updateState = function (params) {
                 currentColorMode = 'cct';
             }
             if (hue && saturation) {
-                rgb_color = colorConvertUtils_1.hueToRgb(hue, saturation);
+                rgb_color = (0, colorConvertUtils_1.hueToRgb)(hue, saturation);
                 currentColorMode = 'rgb';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {

@@ -7,6 +7,7 @@ var switchUiidSet = new Set([
     14,
     1009,
     1256,
+    7004,
 ]);
 exports.switchUiidSet = switchUiidSet;
 var multiChannelSwitchUiidSet = new Set([
@@ -21,11 +22,17 @@ var multiChannelSwitchUiidSet = new Set([
     112,
     113,
     114,
+    130,
     138,
     139,
     140,
     141,
     133,
+    138,
+    160,
+    161,
+    162,
+    182,
 ]);
 exports.multiChannelSwitchUiidSet = multiChannelSwitchUiidSet;
 var zigbeeMultiSwitchSet = new Set([
@@ -39,6 +46,9 @@ var unsupportedLanModeUiidSet = new Set([
     139,
     140,
     141,
+    160,
+    161,
+    162
 ]);
 exports.unsupportedLanModeUiidSet = unsupportedLanModeUiidSet;
 var unsupportedLanModeModelSet = new Set([

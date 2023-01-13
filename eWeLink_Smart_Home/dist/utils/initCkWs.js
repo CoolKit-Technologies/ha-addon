@@ -25,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -85,14 +85,22 @@ var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../control
 var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
 var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
 var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
-var apikey = dataUtil_1.getDataSync('user.json', ['user', 'apikey']);
+var CloudUIID137Controller_1 = __importDefault(require("../controller/CloudUIID137Controller"));
+var CloudUIID173Controller_1 = __importDefault(require("../controller/CloudUIID173Controller"));
+var mergeDeviceParams_1 = __importDefault(require("./mergeDeviceParams"));
+var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceController"));
+var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
+var CloudUIID130Controller_1 = __importDefault(require("../controller/CloudUIID130Controller"));
+var CloudUIID182Controller_1 = __importDefault(require("../controller/CloudUIID182Controller"));
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var at, region;
+    var apikey, at, region, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                at = dataUtil_1.getDataSync('user.json', ['at']);
-                region = dataUtil_1.getDataSync('user.json', ['region']);
+                apikey = (0, dataUtil_1.getDataSync)('user.json', ['user', 'apikey']);
+                at = (0, dataUtil_1.getDataSync)('user.json', ['at']);
+                region = (0, dataUtil_1.getDataSync)('user.json', ['region']);
+                logger_1.logger.debug("initCkWs.ts at: ".concat(at, " region: ").concat(region));
                 if (!at || !apikey) {
                     return [2, -1];
                 }
@@ -107,17 +115,18 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                         maxRetry: 10000,
                     })];
             case 1:
-                _a.sent();
-                logger_1.logger.info("initCkWs at: " + at);
+                res = _a.sent();
+                logger_1.logger.debug('initCkWs.ts res: ' + JSON.stringify(res));
+                logger_1.logger.debug("initCkWs at: ".concat(at));
                 coolkit_ws_1.default.on('message', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, switches, ids, switches, online, res, error_1;
-                    return __generator(this, function (_d) {
-                        switch (_d.label) {
+                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, switches, ids, switches, switches, switches, _d, online, name_1, res_1, error_1;
+                    return __generator(this, function (_e) {
+                        switch (_e.label) {
                             case 0:
-                                _d.trys.push([0, 4, , 5]);
+                                _e.trys.push([0, 4, , 5]);
                                 type = ws.type, data = ws.data;
-                                logger_1.logger.debug("receive CK-WS msg: type: " + type);
-                                logger_1.logger.debug("receive CK-WS msg: data: " + JSON.stringify(data));
+                                logger_1.logger.debug("receive CK-WS msg: type: ".concat(type));
+                                logger_1.logger.debug("receive CK-WS msg: data: ".concat(JSON.stringify(data)));
                                 if (!(type === 'message' && data !== 'pong')) return [3, 3];
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {
@@ -125,6 +134,9 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                 }
                                 device = Controller_1.default.getDevice(tmp.deviceid);
                                 if (tmp.action === 'update') {
+                                    if (device instanceof LanDeviceController_1.default || device instanceof CloudDeviceController_1.default) {
+                                        (0, mergeDeviceParams_1.default)(device.params, tmp.params);
+                                    }
                                     if (device instanceof CloudSwitchController_1.default) {
                                         device.updateState(tmp.params.switch);
                                     }
@@ -149,7 +161,7 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     }
                                     else if (device instanceof CloudPowerDetectionSwitchController_1.default) {
                                         _c = tmp.params, current = _c.current, voltage = _c.voltage, power = _c.power, status_2 = _c.switch;
-                                        logger_1.logger.info("Get power detection switch message, params: " + JSON.stringify(tmp.params));
+                                        logger_1.logger.info("Get power detection switch message, params: ".concat(JSON.stringify(tmp.params)));
                                         device.updateState({
                                             status: status_2,
                                             current: current,
@@ -170,87 +182,109 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                         }
                                     }
                                     else if (device instanceof CloudRGBLightStripController_1.default) {
-                                        logger_1.logger.info("Get lamp strip message, params: " + JSON.stringify(tmp.params));
+                                        logger_1.logger.info("Get lamp strip message, params: ".concat(JSON.stringify(tmp.params)));
                                         device.updateState(device.parseCkData2Ha(tmp.params));
                                     }
                                     else if (device instanceof CloudDoubleColorBulbController_1.default) {
-                                        logger_1.logger.info("Get double color bulb message, params: " + JSON.stringify(tmp.params));
+                                        logger_1.logger.info("Get double color bulb message, params: ".concat(JSON.stringify(tmp.params)));
                                         device.updateState(tmp.params);
                                     }
                                     else if (device instanceof CloudUIID104Controller_1.default) {
-                                        logger_1.logger.info("Get UIID 104 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get UIID 104 message, params: ".concat(tmp.params));
                                         device.updateState(tmp.params);
                                     }
                                     else if (device instanceof CloudDualR3Controller_1.default || device instanceof LanDualR3Controller_1.default) {
-                                        logger_1.logger.info("Get DualR3 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get DualR3 message, params: ".concat(tmp.params));
                                         if (tmp.params && tmp.params.switches) {
                                             device.updateState(tmp.params.switches);
                                         }
                                     }
                                     else if (device instanceof CloudDW2WiFiController_1.default) {
-                                        logger_1.logger.info("Get DW2 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get DW2 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudZigbeeUIID1000Controller_1.default) {
-                                        logger_1.logger.info("Get Zigbee UIID 1000 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get Zigbee UIID 1000 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudZigbeeUIID1770Controller_1.default) {
-                                        logger_1.logger.info("Get Zigbee UIID 1770 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get Zigbee UIID 1770 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudZigbeeUIID2026Controller_1.default) {
-                                        logger_1.logger.info("Get Zigbee UIID 2026 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get Zigbee UIID 2026 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudZigbeeUIID3026Controller_1.default) {
-                                        logger_1.logger.info("Get Zigbee UIID 3026 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get Zigbee UIID 3026 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudZigbeeUIID4026Controller_1.default) {
-                                        logger_1.logger.info("Get Zigbee UIID 4026 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get Zigbee UIID 4026 message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudCoverController_1.default) {
-                                        logger_1.logger.info("Get cover message, params: " + tmp.params);
+                                        logger_1.logger.info("Get cover message, params: ".concat(tmp.params));
                                         if (tmp.params) {
                                             device.updateState(tmp.params);
                                         }
                                     }
                                     else if (device instanceof CloudRFBridgeController_1.default) {
-                                        logger_1.logger.info("Get RF-Bridge message, params: " + tmp.params);
+                                        logger_1.logger.info("Get RF-Bridge message, params: ".concat(tmp.params));
                                         ids = device.parseCkData2Ha(tmp.params);
                                         device.updateState(ids);
                                     }
                                     else if (device instanceof CloudUIID34Controller_1.default) {
-                                        logger_1.logger.info("Get UIID 34 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get UIID 34 message, params: ".concat(tmp.params));
                                         device.updateState(tmp.params.switches);
                                     }
                                     else if (device instanceof CloudUIID44Controller_1.default) {
-                                        logger_1.logger.info("Get UIID 44 message, params: " + tmp.params);
+                                        logger_1.logger.info("Get UIID 44 message, params: ".concat(tmp.params));
                                         device.updateState(tmp.params);
                                     }
                                     else if (device instanceof CloudZigbeeDoubleColorBulbController_1.default || device instanceof CloudZigbeeFiveColorBulbController_1.default) {
-                                        logger_1.logger.info("Get UIID 1258 message, params: " + JSON.stringify(tmp.params));
+                                        logger_1.logger.info("Get UIID 1258 message, params: ".concat(JSON.stringify(tmp.params)));
                                         device.updateState(tmp.params);
                                     }
                                     else if (device instanceof CloudUIID181Controller_1.default) {
                                         device.updateState(tmp.params.switch);
                                     }
                                     else if (device instanceof CloudUIID190Controller_1.default) {
-                                        logger_1.logger.info("Get UIID 190 message, params: " + JSON.stringify(tmp.params));
+                                        logger_1.logger.info("Get UIID 190 message, params: ".concat(JSON.stringify(tmp.params)));
+                                        switches = tmp.params.switches;
+                                        if (Array.isArray(switches)) {
+                                            device.updateState(switches);
+                                        }
+                                    }
+                                    else if (device instanceof CloudUIID137Controller_1.default) {
+                                        logger_1.logger.info("Get UIID 137 message, params: ".concat(JSON.stringify(tmp.params)));
+                                        device.updateState(tmp.params);
+                                    }
+                                    else if (device instanceof CloudUIID173Controller_1.default) {
+                                        logger_1.logger.info("Get UIID 173 message, params: ".concat(JSON.stringify(tmp.params)));
+                                        device.updateState(tmp.params);
+                                    }
+                                    else if (device instanceof CloudUIID130Controller_1.default) {
+                                        logger_1.logger.info("Get UIID 130 message, params: ".concat(JSON.stringify(tmp.params)));
+                                        switches = tmp.params.switches;
+                                        if (Array.isArray(switches)) {
+                                            device.updateState(switches);
+                                        }
+                                    }
+                                    else if (device instanceof CloudUIID182Controller_1.default) {
+                                        logger_1.logger.info("Get UIID 182 message, params: ".concat(JSON.stringify(tmp.params)));
                                         switches = tmp.params.switches;
                                         if (Array.isArray(switches)) {
                                             device.updateState(switches);
@@ -259,27 +293,30 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     eventBus_1.default.emit('update-controller', data);
                                 }
                                 if (!(tmp.action === 'sysmsg' && (device === null || device === void 0 ? void 0 : device.entityId))) return [3, 2];
-                                online = tmp.params.online;
+                                _d = tmp.params, online = _d.online, name_1 = _d.name;
+                                if (device instanceof LanDeviceController_1.default || device instanceof CloudDeviceController_1.default) {
+                                    (0, mergeDeviceParams_1.default)(device, { online: online, deviceName: name_1 });
+                                }
                                 if (!(online === false)) return [3, 2];
-                                return [4, restApi_1.getStateByEntityId(device.entityId)];
+                                return [4, (0, restApi_1.getStateByEntityId)(device.entityId)];
                             case 1:
-                                res = _d.sent();
-                                if (res && res.data) {
-                                    restApi_1.updateStates(device.entityId, {
+                                res_1 = _e.sent();
+                                if (res_1 && res_1.data) {
+                                    (0, restApi_1.updateStates)(device.entityId, {
                                         entity_id: device.entityId,
                                         state: 'unavailable',
-                                        attributes: __assign(__assign({}, res.data.attributes), { state: 'unavailable' }),
+                                        attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable' }),
                                     });
                                 }
                                 eventBus_1.default.emit('device-offline', device.deviceId);
-                                _d.label = 2;
+                                _e.label = 2;
                             case 2:
                                 eventBus_1.default.emit('sse');
-                                _d.label = 3;
+                                _e.label = 3;
                             case 3: return [3, 5];
                             case 4:
-                                error_1 = _d.sent();
-                                logger_1.logger.error("initCkWs error: " + error_1);
+                                error_1 = _e.sent();
+                                logger_1.logger.error("initCkWs error: ".concat(error_1));
                                 return [3, 5];
                             case 5: return [2];
                         }

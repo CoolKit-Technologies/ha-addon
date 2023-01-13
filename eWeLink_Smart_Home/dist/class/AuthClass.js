@@ -25,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -64,9 +64,9 @@ var AuthClass = (function () {
     };
     AuthClass.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var auths, _a, _b, _i, origin_1, auth, tmp, error_1;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var auths, _a, _b, _c, _i, origin_1, auth, tmp, error_1;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         if (config_1.debugMode) {
                             this.curAuth = auth_1.HaToken;
@@ -76,35 +76,38 @@ var AuthClass = (function () {
                             this.curAuth = process.env.SUPERVISOR_TOKEN;
                             return [2];
                         }
-                        _c.label = 1;
+                        _d.label = 1;
                     case 1:
-                        _c.trys.push([1, 6, , 7]);
-                        auths = dataUtil_1.getDataSync('auth.json', []);
-                        _a = [];
-                        for (_b in auths)
-                            _a.push(_b);
+                        _d.trys.push([1, 6, , 7]);
+                        auths = (0, dataUtil_1.getDataSync)('auth.json', []);
+                        _a = auths;
+                        _b = [];
+                        for (_c in _a)
+                            _b.push(_c);
                         _i = 0;
-                        _c.label = 2;
+                        _d.label = 2;
                     case 2:
-                        if (!(_i < _a.length)) return [3, 5];
-                        origin_1 = _a[_i];
+                        if (!(_i < _b.length)) return [3, 5];
+                        _c = _b[_i];
+                        if (!(_c in _a)) return [3, 4];
+                        origin_1 = _c;
                         auth = JSON.parse(auths[origin_1]);
                         if (!(auth && Date.now() < +auth.expires_time)) return [3, 4];
                         AuthClass.AuthMap.set(origin_1, auth);
                         return [4, this.refresh(origin_1)];
                     case 3:
-                        tmp = _c.sent();
+                        tmp = _d.sent();
                         if (tmp) {
                             this.curAuth = auth.access_token;
                         }
-                        _c.label = 4;
+                        _d.label = 4;
                     case 4:
                         _i++;
                         return [3, 2];
                     case 5: return [3, 7];
                     case 6:
-                        error_1 = _c.sent();
-                        logger_1.logger.warn("AuthClass init error: " + error_1);
+                        error_1 = _d.sent();
+                        logger_1.logger.warn("AuthClass init error: ".concat(error_1));
                         return [3, 7];
                     case 7: return [2];
                 }
@@ -124,7 +127,7 @@ var AuthClass = (function () {
         var data = __assign(__assign({}, auth), { cliend_id: clientId, expires_time: Date.now() + auth.expires_in * 1000 });
         this.curAuth = auth.access_token;
         AuthClass.AuthMap.set(origin, data);
-        dataUtil_1.appendData('auth.json', [origin], JSON.stringify(data));
+        (0, dataUtil_1.appendData)('auth.json', [origin], JSON.stringify(data));
         setTimeout(function () {
             _this.refresh(origin);
         }, (auth.expires_in - 300) * 1000);
@@ -143,7 +146,7 @@ var AuthClass = (function () {
                             return [2];
                         }
                         logger_1.logger.info('Start refresh the HA token');
-                        return [4, restApi_1.refreshAuth(cliend_id, refresh_token)];
+                        return [4, (0, restApi_1.refreshAuth)(cliend_id, refresh_token)];
                     case 1:
                         res = _a.sent();
                         logger_1.logger.info('Refresh HA token success!');

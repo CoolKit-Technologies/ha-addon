@@ -25,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -73,7 +73,11 @@ var CloudRGBLightStripController_1 = __importDefault(require("../controller/Clou
 var CloudSwitchController_1 = __importDefault(require("../controller/CloudSwitchController"));
 var CloudTandHModificationController_1 = __importDefault(require("../controller/CloudTandHModificationController"));
 var CloudUIID104Controller_1 = __importDefault(require("../controller/CloudUIID104Controller"));
+var CloudUIID130Controller_1 = __importDefault(require("../controller/CloudUIID130Controller"));
+var CloudUIID137Controller_1 = __importDefault(require("../controller/CloudUIID137Controller"));
+var CloudUIID173Controller_1 = __importDefault(require("../controller/CloudUIID173Controller"));
 var CloudUIID181Controller_1 = __importDefault(require("../controller/CloudUIID181Controller"));
+var CloudUIID182Controller_1 = __importDefault(require("../controller/CloudUIID182Controller"));
 var CloudUIID190Controller_1 = __importDefault(require("../controller/CloudUIID190Controller"));
 var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeDoubleColorBulbController"));
 var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("../controller/CloudZigbeeFiveColorBulbController"));
@@ -138,16 +142,18 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         device instanceof LanMultiChannelSwitchController_1.default ||
                         device instanceof CloudDualR3Controller_1.default ||
                         device instanceof LanDualR3Controller_1.default ||
-                        device instanceof CloudZigbeeMultiSwitchController_1.default) {
+                        device instanceof CloudZigbeeMultiSwitchController_1.default ||
+                        device instanceof CloudUIID130Controller_1.default ||
+                        device instanceof CloudUIID182Controller_1.default) {
                         if (device.maxChannel === 1 && device.deviceName) {
-                            singalSwitchCard.entities.push(device.entityId + "_1");
+                            singalSwitchCard.entities.push("".concat(device.entityId, "_1"));
                             return "continue";
                         }
                         if (!device.maxChannel || !device.deviceName) {
                             return "continue";
                         }
                         var entities = Array.from({ length: device.maxChannel }, function (v, k) {
-                            return device.entityId + "_" + (k + 1);
+                            return "".concat(device.entityId, "_").concat(k + 1);
                         });
                         var tmpCard = {
                             type: 'entities',
@@ -170,7 +176,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'entities',
-                            entities: ["switch." + device.deviceId, "sensor." + device.deviceId + "_t", "sensor." + device.deviceId + "_h"],
+                            entities: ["switch.".concat(device.deviceId), "sensor.".concat(device.deviceId, "_t"), "sensor.".concat(device.deviceId, "_h")],
                             title: device.deviceName,
                             state_color: true,
                             show_header_toggle: false,
@@ -190,8 +196,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "sensor." + device.deviceId,
-                                "sensor." + device.deviceId + "_battery"
+                                "sensor.".concat(device.deviceId),
+                                "sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -212,9 +218,9 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "sensor." + device.deviceId + "_humidity",
-                                "sensor." + device.deviceId + "_temperature",
-                                "sensor." + device.deviceId + "_battery"
+                                "sensor.".concat(device.deviceId, "_humidity"),
+                                "sensor.".concat(device.deviceId, "_temperature"),
+                                "sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -235,8 +241,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "binary_sensor." + device.deviceId,
-                                "sensor." + device.deviceId + "_battery"
+                                "binary_sensor.".concat(device.deviceId),
+                                "sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -257,8 +263,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "binary_sensor." + device.deviceId,
-                                "sensor." + device.deviceId + "_battery"
+                                "binary_sensor.".concat(device.deviceId),
+                                "sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -279,8 +285,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "binary_sensor." + device.deviceId,
-                                "sensor." + device.deviceId + "_battery"
+                                "binary_sensor.".concat(device.deviceId),
+                                "sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -300,7 +306,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
@@ -316,7 +322,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
@@ -333,8 +339,8 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "binary_sensor." + device.deviceId + "_lock",
-                                "binary_sensor." + device.deviceId + "_battery"
+                                "binary_sensor.".concat(device.deviceId, "_lock"),
+                                "binary_sensor.".concat(device.deviceId, "_battery")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -354,7 +360,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
@@ -370,7 +376,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
@@ -387,7 +393,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "switch." + device.deviceId
+                                "switch.".concat(device.deviceId)
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -408,7 +414,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         var tmpCard = {
                             type: 'entities',
                             entities: [
-                                "switch." + device.deviceId + "_1"
+                                "switch.".concat(device.deviceId, "_1")
                             ],
                             title: device.deviceName,
                             state_color: true,
@@ -428,7 +434,7 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {
@@ -444,7 +450,23 @@ var generateLovelace = function () { return __awaiter(void 0, void 0, void 0, fu
                         }
                         var tmpCard = {
                             type: 'light',
-                            entity: "light." + device.deviceId,
+                            entity: "light.".concat(device.deviceId),
+                        };
+                        var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
+                        if (~index) {
+                            lovelace_1.cards[index] = tmpCard;
+                        }
+                        else {
+                            lovelace_1.cards.push(tmpCard);
+                        }
+                    }
+                    if (device instanceof CloudUIID137Controller_1.default || device instanceof CloudUIID173Controller_1.default) {
+                        if (!device.deviceName) {
+                            return "continue";
+                        }
+                        var tmpCard = {
+                            type: 'light',
+                            entity: "light.".concat(device.deviceId),
                         };
                         var index = lodash_1.default.findIndex(lovelace_1.cards, { title: device.deviceName });
                         if (~index) {

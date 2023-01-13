@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -91,7 +91,7 @@ var CloudRGBLightStripController = (function (_super) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 59;
         _this.effectList = light_1.effectList;
-        _this.entityId = "light." + params.deviceId;
+        _this.entityId = "light.".concat(params.deviceId);
         _this.params = params.params;
         _this.mode = _this.params.mode;
         return _this;
@@ -139,7 +139,7 @@ CloudRGBLightStripController.prototype.parseCkData2Ha = function (params) {
     }
     if (light_type === 2) {
         if (colorR && colorG && colorB) {
-            var temp = light_1.fakeTempList.indexOf(colorR + "," + colorG + "," + colorB);
+            var temp = light_1.fakeTempList.indexOf("".concat(colorR, ",").concat(colorG, ",").concat(colorB));
             if (temp !== -1) {
                 res.color_temp = temp;
             }
@@ -185,7 +185,7 @@ CloudRGBLightStripController.prototype.updateState = function (params) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: __assign(__assign(__assign({ restored: false, supported_features: 4, supported_color_modes: ['color_temp', 'rgb'], effect_list: this.effectList.slice(1), min_mireds: 1, max_mireds: 142, friendly_name: this.deviceName }, this.parseCkData2Ha(this.params)), params), { state: state }),

@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.4.0
+
+-   Support new devices
+
+-   Update Web UI
+
 ## v1.3.3
 
 -   Update sync lovelace settings

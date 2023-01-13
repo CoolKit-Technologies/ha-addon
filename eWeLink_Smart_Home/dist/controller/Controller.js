@@ -57,6 +57,10 @@ var CloudUIID190Controller_1 = __importDefault(require("./CloudUIID190Controller
 var CloudZigbeeMultiSwitchController_1 = __importDefault(require("./CloudZigbeeMultiSwitchController"));
 var CloudZigbeeDoubleColorBulbController_1 = __importDefault(require("./CloudZigbeeDoubleColorBulbController"));
 var CloudZigbeeFiveColorBulbController_1 = __importDefault(require("./CloudZigbeeFiveColorBulbController"));
+var CloudUIID137Controller_1 = __importDefault(require("./CloudUIID137Controller"));
+var CloudUIID173Controller_1 = __importDefault(require("./CloudUIID173Controller"));
+var CloudUIID130Controller_1 = __importDefault(require("./CloudUIID130Controller"));
+var CloudUIID182Controller_1 = __importDefault(require("./CloudUIID182Controller"));
 var Controller = (function () {
     function Controller() {
     }
@@ -77,7 +81,7 @@ var Controller = (function () {
         if (lodash_1.default.isEmpty(id)) {
             return null;
         }
-        var disabled = dataUtil_1.getDataSync('disabled.json', [id]) || false;
+        var disabled = (0, dataUtil_1.getDataSync)('disabled.json', [id]) || false;
         if (type === 1) {
             var tmp = data;
             if (!tmp.a) {
@@ -94,9 +98,9 @@ var Controller = (function () {
             return diyDevice;
         }
         if (type === 2) {
-            var params_1 = formatLanDevice_1.default(data);
+            var params_1 = (0, formatLanDevice_1.default)(data);
             if (!params_1 || (!params_1.ip && !params_1.target)) {
-                logger_1.logger.info("This device is not LAN support, deviceId: " + (params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId));
+                logger_1.logger.info("This device is not LAN support, deviceId: ".concat(params_1 === null || params_1 === void 0 ? void 0 : params_1.deviceId));
                 return;
             }
             var old = Controller.getDevice(id);
@@ -107,7 +111,7 @@ var Controller = (function () {
                 }
                 if (old.iv && old.devicekey && old.encryptedData) {
                     var tmpParams = old.parseEncryptedData();
-                    tmpParams && (old.params = mergeDeviceParams_1.default(old.params, tmpParams));
+                    tmpParams && (old.params = (0, mergeDeviceParams_1.default)(old.params, tmpParams));
                 }
                 return old;
             }
@@ -407,6 +411,72 @@ var Controller = (function () {
                     params: tmp.params,
                     devicekey: tmp.devicekey,
                     disabled: disabled,
+                    online: tmp.online,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 130) {
+                var tmp = data;
+                var device = new CloudUIID130Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    devicekey: tmp.devicekey,
+                    disabled: disabled,
+                    tags: tmp.tags,
+                    online: tmp.online,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 137) {
+                var tmp = data;
+                var device = new CloudUIID137Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    devicekey: tmp.devicekey,
+                    disabled: disabled,
+                    online: tmp.online,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 173) {
+                var tmp = data;
+                var device = new CloudUIID173Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    devicekey: tmp.devicekey,
+                    disabled: disabled,
+                    online: tmp.online,
+                    index: _index,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
+            if (data.extra.uiid === 182) {
+                var tmp = data;
+                var device = new CloudUIID182Controller_1.default({
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    extra: tmp.extra,
+                    params: tmp.params,
+                    devicekey: tmp.devicekey,
+                    disabled: disabled,
+                    tags: tmp.tags,
                     online: tmp.online,
                     index: _index,
                 });

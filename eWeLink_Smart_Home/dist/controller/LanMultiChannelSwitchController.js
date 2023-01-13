@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -65,7 +65,7 @@ var LanMultiChannelSwitchController = (function (_super) {
         var _this = this;
         var deviceId = props.deviceId;
         _this = _super.call(this, props) || this;
-        _this.entityId = "switch." + deviceId;
+        _this.entityId = "switch.".concat(deviceId);
         _this.maxChannel = props.maxChannel;
         return _this;
     }
@@ -78,7 +78,7 @@ LanMultiChannelSwitchController.prototype.setSwitch = function (switches) {
             switch (_a.label) {
                 case 0:
                     if (!(this.devicekey && this.selfApikey)) return [3, 2];
-                    return [4, lanDeviceApi_1.setSwitches({
+                    return [4, (0, lanDeviceApi_1.setSwitches)({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -92,7 +92,7 @@ LanMultiChannelSwitchController.prototype.setSwitch = function (switches) {
                     res = _a.sent();
                     if (lodash_1.default.get(res, ['data', 'error']) === 0) {
                         this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, { switches: switches });
                         return [2, 0];
                     }
                     _a.label = 2;
@@ -115,13 +115,13 @@ LanMultiChannelSwitchController.prototype.updateState = function (switches) {
                 if (!_this.online) {
                     state = 'unavailable';
                 }
-                restApi_1.updateStates(_this.entityId + "_" + (outlet + 1), {
-                    entity_id: _this.entityId + "_" + (outlet + 1),
+                (0, restApi_1.updateStates)("".concat(_this.entityId, "_").concat(outlet + 1), {
+                    entity_id: "".concat(_this.entityId, "_").concat(outlet + 1),
                     state: state,
                     attributes: {
                         restored: false,
                         supported_features: 0,
-                        friendly_name: _this.deviceName + "-" + name,
+                        friendly_name: "".concat(_this.deviceName, "-").concat(name),
                         state: state,
                     },
                 });

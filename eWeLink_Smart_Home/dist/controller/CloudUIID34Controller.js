@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -65,7 +65,7 @@ var CloudUIID34Controller = (function (_super) {
     function CloudUIID34Controller(params) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 34;
-        _this.entityId = "light." + params.deviceId;
+        _this.entityId = "light.".concat(params.deviceId);
         _this.uiid = params.extra.uiid;
         _this.params = params.params;
         return _this;
@@ -116,7 +116,7 @@ CloudUIID34Controller.prototype.updateSwitch = function (switches) {
                     res = _a.sent();
                     if (res.error === 0) {
                         this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, { switches: switches });
                     }
                     return [2];
             }
@@ -143,23 +143,23 @@ CloudUIID34Controller.prototype.updateState = function (switches) {
                 lightState = 'unavailable';
                 fanState = 'unavailable';
             }
-            restApi_1.updateStates("" + this.entityId, {
-                entity_id: "" + this.entityId,
+            (0, restApi_1.updateStates)("".concat(this.entityId), {
+                entity_id: "".concat(this.entityId),
                 state: lightState,
                 attributes: {
                     restored: false,
                     supported_features: 0,
-                    friendly_name: "" + this.deviceName,
+                    friendly_name: "".concat(this.deviceName),
                     state: lightState,
                 },
             });
-            restApi_1.updateStates("fan." + this.deviceId, {
-                entity_id: "fan." + this.deviceId,
+            (0, restApi_1.updateStates)("fan.".concat(this.deviceId), {
+                entity_id: "fan.".concat(this.deviceId),
                 state: fanState,
                 attributes: {
                     restored: false,
                     supported_features: 0,
-                    friendly_name: "" + this.deviceName,
+                    friendly_name: "".concat(this.deviceName),
                     state: lightState,
                     preset_mode: presetMode,
                     preset_modes: Object.values(EFanPresetModes_1.default),

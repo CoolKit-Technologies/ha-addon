@@ -23,12 +23,13 @@ var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController")
 var CloudNSPanelController = (function (_super) {
     __extends(CloudNSPanelController, _super);
     function CloudNSPanelController(props) {
+        var _this = this;
         var _a;
-        var _this = _super.call(this, props) || this;
-        _this.entityId = "switch." + props.deviceId;
+        _this = _super.call(this, props) || this;
+        _this.entityId = "switch.".concat(props.deviceId);
         _this.uiid = props.extra.uiid;
         _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
-        _this.maxChannel = channelMap_1.getMaxChannelByUiid(props.extra.uiid);
+        _this.maxChannel = (0, channelMap_1.getMaxChannelByUiid)(props.extra.uiid);
         _this.params = props.params;
         return _this;
     }

@@ -31,7 +31,7 @@ function getEntityListByType(entities, type) {
     try {
         for (var entities_1 = __values(entities), entities_1_1 = entities_1.next(); !entities_1_1.done; entities_1_1 = entities_1.next()) {
             var ent = entities_1_1.value;
-            if (WebSocket2Ha_1.getEntityTypeById(ent.entityId) === type) {
+            if ((0, WebSocket2Ha_1.getEntityTypeById)(ent.entityId) === type) {
                 entList.push(ent);
             }
         }
@@ -127,7 +127,7 @@ function initDeviceParams(data) {
             var brightness = entityState.attributes.brightness;
             params = {
                 switch: checkUnavailableState(entityState.state),
-                brightness: utils_1.getCkBrightness(brightness)
+                brightness: (0, utils_1.getCkBrightness)(brightness)
             };
         }
         else {
@@ -143,8 +143,8 @@ function initDeviceParams(data) {
             var _a = entityState.attributes, brightness = _a.brightness, min_mireds = _a.min_mireds, max_mireds = _a.max_mireds, color_temp = _a.color_temp;
             params = {
                 switch: checkUnavailableState(entityState.state),
-                brightness: utils_1.getCkBrightness(brightness),
-                colorTemp: utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp),
+                brightness: (0, utils_1.getCkBrightness)(brightness),
+                colorTemp: (0, utils_1.getCkColorTemp)(min_mireds, max_mireds, color_temp),
             };
         }
         else {
@@ -163,14 +163,14 @@ function initDeviceParams(data) {
             };
             if (color_mode === const_1.HA_COLOR_MODE_XY) {
                 lodash_1.default.set(params, 'colorMode', const_1.CK_COLOR_MODE_RGB);
-                lodash_1.default.set(params, 'rgbBrightness', utils_1.getCkBrightness(brightness));
+                lodash_1.default.set(params, 'rgbBrightness', (0, utils_1.getCkBrightness)(brightness));
                 lodash_1.default.set(params, 'hue', Math.round(hs_color[0]));
                 lodash_1.default.set(params, 'saturation', Math.round(hs_color[1]));
             }
             else if (color_mode === const_1.HA_COLOR_MODE_COLOR_TEMP) {
                 lodash_1.default.set(params, 'colorMode', const_1.CK_COLOR_MODE_CCT);
-                lodash_1.default.set(params, 'cctBrightness', utils_1.getCkBrightness(brightness));
-                lodash_1.default.set(params, 'colorTemp', utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp));
+                lodash_1.default.set(params, 'cctBrightness', (0, utils_1.getCkBrightness)(brightness));
+                lodash_1.default.set(params, 'colorTemp', (0, utils_1.getCkColorTemp)(min_mireds, max_mireds, color_temp));
             }
         }
         else {
@@ -179,7 +179,7 @@ function initDeviceParams(data) {
             };
         }
     }
-    logger_1.logger.verbose("initDeviceParams: " + JSON.stringify(params));
+    logger_1.logger.verbose("initDeviceParams: ".concat(JSON.stringify(params)));
     return params;
 }
 exports.initDeviceParams = initDeviceParams;
@@ -219,7 +219,7 @@ function getDeviceUpdateParams(deviceData, oldState, newState, haOldState) {
         }
         params = {
             switch: newState.state,
-            brightness: utils_1.getCkBrightness(newState.attributes.brightness)
+            brightness: (0, utils_1.getCkBrightness)(newState.attributes.brightness)
         };
     }
     else if (uiid === const_1.CK_UIID_20007) {
@@ -233,10 +233,10 @@ function getDeviceUpdateParams(deviceData, oldState, newState, haOldState) {
                 switch: newState.state
             };
             if (newState.attributes.brightness === haOldState.attributes.brightness) {
-                params.colorTemp = utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp);
+                params.colorTemp = (0, utils_1.getCkColorTemp)(min_mireds, max_mireds, color_temp);
             }
             else {
-                params.brightness = utils_1.getCkBrightness(brightness);
+                params.brightness = (0, utils_1.getCkBrightness)(brightness);
             }
         }
         else {
@@ -257,14 +257,14 @@ function getDeviceUpdateParams(deviceData, oldState, newState, haOldState) {
             };
             if (color_mode === const_1.HA_COLOR_MODE_XY) {
                 lodash_1.default.set(params, 'colorMode', const_1.CK_COLOR_MODE_RGB);
-                lodash_1.default.set(params, 'rgbBrightness', utils_1.getCkBrightness(brightness));
+                lodash_1.default.set(params, 'rgbBrightness', (0, utils_1.getCkBrightness)(brightness));
                 lodash_1.default.set(params, 'hue', Math.round(hs_color[0]));
                 lodash_1.default.set(params, 'saturation', Math.round(hs_color[1]));
             }
             else if (color_mode === const_1.HA_COLOR_MODE_COLOR_TEMP) {
                 lodash_1.default.set(params, 'colorMode', const_1.CK_COLOR_MODE_CCT);
-                lodash_1.default.set(params, 'cctBrightness', utils_1.getCkBrightness(brightness));
-                lodash_1.default.set(params, 'colorTemp', utils_1.getCkColorTemp(min_mireds, max_mireds, color_temp));
+                lodash_1.default.set(params, 'cctBrightness', (0, utils_1.getCkBrightness)(brightness));
+                lodash_1.default.set(params, 'colorTemp', (0, utils_1.getCkColorTemp)(min_mireds, max_mireds, color_temp));
             }
         }
         else {
@@ -381,18 +381,18 @@ function handleHaLight(deviceData, updateParams) {
     }
     else if (uiid === const_1.CK_UIID_20006) {
         if (typeof updateParams.brightness === 'number') {
-            params.sequence[0].data.brightness = utils_1.getHaBrightness(updateParams.brightness);
+            params.sequence[0].data.brightness = (0, utils_1.getHaBrightness)(updateParams.brightness);
         }
         init_1.ws2ha.sendMessage(params);
     }
     else if (uiid === const_1.CK_UIID_20007) {
         if (typeof updateParams.brightness === 'number') {
-            params.sequence[0].data.brightness = utils_1.getHaBrightness(updateParams.brightness);
+            params.sequence[0].data.brightness = (0, utils_1.getHaBrightness)(updateParams.brightness);
         }
         if (typeof updateParams.colorTemp === 'number') {
             var min = entList[0].entityState.attributes.min_mireds;
             var max = entList[0].entityState.attributes.max_mireds;
-            params.sequence[0].data.color_temp = utils_1.getHaColorTemp(min, max, updateParams.colorTemp);
+            params.sequence[0].data.color_temp = (0, utils_1.getHaColorTemp)(min, max, updateParams.colorTemp);
         }
         init_1.ws2ha.sendMessage(params);
     }
@@ -400,12 +400,12 @@ function handleHaLight(deviceData, updateParams) {
         var cctBrightness = updateParams.cctBrightness, rgbBrightness = updateParams.rgbBrightness, hue = updateParams.hue, saturation = updateParams.saturation, colorTemp = updateParams.colorTemp;
         if ((typeof cctBrightness === 'number') || (typeof rgbBrightness === 'number')) {
             var br = cctBrightness || rgbBrightness;
-            params.sequence[0].data.brightness = utils_1.getHaBrightness(br);
+            params.sequence[0].data.brightness = (0, utils_1.getHaBrightness)(br);
         }
         if (typeof colorTemp === 'number') {
             var min = entList[0].entityState.attributes.min_mireds;
             var max = entList[0].entityState.attributes.max_mireds;
-            params.sequence[0].data.color_temp = utils_1.getHaColorTemp(min, max, colorTemp);
+            params.sequence[0].data.color_temp = (0, utils_1.getHaColorTemp)(min, max, colorTemp);
         }
         if ((typeof hue === 'number') && (typeof saturation === 'number')) {
             params.sequence[0].data.hs_color = [hue, saturation];
@@ -434,7 +434,7 @@ function sendWsUpdateMsg2Ha(deviceData, updateParams) {
 }
 exports.sendWsUpdateMsg2Ha = sendWsUpdateMsg2Ha;
 function handleCkWsUpdateMessage(msg) {
-    logger_1.logger.verbose("Get CK-WS update message: " + JSON.stringify(msg));
+    logger_1.logger.verbose("Get CK-WS update message: ".concat(JSON.stringify(msg)));
     if (msg.apikey !== init_1.curUserGwData.userApiKey) {
         return -1;
     }

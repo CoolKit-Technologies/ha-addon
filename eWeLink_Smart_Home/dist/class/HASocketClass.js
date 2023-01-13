@@ -25,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -70,7 +70,7 @@ var HaSocket = (function () {
             });
         }
         catch (error) {
-            logger_1.logger.warn("init HA-WS error: " + error);
+            logger_1.logger.warn("init HA-WS error: ".concat(error));
         }
     };
     HaSocket.createInstance = function () {
@@ -104,7 +104,7 @@ var HaSocket = (function () {
                                 if (data.type === 'auth_ok') {
                                     resolve(0);
                                     if (reconnect) {
-                                        syncDevice2Ha_1.default({
+                                        (0, syncDevice2Ha_1.default)({
                                             syncLovelace: false,
                                             sleepTime: 2000,
                                         });
@@ -113,7 +113,7 @@ var HaSocket = (function () {
                                 }
                             }
                             catch (error) {
-                                logger_1.logger.warn("HaSocket init error: " + error);
+                                logger_1.logger.warn("HaSocket init error: ".concat(error));
                                 resolve(-1);
                             }
                         }));
@@ -132,9 +132,9 @@ var HaSocket = (function () {
                         })];
                     case 1:
                         res = _a.sent();
-                        logger_1.logger.info("HA-WS heart beat result: " + JSON.stringify(res));
+                        logger_1.logger.info("HA-WS heart beat result: ".concat(JSON.stringify(res)));
                         if (res === -1) {
-                            initHaSocket_1.default(true);
+                            (0, initHaSocket_1.default)(true);
                         }
                         this.heartBeat();
                         return [2];
@@ -158,7 +158,7 @@ var HaSocket = (function () {
                 }
             }
             catch (err) {
-                logger_1.logger.warn("HaSocket handleEvent error: " + err);
+                logger_1.logger.warn("HaSocket handleEvent error: ".concat(err));
             }
         });
     };
@@ -190,7 +190,7 @@ var HaSocket = (function () {
                                 }
                             }
                             catch (error) {
-                                logger_1.logger.warn("HaSocket query error: " + error);
+                                logger_1.logger.warn("HaSocket query error: ".concat(error));
                                 resolve(-1);
                                 _this.client.removeEventListener('message', handler);
                             }

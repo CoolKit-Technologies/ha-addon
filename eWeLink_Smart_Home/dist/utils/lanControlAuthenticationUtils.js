@@ -20,7 +20,7 @@ var LanControlAuthenticationUtils = (function () {
             return base64Cipher;
         }
         catch (e) {
-            logger_1.logger.error("encryptionData error: " + e);
+            logger_1.logger.error("encryptionData error: ".concat(e));
         }
     };
     LanControlAuthenticationUtils.decryptionData = function (_a) {

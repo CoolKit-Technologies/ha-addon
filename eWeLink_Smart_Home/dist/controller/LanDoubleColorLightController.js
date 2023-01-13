@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -77,7 +77,7 @@ var LanDoubleColorLightController = (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.effectList = light_1.doubleColorBulbEffectList;
         var deviceId = props.deviceId;
-        _this.entityId = "light." + deviceId;
+        _this.entityId = "light.".concat(deviceId);
         return _this;
     }
     return LanDoubleColorLightController;
@@ -128,7 +128,7 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
                     if (!(this.devicekey && this.selfApikey)) return [3, 5];
                     res = void 0;
                     if (!params.ltype) return [3, 2];
-                    return [4, lanDeviceApi_1.updateLanLight({
+                    return [4, (0, lanDeviceApi_1.updateLanLight)({
                             ip: this.ip || this.target,
                             port: this.port,
                             deviceid: this.deviceId,
@@ -139,7 +139,7 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
                 case 1:
                     res = _a.sent();
                     return [3, 4];
-                case 2: return [4, lanDeviceApi_1.setSwitch({
+                case 2: return [4, (0, lanDeviceApi_1.setSwitch)({
                         ip: this.ip || this.target,
                         port: this.port,
                         deviceid: this.deviceId,
@@ -152,7 +152,7 @@ LanDoubleColorLightController.prototype.updateLight = function (params) {
                     _a.label = 4;
                 case 4:
                     if (lodash_1.default.get(res, ['data', 'error']) === 0) {
-                        this.params = mergeDeviceParams_1.default(this.params, params);
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, params);
                         this.updateState(params);
                     }
                     _a.label = 5;
@@ -179,7 +179,7 @@ LanDoubleColorLightController.prototype.updateState = function (params) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {

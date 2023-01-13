@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -64,7 +64,7 @@ var CloudZigbeeDoubleColorBulbController = (function (_super) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 1258;
         _this.type = 8;
-        _this.entityId = "light." + params.deviceId;
+        _this.entityId = "light.".concat(params.deviceId);
         _this.params = params.params;
         return _this;
     }
@@ -118,7 +118,7 @@ CloudZigbeeDoubleColorBulbController.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var tempParams, _a, status, _b, brightness, _c, colorTemp, state;
         return __generator(this, function (_d) {
-            tempParams = mergeDeviceParams_1.assignDeviceParams(this.params, params);
+            tempParams = (0, mergeDeviceParams_1.assignDeviceParams)(this.params, params);
             if (this.disabled) {
                 return [2];
             }
@@ -127,7 +127,7 @@ CloudZigbeeDoubleColorBulbController.prototype.updateState = function (params) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {

@@ -36,7 +36,7 @@ LanDeviceController.prototype.parseEncryptedData = function () {
         return null;
     }
     catch (error) {
-        logger_1.logger.warn("LanDeviceController error: " + error);
+        logger_1.logger.warn("LanDeviceController error: ".concat(error));
         return null;
     }
 };

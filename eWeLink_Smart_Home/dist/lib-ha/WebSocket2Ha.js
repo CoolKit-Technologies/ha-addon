@@ -25,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -104,7 +104,7 @@ var WebSocket2Ha = (function () {
         this.wsUrl = '';
         this.connected = false;
         this.cmdId = 1;
-        this.wsUrl = 'http://supervisor/core/websocket';
+        this.wsUrl = process_1.default.env.DEBUG_MODE ? process_1.default.env.HASS_WS_URL : 'http://supervisor/core/websocket';
         this.connect();
     }
     WebSocket2Ha.prototype.connect = function () {
@@ -126,7 +126,7 @@ var WebSocket2Ha = (function () {
         this.ws.removeEventListener('message');
     };
     WebSocket2Ha.prototype.handleError = function (err) {
-        logger_1.logger.error("WebSocket2Ha error: " + err);
+        logger_1.logger.error("WebSocket2Ha error: ".concat(err));
     };
     WebSocket2Ha.prototype.handleMessage = function (msg) {
         try {
@@ -135,7 +135,7 @@ var WebSocket2Ha = (function () {
                 case 'auth_required':
                     var resMsg = {
                         type: 'auth',
-                        access_token: process_1.default.env.SUPERVISOR_TOKEN,
+                        access_token: process_1.default.env.DEBUG_MODE ? process_1.default.env.HASS_LLAT : process_1.default.env.SUPERVISOR_TOKEN,
                     };
                     this.ws.send(JSON.stringify(resMsg));
                     break;
@@ -158,7 +158,7 @@ var WebSocket2Ha = (function () {
             }
         }
         catch (err) {
-            logger_1.logger.error("WebSocket2Ha error: " + err);
+            logger_1.logger.error("WebSocket2Ha error: ".concat(err));
         }
     };
     WebSocket2Ha.prototype.heartBeat = function () {
@@ -206,8 +206,8 @@ var WebSocket2Ha = (function () {
                         }
                         newState = e.event.data.new_state;
                         if (newState.state === 'unavailable') {
-                            logger_1.logger.info("HA device unavailable, new state: " + JSON.stringify(newState));
-                            init_1.setCkDeviceOnlineState({
+                            logger_1.logger.info("HA device unavailable, new state: ".concat(JSON.stringify(newState)));
+                            (0, init_1.setCkDeviceOnlineState)({
                                 uiid: deviceData.deviceUiid,
                                 subDevId: deviceData.haDeviceData.deviceId,
                                 online: false,
@@ -216,13 +216,13 @@ var WebSocket2Ha = (function () {
                             return [2];
                         }
                         haOldState = e.event.data.old_state;
-                        params = protocols_1.getDeviceUpdateParams(deviceData, oldState, newState, haOldState);
-                        logger_1.logger.verbose("Send message to CK, params: " + JSON.stringify(params));
+                        params = (0, protocols_1.getDeviceUpdateParams)(deviceData, oldState, newState, haOldState);
+                        logger_1.logger.verbose("Send message to CK, params: ".concat(JSON.stringify(params)));
                         if (!params) {
                             return [2, -1];
                         }
                         if (lodash_1.default.get(init_1.ws2ckRes, 'error') === 0) {
-                            init_1.setCkDeviceOnlineState({
+                            (0, init_1.setCkDeviceOnlineState)({
                                 uiid: deviceData.deviceUiid,
                                 subDevId: deviceData.haDeviceData.deviceId,
                                 online: true,
@@ -243,7 +243,7 @@ var WebSocket2Ha = (function () {
         });
     };
     WebSocket2Ha.prototype.sendMessage = function (data) {
-        logger_1.logger.verbose("Send message to HA Core, data: " + JSON.stringify(data));
+        logger_1.logger.verbose("Send message to HA Core, data: ".concat(JSON.stringify(data)));
         this.ws.send(JSON.stringify(__assign({ id: this.cmdId++ }, data)));
     };
     WebSocket2Ha.prototype.subscribeEvents = function (eventType) {
@@ -316,12 +316,12 @@ var WebSocket2Ha = (function () {
                         return [4, this.getEntityStates()];
                     case 1:
                         entityStatesRes = _a.sent();
-                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStatesRes: " + JSON.stringify(entityStatesRes));
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStatesRes: ".concat(JSON.stringify(entityStatesRes)));
                         if (entityStatesRes === -1) {
                             return [2, result];
                         }
                         entityStateList = entityStateFilter(entityStatesRes);
-                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStateList: " + JSON.stringify(entityStateList));
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityStateList: ".concat(JSON.stringify(entityStateList)));
                         return [4, this.getConfigDeviceRegistryList()];
                     case 2:
                         deviceRes = _a.sent();
@@ -329,7 +329,7 @@ var WebSocket2Ha = (function () {
                             return [2, result];
                         }
                         deviceList = deviceRes;
-                        logger_1.logger.verbose("getHaDeviceEntityMap: deviceList: " + JSON.stringify(deviceList));
+                        logger_1.logger.verbose("getHaDeviceEntityMap: deviceList: ".concat(JSON.stringify(deviceList)));
                         return [4, this.getConfigEntityRegistryList()];
                     case 3:
                         entityRes = _a.sent();
@@ -337,7 +337,7 @@ var WebSocket2Ha = (function () {
                             return [2, result];
                         }
                         entityList = entityFilter(entityRes, entityStateList);
-                        logger_1.logger.verbose("getHaDeviceEntityMap: entityList: " + JSON.stringify(entityList));
+                        logger_1.logger.verbose("getHaDeviceEntityMap: entityList: ".concat(JSON.stringify(entityList)));
                         for (i = 0; i < entityList.length; i++) {
                             device = lodash_1.default.find(deviceList, { id: entityList[i]['device_id'] });
                             deviceId = device['id'];
@@ -355,7 +355,7 @@ var WebSocket2Ha = (function () {
                                 result[index].entities.push({ entityId: entityId, entityData: entityList[i], entityState: entityState });
                             }
                         }
-                        logger_1.logger.verbose("getHaDeviceEntityMap: result: " + JSON.stringify(result));
+                        logger_1.logger.verbose("getHaDeviceEntityMap: result: ".concat(JSON.stringify(result)));
                         return [2, result];
                 }
             });
