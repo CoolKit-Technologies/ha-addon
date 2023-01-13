@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -47,7 +47,7 @@ var updateDiySwitchAPI = function (params) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/switch", {
+                return [4, axios_1.default.post("http://".concat(ip, ":").concat(port, "/zeroconf/switch"), {
                         deviceid: deviceid,
                         data: {
                             switch: state,
@@ -66,7 +66,7 @@ var updateDiyStartupAPI = function (params) { return __awaiter(void 0, void 0, v
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/startup", {
+                return [4, axios_1.default.post("http://".concat(ip, ":").concat(port, "/zeroconf/startup"), {
                         deviceid: deviceid,
                         data: {
                             startup: state,
@@ -85,7 +85,7 @@ var updateDiyPulseAPI = function (params) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid, width = params.width;
-                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/pulse", {
+                return [4, axios_1.default.post("http://".concat(ip, ":").concat(port, "/zeroconf/pulse"), {
                         deviceid: deviceid,
                         data: {
                             pulse: state,
@@ -105,7 +105,7 @@ var updateDiySledOnlineAPI = function (params) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 ip = params.ip, port = params.port, state = params.state, deviceid = params.deviceid;
-                return [4, axios_1.default.post("http://" + ip + ":" + port + "/zeroconf/sledonline", {
+                return [4, axios_1.default.post("http://".concat(ip, ":").concat(port, "/zeroconf/sledonline"), {
                         deviceid: deviceid,
                         data: {
                             sledOnline: state,

@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -64,8 +64,8 @@ var LanTandHModificationController = (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.uiid = 15;
         var deviceId = props.deviceId;
-        _this.entityId = "switch." + deviceId;
-        _this.unit = dataUtil_1.getDataSync('unit.json', [_this.deviceId]) || 'c';
+        _this.entityId = "switch.".concat(deviceId);
+        _this.unit = (0, dataUtil_1.getDataSync)('unit.json', [_this.deviceId]) || 'c';
         return _this;
     }
     return LanTandHModificationController;
@@ -79,7 +79,7 @@ LanTandHModificationController.prototype.setSwitch = function (status) {
                     if (!this.devicekey || !this.selfApikey) {
                         return [2, -1];
                     }
-                    return [4, lanDeviceApi_1.setSwitch({
+                    return [4, (0, lanDeviceApi_1.setSwitch)({
                             selfApikey: this.selfApikey,
                             deviceid: this.deviceId,
                             ip: this.ip || this.target,
@@ -114,8 +114,8 @@ LanTandHModificationController.prototype.updateState = function (status) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates("switch." + this.deviceId, {
-                entity_id: "switch." + this.deviceId,
+            (0, restApi_1.updateStates)("switch.".concat(this.deviceId), {
+                entity_id: "switch.".concat(this.deviceId),
                 state: state,
                 attributes: {
                     restored: false,
@@ -132,13 +132,13 @@ LanTandHModificationController.prototype.updateTandH = function (currentTemperat
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             if (currentTemperature && currentTemperature !== 'unavailable') {
-                restApi_1.updateStates("sensor." + this.deviceId + "_t", {
-                    entity_id: "sensor." + this.deviceId + "_t",
+                (0, restApi_1.updateStates)("sensor.".concat(this.deviceId, "_t"), {
+                    entity_id: "sensor.".concat(this.deviceId, "_t"),
                     state: currentTemperature,
                     attributes: {
                         restored: false,
                         supported_features: 0,
-                        friendly_name: this.deviceName + "-Temperature",
+                        friendly_name: "".concat(this.deviceName, "-Temperature"),
                         device_class: 'temperature',
                         state: currentTemperature,
                         unit_of_measurement: '°C',
@@ -146,13 +146,13 @@ LanTandHModificationController.prototype.updateTandH = function (currentTemperat
                 });
             }
             if (currentHumidity && currentHumidity !== 'unavailable') {
-                restApi_1.updateStates("sensor." + this.deviceId + "_h", {
-                    entity_id: "sensor." + this.deviceId + "_h",
+                (0, restApi_1.updateStates)("sensor.".concat(this.deviceId, "_h"), {
+                    entity_id: "sensor.".concat(this.deviceId, "_h"),
                     state: currentHumidity,
                     attributes: {
                         restored: false,
                         supported_features: 0,
-                        friendly_name: this.deviceName + "-Humidity",
+                        friendly_name: "".concat(this.deviceName, "-Humidity"),
                         device_class: 'humidity',
                         state: currentHumidity,
                         unit_of_measurement: '%',

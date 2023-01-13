@@ -26,11 +26,11 @@ function getHaDeviceUiid(data) {
         try {
             for (var _d = __values(data.entities), _e = _d.next(); !_e.done; _e = _d.next()) {
                 var ent = _e.value;
-                if (WebSocket2Ha_1.getEntityTypeById(ent.entityData.entity_id) === 'light') {
+                if ((0, WebSocket2Ha_1.getEntityTypeById)(ent.entityData.entity_id) === 'light') {
                     type = 'light';
                     break;
                 }
-                else if (WebSocket2Ha_1.getEntityTypeById(ent.entityData.entity_id) === 'switch') {
+                else if ((0, WebSocket2Ha_1.getEntityTypeById)(ent.entityData.entity_id) === 'switch') {
                     type = 'switch';
                     break;
                 }
@@ -48,7 +48,7 @@ function getHaDeviceUiid(data) {
             try {
                 for (var _f = __values(data.entities), _g = _f.next(); !_g.done; _g = _f.next()) {
                     var ent = _g.value;
-                    if (WebSocket2Ha_1.getEntityTypeById(ent.entityData.entity_id) === 'light') {
+                    if ((0, WebSocket2Ha_1.getEntityTypeById)(ent.entityData.entity_id) === 'light') {
                         lightEntity = ent;
                         break;
                     }
@@ -84,7 +84,7 @@ function getHaDeviceUiid(data) {
             try {
                 for (var _h = __values(data.entities), _j = _h.next(); !_j.done; _j = _h.next()) {
                     var ent = _j.value;
-                    if (WebSocket2Ha_1.getEntityTypeById(ent.entityData.entity_id) === 'switch') {
+                    if ((0, WebSocket2Ha_1.getEntityTypeById)(ent.entityData.entity_id) === 'switch') {
                         switchCnt++;
                     }
                 }
@@ -110,7 +110,7 @@ function getHaDeviceUiid(data) {
             }
         }
         else {
-            logger_1.logger.info("getHaDeviceUiid(): unsupport ha device data: " + JSON.stringify(data));
+            logger_1.logger.info("getHaDeviceUiid(): unsupport ha device data: ".concat(JSON.stringify(data)));
             return -1;
         }
     }

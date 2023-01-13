@@ -53,7 +53,7 @@ var Mdns = (function () {
                     var data = answers[i].data;
                     switch (answers[i].type) {
                         case 'PTR':
-                            if (("" + data).indexOf('ewelink') === -1) {
+                            if ("".concat(data).indexOf('ewelink') === -1) {
                                 return { value: void 0 };
                             }
                             tmp.ptr = data;

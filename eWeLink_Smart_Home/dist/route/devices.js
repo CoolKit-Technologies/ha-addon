@@ -24,4 +24,5 @@ router.post('/device/unit', devices_1.changeUnit);
 router.post('/device/rate', devices_1.setRate);
 router.post('/device/tempHumHistory', devices_1.getDevTempHumHistory);
 router.post('/lan', devices_1.updateLanDevice);
+router.post('/electricRate', devices_1.updateElectricRate);
 exports.default = router;

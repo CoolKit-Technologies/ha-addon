@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -60,9 +60,10 @@ var restApi_1 = require("../apis/restApi");
 var CloudUIID181Controller = (function (_super) {
     __extends(CloudUIID181Controller, _super);
     function CloudUIID181Controller(props) {
+        var _this = this;
         var _a;
-        var _this = _super.call(this, props) || this;
-        _this.entityId = "switch." + props.deviceId;
+        _this = _super.call(this, props) || this;
+        _this.entityId = "switch.".concat(props.deviceId);
         _this.uiid = props.extra.uiid;
         _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
         _this.params = props.params;
@@ -104,7 +105,7 @@ CloudUIID181Controller.prototype.updateState = function (status) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {

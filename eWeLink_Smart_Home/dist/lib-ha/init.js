@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -103,7 +103,7 @@ function handleDeleteGateway() {
             switch (_a.label) {
                 case 0:
                     exports.curUserGwData = curUserGwData = [];
-                    return [4, dataUtil_1.setGwData([])];
+                    return [4, (0, dataUtil_1.setGwData)([])];
                 case 1:
                     _a.sent();
                     closeWs2Ck();
@@ -123,7 +123,7 @@ function initWs2Ck(_a) {
             switch (_b.label) {
                 case 0:
                     logger_1.logger.info('Init websocket to CK...');
-                    logger_1.logger.verbose("apikey: " + apikey);
+                    logger_1.logger.verbose("apikey: ".concat(apikey));
                     return [4, coolkit_ws_device_1.default.init({
                             userAgent: 'device',
                             apikey: apikey,
@@ -138,7 +138,7 @@ function initWs2Ck(_a) {
                         try {
                             var msg = JSON.parse(e.data);
                             if (msg.action === 'update') {
-                                protocols_1.handleCkWsUpdateMessage(msg);
+                                (0, protocols_1.handleCkWsUpdateMessage)(msg);
                             }
                             else if (msg.action === 'notify' && msg.cmd === 'deleteNotify') {
                                 handleDeleteGateway();
@@ -171,15 +171,15 @@ function init() {
                     if (!lodash_1.default.get(ws2ha, 'connected')) {
                         exports.ws2ha = ws2ha = new WebSocket2Ha_1.WebSocket2Ha();
                     }
-                    return [4, dataUtil_1.initLibHaFiles()];
+                    return [4, (0, dataUtil_1.initLibHaFiles)()];
                 case 1:
                     _b.sent();
-                    userData = dataUtil_1.getDataSync('user.json', ['user']);
+                    userData = (0, dataUtil_1.getDataSync)('user.json', ['user']);
                     if (!userData) {
                         return [2];
                     }
                     userApiKey = userData.apikey;
-                    return [4, dataUtil_1.getGwData()];
+                    return [4, (0, dataUtil_1.getGwData)()];
                 case 2:
                     gwData = _b.sent();
                     gwuuid = uuid4();
@@ -191,7 +191,7 @@ function init() {
                     };
                     gwData.push(data);
                     exports.curUserGwData = curUserGwData = data;
-                    return [4, dataUtil_1.setGwData(gwData)];
+                    return [4, (0, dataUtil_1.setGwData)(gwData)];
                 case 3:
                     _b.sent();
                     return [3, 5];
@@ -205,7 +205,7 @@ function init() {
                         return [2];
                     }
                     deviceList = deviceListRes.data.thingList;
-                    return [4, dataUtil_1.getGwData()];
+                    return [4, (0, dataUtil_1.getGwData)()];
                 case 7:
                     newGwData = _b.sent();
                     index = lodash_1.default.findIndex(newGwData, { userApiKey: userApiKey });
@@ -214,7 +214,7 @@ function init() {
                         if (userGwuuid === newGwData[index].gwuuid) {
                             apikey = lodash_1.default.get(deviceList[i], 'itemData.devicekey');
                             deviceid = lodash_1.default.get(deviceList[i], 'itemData.deviceid');
-                            region = dataUtil_1.getDataSync('user.json', ['region']);
+                            region = (0, dataUtil_1.getDataSync)('user.json', ['region']);
                             coolkit_api_device_1.default.init({
                                 apikey: apikey,
                                 appSecret: app_1.appSecret,
@@ -231,18 +231,18 @@ function init() {
                         }
                     }
                     exports.curUserGwData = curUserGwData = newGwData[index];
-                    return [4, dataUtil_1.setGwData(newGwData)];
+                    return [4, (0, dataUtil_1.setGwData)(newGwData)];
                 case 8:
                     _b.sent();
                     if (!(curUserGwData.gwInList && lodash_1.default.get(ws2ckRes, 'error') !== 0)) return [3, 11];
                     return [4, initWs2Ck({
                             apikey: curUserGwData.gwApikey,
-                            region: dataUtil_1.getDataSync('user.json', ['region']),
+                            region: (0, dataUtil_1.getDataSync)('user.json', ['region']),
                             deviceid: curUserGwData.gwDeviceid
                         })];
                 case 9:
                     _b.sent();
-                    return [4, api_1.getHaDeviceList()];
+                    return [4, (0, api_1.getHaDeviceList)()];
                 case 10:
                     devList = _b.sent();
                     if (devList !== -1) {
@@ -261,7 +261,7 @@ function init() {
                                         deviceid: dev.ckDeviceData.deviceid,
                                         online: online
                                     });
-                                    params = protocols_1.initDeviceParams(dev);
+                                    params = (0, protocols_1.initDeviceParams)(dev);
                                     coolkit_ws_device_1.default.sendMessage(JSON.stringify({
                                         action: 'update',
                                         apikey: curUserGwData.userApiKey,

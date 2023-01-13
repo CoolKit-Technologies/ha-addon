@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -57,11 +57,11 @@ if (!fs_1.default.existsSync(basePath)) {
 var getDataSync = function (fileName, namePath) {
     if (namePath === void 0) { namePath = []; }
     try {
-        var data = fs_1.default.readFileSync(path_1.default.join(basePath, "/" + fileName), { encoding: 'utf-8' });
+        var data = fs_1.default.readFileSync(path_1.default.join(basePath, "/".concat(fileName)), { encoding: 'utf-8' });
         return namePath.reduce(function (cur, path) { return cur[path]; }, JSON.parse(data));
     }
     catch (err) {
-        logger_1.logger.error("getDataSync: " + fileName + " -> " + namePath + " no data");
+        logger_1.logger.error("getDataSync: ".concat(fileName, " -> ").concat(namePath, " no data"));
         return null;
     }
 };
@@ -70,9 +70,9 @@ var saveData = function (fileName, data) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         try {
             return [2, new Promise(function (resolve, reject) {
-                    fs_1.default.writeFile(path_1.default.join(basePath, "/" + fileName), data, function (err) {
+                    fs_1.default.writeFile(path_1.default.join(basePath, "/".concat(fileName)), data, function (err) {
                         if (err) {
-                            logger_1.logger.error("fs.writeFile error: " + err);
+                            logger_1.logger.error("fs.writeFile error: ".concat(err));
                             resolve(-1);
                         }
                         resolve(0);

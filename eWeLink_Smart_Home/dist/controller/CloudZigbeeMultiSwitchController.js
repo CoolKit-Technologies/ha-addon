@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -63,13 +63,14 @@ var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"))
 var CloudZigbeeMultiSwitchController = (function (_super) {
     __extends(CloudZigbeeMultiSwitchController, _super);
     function CloudZigbeeMultiSwitchController(props) {
+        var _this = this;
         var _a;
-        var _this = _super.call(this, props) || this;
+        _this = _super.call(this, props) || this;
         _this.type = 8;
-        _this.entityId = "switch." + props.deviceId;
+        _this.entityId = "switch.".concat(props.deviceId);
         _this.uiid = props.extra.uiid;
         _this.channelName = (_a = props.tags) === null || _a === void 0 ? void 0 : _a.ck_channel_name;
-        _this.maxChannel = channelMap_1.getMaxChannelByUiid(props.extra.uiid);
+        _this.maxChannel = (0, channelMap_1.getMaxChannelByUiid)(props.extra.uiid);
         _this.params = props.params;
         return _this;
     }
@@ -91,7 +92,7 @@ CloudZigbeeMultiSwitchController.prototype.updateSwitch = function (switches) {
                     res = _a.sent();
                     if (res.error === 0) {
                         this.updateState(switches);
-                        this.params = mergeDeviceParams_1.default(this.params, { switches: switches });
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, { switches: switches });
                     }
                     return [2];
             }
@@ -115,13 +116,13 @@ CloudZigbeeMultiSwitchController.prototype.updateState = function (switches) {
                 if (!this.online) {
                     state = 'unavailable';
                 }
-                restApi_1.updateStates(this.entityId + "_" + (outlet + 1), {
-                    entity_id: this.entityId + "_" + (outlet + 1),
+                (0, restApi_1.updateStates)("".concat(this.entityId, "_").concat(outlet + 1), {
+                    entity_id: "".concat(this.entityId, "_").concat(outlet + 1),
                     state: state,
                     attributes: {
                         restored: false,
                         supported_features: 0,
-                        friendly_name: this.deviceName + "-" + name_1,
+                        friendly_name: "".concat(this.deviceName, "-").concat(name_1),
                         state: state,
                     },
                 });

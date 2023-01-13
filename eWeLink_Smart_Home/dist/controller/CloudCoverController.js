@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -65,7 +65,7 @@ var CloudCoverController = (function (_super) {
     function CloudCoverController(params) {
         var _this = _super.call(this, params) || this;
         _this.uiid = 11;
-        _this.entityId = "cover." + params.deviceId;
+        _this.entityId = "cover.".concat(params.deviceId);
         _this.params = params.params;
         return _this;
     }
@@ -83,7 +83,7 @@ CloudCoverController.prototype.setCover = function (params) {
                             setclose: 100 - params.setclose,
                         };
                     }
-                    logger_1.logger.info("CloudCoverController params: " + JSON.stringify(params));
+                    logger_1.logger.info("CloudCoverController params: ".concat(JSON.stringify(params)));
                     return [4, coolkit_ws_1.default.updateThing({
                             ownerApikey: this.apikey,
                             deviceid: this.deviceId,
@@ -93,7 +93,7 @@ CloudCoverController.prototype.setCover = function (params) {
                     res = _a.sent();
                     if (res.error === 0) {
                         this.updateState(params);
-                        this.params = mergeDeviceParams_1.default(this.params, params);
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, params);
                     }
                     return [2];
             }
@@ -112,7 +112,7 @@ CloudCoverController.prototype.updateState = function (_a) {
             if (!this.online) {
                 state = 'unavailable';
             }
-            restApi_1.updateStates(this.entityId, {
+            (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
                 attributes: {

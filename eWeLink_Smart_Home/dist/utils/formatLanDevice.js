@@ -11,7 +11,7 @@ exports.default = (function (device) {
         return {
             deviceId: txt.id,
             type: txt.type,
-            encryptedData: "" + data1 + data2 + data3 + data4,
+            encryptedData: "".concat(data1).concat(data2).concat(data3).concat(data4),
             ip: a,
             port: srv.port,
             target: srv.target,

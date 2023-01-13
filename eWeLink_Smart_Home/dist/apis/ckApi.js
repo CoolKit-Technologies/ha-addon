@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTempHumHistory = exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
+exports.updateDeviceTags = exports.getTempHumHistory = exports.getOTAinfoAPI = exports.updateChannelNameAPI = exports.updateDeviceNameAPI = void 0;
 var coolkit_api_1 = __importDefault(require("coolkit-api"));
 var getTempHumHistory = function (deviceid, last, format) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -93,3 +93,16 @@ var getOTAinfoAPI = function (list) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.getOTAinfoAPI = getOTAinfoAPI;
+var updateDeviceTags = function (params) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4, coolkit_api_1.default.device.updateDeviceTag({
+                    deviceid: params.id,
+                    type: 'merge',
+                    tags: params.tags
+                })];
+            case 1: return [2, _a.sent()];
+        }
+    });
+}); };
+exports.updateDeviceTags = updateDeviceTags;

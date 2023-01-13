@@ -54,84 +54,77 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var restApi_1 = require("../apis/restApi");
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var CloudZigbeeUIID1000Controller = (function (_super) {
-    __extends(CloudZigbeeUIID1000Controller, _super);
-    function CloudZigbeeUIID1000Controller(props) {
-        var _this = _super.call(this, props) || this;
-        _this.type = 8;
-        _this.uiid = props.extra.uiid;
-        _this.entityId = "sensor.".concat(_this.deviceId);
-        _this.params = props.params;
+var restApi_1 = require("../apis/restApi");
+var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
+var dataUtil_1 = require("../utils/dataUtil");
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
+var CloudUIID182Controller = (function (_super) {
+    __extends(CloudUIID182Controller, _super);
+    function CloudUIID182Controller(params) {
+        var _this = this;
+        var _a;
+        _this = _super.call(this, params) || this;
+        _this.uiid = 182;
+        _this.maxChannel = 1;
+        _this.entityId = "switch.".concat(params.deviceId);
+        _this.params = params.params;
+        _this.rate = +(0, dataUtil_1.getDataSync)('rate.json', [_this.deviceId]) || 0;
+        _this.eRate = ((_a = params.tags) === null || _a === void 0 ? void 0 : _a.rate) || 0;
         return _this;
     }
-    return CloudZigbeeUIID1000Controller;
+    return CloudUIID182Controller;
 }(CloudDeviceController_1.default));
-CloudZigbeeUIID1000Controller.prototype.updateState = function (_a) {
-    var key = _a.key, battery = _a.battery;
+CloudUIID182Controller.prototype.updateSwitch = function (switches) {
     return __awaiter(this, void 0, void 0, function () {
-        var state, keyMap;
-        var _this = this;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    if (this.disabled) {
-                        return [2];
-                    }
-                    state = "".concat(key);
-                    if (!this.online) {
-                        state = 'unavailable';
-                    }
-                    keyMap = new Map([
-                        ['0', 'Click'],
-                        ['1', 'Double Click'],
-                        ['2', 'Long Press'],
-                        ['unavailable', 'unavailable'],
-                    ]);
-                    if (!(key !== undefined)) return [3, 2];
-                    return [4, (0, restApi_1.updateStates)("".concat(this.entityId), {
-                            entity_id: "".concat(this.entityId),
-                            state: keyMap.get(state),
-                            attributes: {
-                                restored: false,
-                                friendly_name: "".concat(this.deviceName),
-                                icon: 'mdi:remote',
-                                state: state,
-                            },
-                        })];
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, coolkit_ws_1.default.updateThing({
+                        ownerApikey: this.apikey,
+                        deviceid: this.deviceId,
+                        params: {
+                            switches: switches,
+                        },
+                    })];
                 case 1:
-                    _b.sent();
-                    setTimeout(function () {
-                        (0, restApi_1.updateStates)("".concat(_this.entityId), {
-                            entity_id: "".concat(_this.entityId),
-                            state: 'None',
-                            attributes: {
-                                restored: false,
-                                friendly_name: "".concat(_this.deviceName),
-                                icon: 'mdi:remote',
-                                state: 'None',
-                            },
-                        });
-                    }, 1000);
-                    _b.label = 2;
-                case 2:
-                    if (battery !== undefined) {
-                        (0, restApi_1.updateStates)("".concat(this.entityId, "_battery"), {
-                            entity_id: "".concat(this.entityId, "_battery"),
-                            state: battery,
-                            attributes: {
-                                restored: false,
-                                friendly_name: "".concat(this.deviceName, "-Battery"),
-                                device_class: 'battery',
-                                unit_of_measurement: '%',
-                                state: battery,
-                            },
-                        });
+                    res = _a.sent();
+                    if (res.error === 0) {
+                        this.updateState(switches);
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, { switches: switches });
                     }
                     return [2];
             }
         });
     });
 };
-exports.default = CloudZigbeeUIID1000Controller;
+CloudUIID182Controller.prototype.updateState = function (switches) {
+    return __awaiter(this, void 0, void 0, function () {
+        var i, _a, outlet, status_1, name_1, state;
+        return __generator(this, function (_b) {
+            if (this.disabled) {
+                return [2];
+            }
+            for (i = 0; i < this.maxChannel; i++) {
+                _a = switches[i] || {}, outlet = _a.outlet, status_1 = _a.switch;
+                name_1 = outlet + 1;
+                state = status_1;
+                if (!this.online) {
+                    state = 'unavailable';
+                }
+                (0, restApi_1.updateStates)("".concat(this.entityId, "_").concat(outlet + 1), {
+                    entity_id: "".concat(this.entityId, "_").concat(outlet + 1),
+                    state: state,
+                    attributes: {
+                        restored: false,
+                        supported_features: 0,
+                        friendly_name: "".concat(this.deviceName, "-").concat(name_1),
+                        state: state,
+                    },
+                });
+            }
+            return [2];
+        });
+    });
+};
+exports.default = CloudUIID182Controller;
