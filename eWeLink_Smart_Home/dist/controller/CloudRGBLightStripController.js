@@ -99,7 +99,7 @@ var CloudRGBLightStripController = (function (_super) {
     return CloudRGBLightStripController;
 }(CloudDeviceController_1.default));
 CloudRGBLightStripController.prototype.parseHaData2Ck = function (params) {
-    var state = params.state, effect = params.effect, brightness_pct = params.brightness_pct, rgb_color = params.rgb_color, color_temp = params.color_temp;
+    var state = params.state, effect = params.effect, brightness_pct = params.brightness_pct, rgb_color = params.rgb_color, color_temp = params.color_temp, color_temp_kelvin = params.color_temp_kelvin;
     var res = {
         mode: 1,
     };
@@ -113,9 +113,17 @@ CloudRGBLightStripController.prototype.parseHaData2Ck = function (params) {
         res.colorB = rgb_color[2];
         res.light_type = 1;
     }
+    if (color_temp_kelvin) {
+        res.light_type = 2;
+        var ct = Math.round((923000 - 142 * color_temp_kelvin) / 3800);
+        var _a = __read(light_1.fakeTempList[ct].split(','), 3), r = _a[0], g = _a[1], b = _a[2];
+        res.colorR = +r;
+        res.colorG = +g;
+        res.colorB = +b;
+    }
     if (color_temp) {
         res.light_type = 2;
-        var _a = __read(light_1.fakeTempList[color_temp].split(','), 3), r = _a[0], g = _a[1], b = _a[2];
+        var _b = __read(light_1.fakeTempList[color_temp].split(','), 3), r = _b[0], g = _b[1], b = _b[2];
         res.colorR = +r;
         res.colorG = +g;
         res.colorB = +b;
@@ -142,6 +150,7 @@ CloudRGBLightStripController.prototype.parseCkData2Ha = function (params) {
             var temp = light_1.fakeTempList.indexOf("".concat(colorR, ",").concat(colorG, ",").concat(colorB));
             if (temp !== -1) {
                 res.color_temp = temp;
+                res.color_temp_kelvin = Math.round((923000 - 3800 * temp) / 142);
             }
             else {
             }
@@ -188,7 +197,7 @@ CloudRGBLightStripController.prototype.updateState = function (params) {
             (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,
-                attributes: __assign(__assign(__assign({ restored: false, supported_features: 4, supported_color_modes: ['color_temp', 'rgb'], effect_list: this.effectList.slice(1), min_mireds: 1, max_mireds: 142, friendly_name: this.deviceName }, this.parseCkData2Ha(this.params)), params), { state: state }),
+                attributes: __assign(__assign(__assign({ restored: false, supported_features: 4, supported_color_modes: ['color_temp', 'rgb'], effect_list: this.effectList.slice(1), min_mireds: 1, max_mireds: 142, min_color_temp_kelvin: 2700, max_color_temp_kelvin: 6500, friendly_name: this.deviceName }, this.parseCkData2Ha(this.params)), params), { state: state }),
             });
             return [2];
         });

@@ -71,14 +71,14 @@ var CloudZigbeeDoubleColorBulbController = (function (_super) {
     return CloudZigbeeDoubleColorBulbController;
 }(CloudDeviceController_1.default));
 CloudZigbeeDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
-    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp, color_temp_kelvin = params.color_temp_kelvin;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !brightness && !color_temp) {
+    if (!brightness_pct && !brightness && !color_temp && !color_temp_kelvin) {
         return {
             switch: 'on',
         };
@@ -91,6 +91,9 @@ CloudZigbeeDoubleColorBulbController.prototype.parseHaData2Ck = function (params
     }
     if (color_temp) {
         res.colorTemp = 100 - color_temp;
+    }
+    if (color_temp_kelvin) {
+        res.colorTemp = Math.round((color_temp_kelvin - 2700) / 38);
     }
     return res;
 };
@@ -138,8 +141,11 @@ CloudZigbeeDoubleColorBulbController.prototype.updateState = function (params) {
                     state: state,
                     min_mireds: 1,
                     max_mireds: 100,
+                    min_color_temp_kelvin: 2700,
+                    max_color_temp_kelvin: 6500,
                     brightness: brightness * 2.55 >> 0,
                     color_temp: 100 - colorTemp,
+                    color_temp_kelvin: 2700 + (6500 - Math.round(6500 - 38 * colorTemp))
                 },
             });
             return [2];

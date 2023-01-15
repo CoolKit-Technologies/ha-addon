@@ -84,14 +84,14 @@ var LanDoubleColorLightController = (function (_super) {
 }(LanDeviceController_1.default));
 LanDoubleColorLightController.prototype.parseHaData2Ck = function (params) {
     var _a;
-    var state = params.state, brightness_pct = params.brightness_pct, effect = params.effect, color_temp = params.color_temp;
+    var state = params.state, brightness_pct = params.brightness_pct, effect = params.effect, color_temp = params.color_temp, color_temp_kelvin = params.color_temp_kelvin;
     var res = {};
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !color_temp && !effect) {
+    if (!brightness_pct && !color_temp && !effect && !color_temp_kelvin) {
         var tmp = lodash_1.default.get(this, ['params', 'ltype']);
         return _a = {
                 switch: 'on',
@@ -112,6 +112,13 @@ LanDoubleColorLightController.prototype.parseHaData2Ck = function (params) {
         res.white = {
             br: lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: 255 - color_temp,
+        };
+    }
+    if (color_temp_kelvin) {
+        res.ltype = 'white';
+        res.white = {
+            br: lodash_1.default.get(this, ['params', 'white', 'br']),
+            ct: Math.round((1657500 - 255 * color_temp_kelvin) / 3800)
         };
     }
     if (effect) {
@@ -191,9 +198,12 @@ LanDoubleColorLightController.prototype.updateState = function (params) {
                     state: state,
                     min_mireds: 1,
                     max_mireds: 255,
+                    min_color_temp_kelvin: 2700,
+                    max_color_temp_kelvin: 6500,
                     effect: ltype,
                     brightness: (br * 2.55) >> 0,
                     color_temp: 255 - ct,
+                    color_temp_kelvin: Math.round((1657500 - 3800 * ct) / 255),
                 },
             });
             return [2];

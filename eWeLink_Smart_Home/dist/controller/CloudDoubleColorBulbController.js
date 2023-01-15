@@ -96,14 +96,14 @@ var CloudDoubleColorBulbController = (function (_super) {
 }(CloudDeviceController_1.default));
 CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
     var _a;
-    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp, color_temp_kelvin = params.color_temp_kelvin;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !brightness && !color_temp && !effect) {
+    if (!brightness_pct && !brightness && !color_temp && !effect && !color_temp_kelvin) {
         var tmp = this.params.ltype;
         return _a = {
                 switch: 'on',
@@ -126,12 +126,21 @@ CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
             ct: lodash_1.default.get(this, ['params', 'white', 'ct']),
         };
     }
+    if (color_temp_kelvin) {
+        res.ltype = 'white';
+        res.white = {
+            br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
+            ct: Math.round((1657500 - 255 * (9200 - color_temp_kelvin)) / 3800),
+        };
+        delete res.switch;
+    }
     if (color_temp) {
         res.ltype = 'white';
         res.white = {
             br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: 255 - color_temp,
         };
+        delete res.switch;
     }
     if (effect && light_1.doubleColorBulbLtypeMap.get(effect)) {
         var switch_state = res.switch, rest = __rest(res, ["switch"]);
@@ -197,6 +206,9 @@ CloudDoubleColorBulbController.prototype.updateState = function (params) {
                     effect: ltype,
                     brightness: (br * 2.55) >> 0,
                     color_temp: 255 - ct,
+                    min_color_temp_kelvin: 2700,
+                    max_color_temp_kelvin: 6500,
+                    color_temp_kelvin: 2700 + (6500 - Math.round((1657500 - 3800 * ct) / 255))
                 },
             });
             return [2];

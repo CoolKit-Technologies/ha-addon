@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.4.1
+
+-   Fix color temperature bug
+
 ## v1.4.0
 
 -   Support new devices
