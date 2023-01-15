@@ -87,14 +87,14 @@ var CloudUIID104Controller = (function (_super) {
 CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
     var _a, _b, _c;
     var _d;
-    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp, rgb_color = params.rgb_color;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp, rgb_color = params.rgb_color, color_temp_kelvin = params.color_temp_kelvin;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
             switch: 'off',
         };
     }
-    if (!brightness_pct && !brightness && !color_temp && !effect && !rgb_color) {
+    if (!brightness_pct && !brightness && !color_temp && !effect && !rgb_color && !color_temp_kelvin) {
         var tmp = this.params.ltype;
         return _a = {
                 switch: 'on',
@@ -124,6 +124,13 @@ CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
                 br: 100,
             })), { r: rgb_color[0], g: rgb_color[1], b: rgb_color[2] }) });
         brightness && Object.assign((_d = res.color) !== null && _d !== void 0 ? _d : {}, { br: (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 });
+    }
+    if (color_temp_kelvin) {
+        res.ltype = 'white';
+        res.white = {
+            br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
+            ct: Math.round((1657500 - 255 * (9200 - color_temp_kelvin)) / 3800),
+        };
     }
     if (color_temp) {
         res.ltype = 'white';
@@ -195,6 +202,9 @@ CloudUIID104Controller.prototype.updateState = function (params) {
                     effect: ltype,
                     brightness: (br * 2.55) >> 0,
                     color_temp: 255 - ct,
+                    min_color_temp_kelvin: 2700,
+                    max_color_temp_kelvin: 6500,
+                    color_temp_kelvin: 2700 + (6500 - Math.round((1657500 - 3800 * ct) / 255)),
                     rgb_color: [r, g, b],
                 },
             });

@@ -89,7 +89,7 @@ var CloudZigbeeFiveColorBulbController = (function (_super) {
 }(CloudDeviceController_1.default));
 CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) {
     var _a;
-    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp, _b = params.rgb_color, rgb_color = _b === void 0 ? [] : _b;
+    var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, color_temp = params.color_temp, _b = params.rgb_color, rgb_color = _b === void 0 ? [] : _b, color_temp_kelvin = params.color_temp_kelvin;
     var res = { switch: 'on' };
     if (state === 'off') {
         return {
@@ -98,7 +98,7 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
     }
     var _c = this.params, _d = _c.colorMode, colorMode = _d === void 0 ? 'cct' : _d, _e = _c.cctBrightness, cctBrightness = _e === void 0 ? 1 : _e, _f = _c.rgbBrightness, rgbBrightness = _f === void 0 ? 1 : _f, _g = _c.colorTemp, colorTemp = _g === void 0 ? 1 : _g, _h = _c.hue, hue = _h === void 0 ? 1 : _h, _j = _c.saturation, saturation = _j === void 0 ? 1 : _j;
     var ltype = "".concat(colorMode, "Brightness");
-    if (typeof brightness_pct !== 'number' && typeof brightness !== 'number' && typeof color_temp !== 'number' && rgb_color.length === 0) {
+    if (typeof brightness_pct !== 'number' && typeof brightness !== 'number' && typeof color_temp !== 'number' && typeof color_temp_kelvin !== 'number' && rgb_color.length === 0) {
         var tempParams = (_a = {
                 switch: 'on',
                 colorMode: colorMode
@@ -122,6 +122,11 @@ CloudZigbeeFiveColorBulbController.prototype.parseHaData2Ck = function (params) 
         res.colorMode = 'cct';
         res.cctBrightness = typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : cctBrightness;
         res.colorTemp = 100 - color_temp;
+    }
+    if (color_temp_kelvin) {
+        res.colorMode = 'cct';
+        res.cctBrightness = typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : cctBrightness;
+        res.colorTemp = 100 - Math.round((6500 - color_temp_kelvin) / 38);
     }
     if (rgb_color.length !== 0) {
         var _k = __read((0, colorConvertUtils_1.rgbToHue)(rgb_color), 3), _l = _k[0], h = _l === void 0 ? 1 : _l, _m = _k[1], s = _m === void 0 ? 1 : _m, v = _k[2];
@@ -196,8 +201,11 @@ CloudZigbeeFiveColorBulbController.prototype.updateState = function (params) {
                     state: state,
                     min_mireds: 0,
                     max_mireds: 100,
+                    min_color_temp_kelvin: 2700,
+                    max_color_temp_kelvin: 6500,
                     brightness: (br * 2.55) >> 0,
                     color_temp: ct,
+                    color_temp_kelvin: Math.round(6500 - 38 * ct),
                     rgb_color: rgb_color,
                 },
             });
