@@ -298,15 +298,27 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     (0, mergeDeviceParams_1.default)(device, { online: online, deviceName: name_1 });
                                 }
                                 if (!(online === false)) return [3, 2];
+                                if(device.params !== undefined && device.params.switches !== undefined && device.params.switches.length > 0) return [4, (0, restApi_1.getStateByEntityId)(device.entityId + "_" + (device.params.switches[0].outlet + 1))];
                                 return [4, (0, restApi_1.getStateByEntityId)(device.entityId)];
                             case 1:
                                 res_1 = _e.sent();
                                 if (res_1 && res_1.data) {
-                                    (0, restApi_1.updateStates)(device.entityId, {
-                                        entity_id: device.entityId,
-                                        state: 'unavailable',
-                                        attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable' }),
-                                    });
+                                    if(device.params !== undefined && device.params.switches !== undefined && device.params.switches.length > 0) {
+                                        device.params.switches.forEach(sw => {
+                                            let entityId = device.entityId + "_" + (1 + sw.outlet);
+                                            (0, restApi_1.updateStates)(entityId, {
+                                                entity_id: entityId,
+                                                state: 'unavailable',
+                                                attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable', friendly_name: device.deviceName +  "-" + (1 + sw.outlet) }),
+                                            });
+                                        });
+                                    } else {
+                                        (0, restApi_1.updateStates)(device.entityId, {
+                                            entity_id: res_1.data.entity_id,
+                                            state: 'unavailable',
+                                            attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable' }),
+                                        });
+                                    }
                                 }
                                 eventBus_1.default.emit('device-offline', device.deviceId);
                                 _e.label = 2;
