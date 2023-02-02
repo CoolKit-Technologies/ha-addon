@@ -102,7 +102,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController"));
-var logger_1 = require("../utils/logger");
 var light_1 = require("../config/light");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
@@ -207,7 +206,6 @@ CloudUIID173Controller.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, status, mode, colorTemp, colorB, colorG, colorR, bright, state, getEffect, ckColorTemp, attributes;
         return __generator(this, function (_b) {
-            logger_1.logger.info('UIID 173 Device updateState: ' + JSON.stringify(params));
             if (this.disabled) {
                 return [2];
             }
@@ -260,7 +258,6 @@ CloudUIID173Controller.prototype.updateState = function (params) {
                     colorB ? colorB : this.params.colorB
                 ],
             };
-            logger_1.logger.info('UIID 173 Device updateState attributes: ' + JSON.stringify(attributes));
             (0, restApi_1.updateStates)(this.entityId, {
                 entity_id: this.entityId,
                 state: state,

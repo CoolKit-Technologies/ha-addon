@@ -104,14 +104,14 @@ CloudUIID104Controller.prototype.parseHaData2Ck = function (params) {
             _a;
     }
     if (brightness_pct) {
-        var tmp = this.params.ltype;
+        var tmp = ['white', 'color'].includes(effect) ? effect : this.params.ltype;
         if (tmp !== 'white' && tmp !== 'color') {
             tmp = 'white';
         }
         res = __assign(__assign({}, res), (_b = { ltype: tmp }, _b[tmp] = __assign(__assign({}, lodash_1.default.get(this, ['params', tmp], {})), { br: brightness_pct }), _b));
     }
     if (brightness) {
-        var tmp = this.params.ltype;
+        var tmp = ['white', 'color'].includes(effect) ? effect : this.params.ltype;
         var br = (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0;
         if (tmp !== 'white' && tmp !== 'color') {
             tmp = 'white';
@@ -167,22 +167,34 @@ CloudUIID104Controller.prototype.updateLight = function (params) {
 };
 CloudUIID104Controller.prototype.updateState = function (params) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, status, ltype, br, ct, r, g, b, tmp, state;
-        return __generator(this, function (_b) {
+        var status, ltype, br, ct, r, g, b, curLtype, tmp, tmp, state;
+        return __generator(this, function (_a) {
             if (this.disabled) {
                 return [2];
             }
-            _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
+            status = params.switch, ltype = params.ltype;
             br = this.params.white ? this.params.white.br : 1, ct = this.params.white ? this.params.white.ct : 0, r = this.params.color ? this.params.color.r : 255, g = this.params.color ? this.params.color.g : 0, b = this.params.color ? this.params.color.b : 0;
-            tmp = params[ltype];
-            if (tmp) {
+            curLtype = ltype || this.params.ltype;
+            if (curLtype === 'white') {
+                tmp = params[curLtype] || this.params[curLtype];
                 tmp.br && (br = tmp.br);
                 tmp.ct && (ct = tmp.ct);
+                r = this.params['color'].r;
+                g = this.params['color'].g;
+                b = this.params['color'].b;
+            }
+            if (curLtype === 'color') {
+                tmp = params[curLtype] || this.params[curLtype];
+                tmp.br && (br = tmp.br);
                 tmp.r && (r = tmp.r);
                 tmp.g && (g = tmp.g);
                 tmp.b && (b = tmp.b);
+                ct = this.params['white'].ct;
             }
             state = status;
+            if (!state) {
+                state = this.params.switch;
+            }
             if (!this.online) {
                 state = 'unavailable';
             }

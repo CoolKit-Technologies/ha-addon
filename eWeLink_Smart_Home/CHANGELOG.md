@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.4.2
+
+-   Fix redirect URL bug
+
+-   Fix device controlling bug
+
 ## v1.4.1
 
 -   Fix color temperature bug

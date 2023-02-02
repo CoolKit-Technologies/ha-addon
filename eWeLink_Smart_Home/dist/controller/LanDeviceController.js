@@ -17,6 +17,13 @@ var LanDeviceController = (function () {
         this.disabled = disabled;
         this.encryptedData = encryptedData;
         this.online = true;
+        var devicekey = props.devicekey, selfApikey = props.selfApikey, deviceName = props.deviceName, extra = props.extra, params = props.params, uiid = props.uiid;
+        this.devicekey = devicekey;
+        this.selfApikey = selfApikey;
+        this.deviceName = deviceName;
+        this.extra = extra;
+        this.params = params;
+        this.uiid = uiid;
         if (index) {
             this.index = index;
         }

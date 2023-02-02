@@ -85,6 +85,7 @@ var CloudDeviceController_1 = __importDefault(require("./CloudDeviceController")
 var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var light_1 = require("../config/light");
+var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
 var CloudRGBLightStripController = (function (_super) {
     __extends(CloudRGBLightStripController, _super);
     function CloudRGBLightStripController(params) {
@@ -141,12 +142,12 @@ CloudRGBLightStripController.prototype.parseCkData2Ha = function (params) {
     };
     bright && (res.brightness = (bright * 2.55) << 0);
     if (light_type === 1) {
-        if (colorR && colorG && colorB) {
+        if (![colorR, colorG, colorB].includes(undefined)) {
             res.rgb_color = [colorR, colorG, colorB];
         }
     }
     if (light_type === 2) {
-        if (colorR && colorG && colorB) {
+        if (![colorR, colorG, colorB].includes(undefined)) {
             var temp = light_1.fakeTempList.indexOf("".concat(colorR, ",").concat(colorG, ",").concat(colorB));
             if (temp !== -1) {
                 res.color_temp = temp;
@@ -174,7 +175,7 @@ CloudRGBLightStripController.prototype.updateLight = function (params) {
                 case 1:
                     res = _a.sent();
                     if (res.error === 0) {
-                        this.params = __assign(__assign({}, this.params), params);
+                        this.params = (0, mergeDeviceParams_1.default)(this.params, params);
                         this.updateState(this.parseCkData2Ha(params));
                     }
                     return [2];
