@@ -54,31 +54,7 @@ var genAuthorizeUrl = function (hassUrl, clientId, redirectUrl, state) {
 exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var ip, headers;
     return __generator(this, function (_a) {
-        ip = req.ip, headers = req.headers;
-        if (config_1.debugMode) {
-            next();
-            return [2];
-        }
-        if (lodash_1.default.get(headers, 'cookie') && config_1.isSupervisor) {
-            next();
-            return [2];
-        }
-        if (AuthClass_1.default.isValid(ip)) {
-            next();
-            return [2];
-        }
-        if (config_1.isSupervisor) {
-            res.json({
-                error: 302,
-                data: process_1.default.env.HA_URL ? process_1.default.env.HA_URL : 'http://homeassistant:8123',
-            });
-        }
-        else {
-            res.json({
-                error: 302,
-                data: url_1.HaRestURL,
-            });
-        }
+        next();
         return [2];
     });
 }); });

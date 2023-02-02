@@ -97,7 +97,7 @@ var CloudDoubleColorBulbController = (function (_super) {
 CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
     var _a;
     var state = params.state, brightness_pct = params.brightness_pct, brightness = params.brightness, effect = params.effect, color_temp = params.color_temp, color_temp_kelvin = params.color_temp_kelvin;
-    var res = { switch: 'on' };
+    var res = {};
     if (state === 'off') {
         return {
             switch: 'off',
@@ -132,7 +132,6 @@ CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
             br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: Math.round((1657500 - 255 * (9200 - color_temp_kelvin)) / 3800),
         };
-        delete res.switch;
     }
     if (color_temp) {
         res.ltype = 'white';
@@ -140,7 +139,6 @@ CloudDoubleColorBulbController.prototype.parseHaData2Ck = function (params) {
             br: typeof brightness === 'number' ? (brightness / 2.55) >> 0 === 0 ? 1 : (brightness / 2.55) >> 0 : lodash_1.default.get(this, ['params', 'white', 'br']),
             ct: 255 - color_temp,
         };
-        delete res.switch;
     }
     if (effect && light_1.doubleColorBulbLtypeMap.get(effect)) {
         var switch_state = res.switch, rest = __rest(res, ["switch"]);
@@ -170,17 +168,18 @@ CloudDoubleColorBulbController.prototype.updateLight = function (params) {
     });
 };
 CloudDoubleColorBulbController.prototype.updateState = function (params) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var _a, status, ltype, br, ct, tmp, state;
-        return __generator(this, function (_b) {
+        var _c, status, ltype, br, ct, tmp, state;
+        return __generator(this, function (_d) {
             if (this.disabled) {
                 return [2];
             }
-            _a = params.switch, status = _a === void 0 ? 'on' : _a, ltype = params.ltype;
+            _c = params.switch, status = _c === void 0 ? 'on' : _c, ltype = params.ltype;
             if (!ltype) {
                 ltype = this.params.ltype;
             }
-            br = this.params.white.br, ct = this.params.white.ct;
+            br = (_a = this.params.white) === null || _a === void 0 ? void 0 : _a.br, ct = (_b = this.params.white) === null || _b === void 0 ? void 0 : _b.ct;
             tmp = this.params[ltype];
             if (tmp) {
                 br = tmp.br;

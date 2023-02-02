@@ -60,7 +60,6 @@ var restApi_1 = require("../apis/restApi");
 var coolkit_ws_1 = __importDefault(require("coolkit-ws"));
 var channelMap_1 = require("../config/channelMap");
 var mergeDeviceParams_1 = __importDefault(require("../utils/mergeDeviceParams"));
-var logger_1 = require("../utils/logger");
 var CloudMultiChannelSwitchController = (function (_super) {
     __extends(CloudMultiChannelSwitchController, _super);
     function CloudMultiChannelSwitchController(props) {
@@ -116,7 +115,6 @@ CloudMultiChannelSwitchController.prototype.updateState = function (switches) {
                 if (!this.online) {
                     state = 'unavailable';
                 }
-                logger_1.logger.info('CloudMultiChannelSwitchController: updateState: ' + "".concat(this.entityId, "_").concat(outlet + 1));
                 (0, restApi_1.updateStates)("".concat(this.entityId, "_").concat(outlet + 1), {
                     entity_id: "".concat(this.entityId, "_").concat(outlet + 1),
                     state: state,
