@@ -1,5 +1,9 @@
 # Changelogs
 
+## v1.4.3
+
+-   Fix multi-channel device state bug
+
 ## v1.4.2
 
 -   Fix redirect URL bug
