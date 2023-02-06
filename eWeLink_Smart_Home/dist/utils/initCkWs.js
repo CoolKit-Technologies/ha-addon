@@ -92,6 +92,8 @@ var LanDeviceController_1 = __importDefault(require("../controller/LanDeviceCont
 var CloudDeviceController_1 = __importDefault(require("../controller/CloudDeviceController"));
 var CloudUIID130Controller_1 = __importDefault(require("../controller/CloudUIID130Controller"));
 var CloudUIID182Controller_1 = __importDefault(require("../controller/CloudUIID182Controller"));
+var lodash_1 = __importDefault(require("lodash"));
+var channelMap_1 = require("../config/channelMap");
 exports.default = (function () { return __awaiter(void 0, void 0, void 0, function () {
     var apikey, at, region, res;
     return __generator(this, function (_a) {
@@ -119,15 +121,13 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                 logger_1.logger.debug('initCkWs.ts res: ' + JSON.stringify(res));
                 logger_1.logger.debug("initCkWs at: ".concat(at));
                 coolkit_ws_1.default.on('message', function (ws) { return __awaiter(void 0, void 0, void 0, function () {
-                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, switches, ids, switches, switches, switches, _d, online, name_1, res_1, error_1;
+                    var type, data, tmp, device, _a, currentTemperature, currentHumidity, state, _b, bright, status_1, _c, current, voltage, power, status_2, switches, switches, ids, switches, switches, switches, _d, online, name_1, updateUnavailable2Ha, switches, channelNum, i;
                     return __generator(this, function (_e) {
-                        switch (_e.label) {
-                            case 0:
-                                _e.trys.push([0, 4, , 5]);
-                                type = ws.type, data = ws.data;
-                                logger_1.logger.debug("receive CK-WS msg: type: ".concat(type));
-                                logger_1.logger.debug("receive CK-WS msg: data: ".concat(JSON.stringify(data)));
-                                if (!(type === 'message' && data !== 'pong')) return [3, 3];
+                        try {
+                            type = ws.type, data = ws.data;
+                            logger_1.logger.debug("receive CK-WS msg: type: ".concat(type));
+                            logger_1.logger.debug("receive CK-WS msg: data: ".concat(JSON.stringify(data)));
+                            if (type === 'message' && data !== 'pong') {
                                 tmp = JSON.parse(data);
                                 if (!tmp.deviceid) {
                                     return [2];
@@ -292,46 +292,52 @@ exports.default = (function () { return __awaiter(void 0, void 0, void 0, functi
                                     }
                                     eventBus_1.default.emit('update-controller', data);
                                 }
-                                if (!(tmp.action === 'sysmsg' && (device === null || device === void 0 ? void 0 : device.entityId))) return [3, 2];
-                                _d = tmp.params, online = _d.online, name_1 = _d.name;
-                                if (device instanceof LanDeviceController_1.default || device instanceof CloudDeviceController_1.default) {
-                                    (0, mergeDeviceParams_1.default)(device, { online: online, deviceName: name_1 });
-                                }
-                                if (!(online === false)) return [3, 2];
-                                if(device.params !== undefined && device.params.switches !== undefined && device.params.switches.length > 0) return [4, (0, restApi_1.getStateByEntityId)(device.entityId + "_" + (device.params.switches[0].outlet + 1))];
-                                return [4, (0, restApi_1.getStateByEntityId)(device.entityId)];
-                            case 1:
-                                res_1 = _e.sent();
-                                if (res_1 && res_1.data) {
-                                    if(device.params !== undefined && device.params.switches !== undefined && device.params.switches.length > 0) {
-                                        device.params.switches.forEach(sw => {
-                                            let entityId = device.entityId + "_" + (1 + sw.outlet);
-                                            (0, restApi_1.updateStates)(entityId, {
-                                                entity_id: entityId,
-                                                state: 'unavailable',
-                                                attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable', friendly_name: device.deviceName +  "-" + (1 + sw.outlet) }),
+                                if (tmp.action === 'sysmsg' && (device === null || device === void 0 ? void 0 : device.entityId)) {
+                                    _d = tmp.params, online = _d.online, name_1 = _d.name;
+                                    if (device instanceof LanDeviceController_1.default || device instanceof CloudDeviceController_1.default) {
+                                        (0, mergeDeviceParams_1.default)(device, { online: online, deviceName: name_1 });
+                                    }
+                                    if (online === false) {
+                                        updateUnavailable2Ha = function (entityId) { return __awaiter(void 0, void 0, void 0, function () {
+                                            var state, entityRes;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0:
+                                                        state = 'unavailable';
+                                                        return [4, (0, restApi_1.getStateByEntityId)(entityId)];
+                                                    case 1:
+                                                        entityRes = _a.sent();
+                                                        if (entityRes && entityRes.data) {
+                                                            (0, restApi_1.updateStates)(entityId, {
+                                                                entity_id: entityId,
+                                                                state: state,
+                                                                attributes: __assign(__assign({}, entityRes.data.attributes), { state: state })
+                                                            });
+                                                        }
+                                                        return [2];
+                                                }
                                             });
-                                        });
-                                    } else {
-                                        (0, restApi_1.updateStates)(device.entityId, {
-                                            entity_id: res_1.data.entity_id,
-                                            state: 'unavailable',
-                                            attributes: __assign(__assign({}, res_1.data.attributes), { state: 'unavailable' }),
-                                        });
+                                        }); };
+                                        switches = lodash_1.default.get(device, ['params', 'switches'], undefined);
+                                        if (switches && switches.length > 0) {
+                                            channelNum = (0, channelMap_1.getMaxChannelByUiid)(device.uiid);
+                                            for (i = 0; i < channelNum; i++) {
+                                                updateUnavailable2Ha("".concat(device.entityId, "_").concat(i + 1));
+                                            }
+                                        }
+                                        else {
+                                            updateUnavailable2Ha(device.entityId);
+                                        }
+                                        eventBus_1.default.emit('device-offline', device.deviceId);
                                     }
                                 }
-                                eventBus_1.default.emit('device-offline', device.deviceId);
-                                _e.label = 2;
-                            case 2:
                                 eventBus_1.default.emit('sse');
-                                _e.label = 3;
-                            case 3: return [3, 5];
-                            case 4:
-                                error_1 = _e.sent();
-                                logger_1.logger.error("initCkWs error: ".concat(error_1));
-                                return [3, 5];
-                            case 5: return [2];
+                            }
                         }
+                        catch (error) {
+                            logger_1.logger.error("initCkWs error: ".concat(error));
+                        }
+                        return [2];
                     });
                 }); });
                 return [2];
