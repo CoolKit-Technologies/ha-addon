@@ -515,6 +515,22 @@ var Controller = (function () {
                 Controller.deviceMap.set(id, device);
                 return device;
             }
+            if (data.extra.uiid === 1771) {
+                var tmp = data;
+                var device = new CloudZigbeeUIID1770Controller_1.default({
+                    devicekey: tmp.devicekey,
+                    deviceId: tmp.deviceid,
+                    deviceName: tmp.name,
+                    apikey: tmp.apikey,
+                    params: tmp.params,
+                    online: tmp.online,
+                    extra: tmp.extra,
+                    index: _index,
+                    disabled: disabled,
+                });
+                Controller.deviceMap.set(id, device);
+                return device;
+            }
             if (data.extra.uiid === 2026) {
                 var tmp = data;
                 var device = new CloudZigbeeUIID2026Controller_1.default({
