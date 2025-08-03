@@ -1,25 +1,17 @@
 {
-    "name": "eWeLink Smart Home",
-    "version": "1.4.3",
-    "slug": "ewelink_smart_home_slug",
-    "description": "connect eWeLink with home-assistant",
-    "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
-    "startup": "application",
-    "boot": "auto",
-    "url": "https://www.facebook.com/ewelink.support",
-    "host_network": false,
-    "ports": {
-        "3000/tcp": 3000
-    },
-    "ports_description": {
-        "3000/tcp": "Web interface"
-    },
-    "panel_icon": "mdi:earth",
-    "panel_title": "eWeLink Smart Home",
-    "hassio_api": true,
-    "webui": "http://[HOST]:[PORT:3000]",
-    "homeassistant_api": true,
-    "ingress": true,
-    "ingress_port": 3000,
-    "ingress_entry": ""
+  "name": "eWeLink Smart Home",
+  "version": "1.0.0",
+  "slug": "ewelink_smart_home",
+  "description": "Integrate eWeLink devices with Home Assistant using this custom add-on.",
+  "startup": "application",
+  "boot": "auto",
+  "url": "https://github.com/eparge/ha-addon",
+  "webui": "http://[HOST]:3000",
+  "ingress": false,
+  "arch": ["amd64", "armv7", "aarch64"],
+  "image": "ghcr.io/eparge/ewelink_smart_home",
+  "ports": {
+    "3000/tcp": 3000
+  },
+  "host_network": true
 }
