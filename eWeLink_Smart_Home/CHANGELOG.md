@@ -1,5 +1,13 @@
 # Changelogs
 
+## v1.4.5
+
+-   Fix docker image build error
+
+## v1.4.4
+
+-   Fix SSE connection issue
+
 ## v1.4.3
 
 -   Fix multi-channel device state bug

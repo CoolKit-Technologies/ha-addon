@@ -7,7 +7,7 @@
     "startup": "application",
     "boot": "auto",
     "url": "https://www.facebook.com/ewelink.support",
-    "host_network": false,
+    "host_network": true,
     "ports": {
         "3000/tcp": 3000
     },
