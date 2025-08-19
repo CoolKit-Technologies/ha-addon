@@ -1,13 +1,13 @@
 {
     "name": "eWeLink Smart Home",
-    "version": "1.4.3",
+    "version": "1.4.5",
     "slug": "ewelink_smart_home_slug",
     "description": "connect eWeLink with home-assistant",
     "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
     "startup": "application",
     "boot": "auto",
     "url": "https://www.facebook.com/ewelink.support",
-    "host_network": false,
+    "host_network": true,
     "ports": {
         "3000/tcp": 3000
     },
