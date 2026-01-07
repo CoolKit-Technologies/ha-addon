@@ -1,0 +1,4 @@
+configuration:
+    enable_conflict_detection: 
+        name: Conflict Detection
+        description: Once enabled, the add-on will check for conflicts with the new eWeLink Smart Home add-on at startup. If a conflict is detected, it will stop running.
