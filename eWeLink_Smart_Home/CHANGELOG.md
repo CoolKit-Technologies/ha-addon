@@ -1,5 +1,11 @@
 # Changelogs
 
+Maintenance for the **eWeLink Smart Home** add-on has ceased as of version **1.4.6**. We have released a [new eWeLink Smart Home add-on](https://github.com/iHost-Open-Source-Project/hassio-ihost-addon), which already supports the same devices as the legacy version and will continue to expand support for more SONOFF devices in the future. However, the new add-on no longer provides a built-in device control UI, nor does it support syncing Home Assistant devices back to the eWeLink cloud.
+
+## v1.4.6
+
+-   A **Conflict Detection** toggle has been added and is enabled by default. When enabled, the new add-on will automatically stop the legacy add-on while in use. You may disable this option manually if needed.
+
 ## v1.4.5
 
 -   Fix docker image build error
