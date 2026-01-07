@@ -1,6 +1,6 @@
 {
     "name": "eWeLink Smart Home",
-    "version": "1.4.5",
+    "version": "1.4.6",
     "slug": "ewelink_smart_home_slug",
     "description": "connect eWeLink with home-assistant",
     "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
@@ -13,6 +13,12 @@
     },
     "ports_description": {
         "3000/tcp": "Web interface"
+    },
+    "options": {
+        "enable_conflict_detection": true
+    },
+    "schema": {
+        "enable_conflict_detection": "bool"
     },
     "panel_icon": "mdi:earth",
     "panel_title": "eWeLink Smart Home",

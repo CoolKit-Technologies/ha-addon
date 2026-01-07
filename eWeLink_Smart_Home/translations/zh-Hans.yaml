@@ -1,0 +1,4 @@
+configuration:
+    enable_conflict_detection: 
+        name: 冲突检测
+        description: 开启后，会在加载项启动时检测与新 eWeLink Smart Home add-on 是否有冲突，冲突时会停止运行本 Add-on
