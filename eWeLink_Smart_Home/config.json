@@ -25,6 +25,7 @@
     "hassio_api": true,
     "webui": "http://[HOST]:[PORT:3000]",
     "homeassistant_api": true,
+    "hassio_role": "admin",
     "ingress": true,
     "ingress_port": 3000,
     "ingress_entry": ""
