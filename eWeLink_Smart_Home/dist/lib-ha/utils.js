@@ -62,8 +62,9 @@ function getHaDeviceUiid(data) {
                 finally { if (e_2) throw e_2.error; }
             }
             var supportedColorMode = lightEntity === null || lightEntity === void 0 ? void 0 : lightEntity.entityState.attributes.supported_color_modes;
-            if (supportedColorMode.includes(const_1.HA_COLOR_MODE_COLOR_TEMP)
-                && (supportedColorMode.includes(const_1.HA_COLOR_MODE_XY) || supportedColorMode.includes(const_1.HA_COLOR_MODE_HS))) {
+            logger_1.logger.info("getHaDeviceUiid(): light supportedColorMode: ".concat(JSON.stringify(supportedColorMode)));
+            if ((supportedColorMode.includes(const_1.HA_COLOR_MODE_COLOR_TEMP)
+                && supportedColorMode.includes(const_1.HA_COLOR_MODE_XY)) || supportedColorMode.includes(const_1.HA_COLOR_MODE_RGB)) {
                 return const_1.CK_UIID_20008;
             }
             else if (supportedColorMode.includes(const_1.HA_COLOR_MODE_COLOR_TEMP)) {
