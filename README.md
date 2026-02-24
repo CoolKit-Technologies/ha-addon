@@ -1,3 +1,13 @@
+## ⚠️ Project Archived Notice
+
+This repository has been **archived** and is no longer maintained.
+
+There will be **no further updates, bug fixes, or security patches** for this project.
+
+We have released a [new eWeLink Smart Home add-on](https://github.com/iHost-Open-Source-Project/hassio-ihost-addon), which already supports the same devices as the legacy version and will continue to expand support for more SONOFF devices in the future. However, the new add-on no longer provides a built-in device control UI, nor does it support syncing Home Assistant devices back to the eWeLink cloud.
+
+
+
 # Source Code Link
 
 -   [FrontEnd](https://github.com/CoolKit-Technologies/ha-addon-frontEnd)
