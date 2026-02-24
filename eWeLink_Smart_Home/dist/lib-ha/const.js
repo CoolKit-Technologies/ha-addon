@@ -19,6 +19,7 @@ exports.HA_SERVICE_LIGHT_TURN_OFF = 'light.turn_off';
 exports.HA_COLOR_MODE_COLOR_TEMP = 'color_temp';
 exports.HA_COLOR_MODE_XY = 'xy';
 exports.HA_COLOR_MODE_HS = 'hs';
+exports.HA_COLOR_MODE_RGB = 'rgb';
 exports.HA_COLOR_MODE_BRIGHTNESS = 'brightness';
 exports.HA_BRIGHTNESS_MAX = 255;
 exports.CK_COLOR_TEMP_MIN = 0;
